@@ -2,4 +2,5 @@
 *.o
 *~
 site
+_cache
 .cabal-sandbox
