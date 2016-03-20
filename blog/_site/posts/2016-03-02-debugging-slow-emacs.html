@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>ahmadnazir - Debugging a slow emacs</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    </head>
+    <body>
+        <div class="header">
+            <a href="../">
+                <i class="fa fa-file-text-o fa-inverse"> notes</i>
+            </a>
+            <a href="../about.html" ">
+                <i class="fa fa-info-circle fa-inverse"> about</i>
+            </a>
+                <!-- <a href="/archive.html">Archive</a> -->
+        </div>
+
+        <br />
+        <br />
+        <br />
+
+        <div id="content" class="content">
+            <!-- <h1>Debugging a slow emacs</h1> -->
+
+            <h1>Debugging a slow emacs</h1>
+
+<div class="info">
+    Posted on March  2, 2016
+    
+</div>
+
+<p>Emacs keeps running for several days on my machine and from time to time I notice that it starts to get slow. I recently found a very easy way to debug a slow emacs instance i.e. using the emacs profiler.</p>
+<h2 id="start-the-profiler">Start the profiler</h2>
+<pre><code>M-x profiler-start</code></pre>
+<p>You need to specify what is it that needs to be profiled i.e. cpu, memory or both. Once the profiler is active, you need to perform the operations that cause the delay. In my case, switching the focus in and out of emacs was causing a delay. So, I just changed the focus a couple of times so that the profiler could record the actions.</p>
+<h2 id="generate-the-report">Generate the report</h2>
+<pre><code>M-x profiler-report</code></pre>
+<p>This gave me a detailed overview such as:</p>
+<p><img class="box" src="../images/slow_emacs-profile_report_overview.jpg" width="100%" /></p>
+<p>By expanding each item (default key for expand/collapse is <code>TAB</code>), further split can be seen:</p>
+<p><img src="../images/slow_emacs-profile_report.jpg" width="100%" /></p>
+<p>Clearly, I could see that the culprit was a hook that ran everytime I was changing the focus. It turned out that the <code>auto-dim-other-buffers-mode</code> was causing the problems. Disabling and re-enabling the mode fixed the problem. Though this didn’t fix the root cause of the problem but the profiler helped me point out what was the source of the problem.</p>
+
+        </div>
+        <div class="footer">
+            <a href="mailto:ahmadnazir[at]gmail[dot]com"><i class="fa fa-2x fa-envelope-o fa-inverse"></i></a>
+            <!-- | -->
+            <a href="https://github.com/ahmadnazir"><i class="fa fa-2x fa-github fa-inverse"></i></a>
+            <!-- | -->
+            <a href="https://twitter.com/ahmadnazir"><i class="fa fa-2x fa-twitter fa-inverse"></i></a>
+            <!-- Powered by <a href="http://jaspervdj.be/hakyll">Hakyll</a> -->
+        </div>
+
+        <br />
+        <br />
+        <br />
+
+    </body>
+</html>
