@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>ahmadnazir - Accessing remote services using SSH Tunnels</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    </head>
+    <body>
+        <div class="header">
+            <a href="../">
+                <i class="fa fa-file-text-o fa-inverse"> notes</i>
+            </a>
+            <a href="../about.html" ">
+                <i class="fa fa-info-circle fa-inverse"> about</i>
+            </a>
+                <!-- <a href="/archive.html">Archive</a> -->
+        </div>
+
+        <br />
+        <br />
+        <br />
+
+        <div id="content" class="content">
+            <!-- <h1>Accessing remote services using SSH Tunnels</h1> -->
+
+            <h1>Accessing remote services using SSH Tunnels</h1>
+
+<div class="info">
+    Posted on June 23, 2015
+    
+</div>
+
+<p>Lately I have been using emacs <strong><a href="https://www.emacswiki.org/emacs/SqlMode">SQLi</a></strong> mode to interact with the. Most of the times I can’t access the database directly from my machine - I have to ssh into an intermediate server that has access to the database server. This strategy doesn’t always work if the intermediate server doesn’t have an sql client installed (e.g. <code>mysql-client</code>). What I really want is to make the database appear as if it were running locally. SSH tunnels solves this problem for me:</p>
+<p>Let’s say you have the following servers running:</p>
+<ul>
+<li><code>app.com</code></li>
+<li><code>db.com</code> (only accessible via <code>app.com</code>)</li>
+</ul>
+<p>Here is how the database on <code>db.com</code> can be accessed locally:</p>
+<pre><code>ssh app.com -L 5000:db.com:3306 -N</code></pre>
+<p>We are instructing the ssh utility to create a tunnel that can redirect your traffic to <code>db.com</code> via <code>app.com</code>:</p>
+<ul>
+<li>Forward all traffic coming on <code>localhost:5000</code> to <code>app.com</code></li>
+<li>All traffic terminating on <code>app.com</code> within the tunnel is redirected to <code>db.com:3306</code></li>
+</ul>
+<p>Now you can try:</p>
+<pre><code>mysql --host 127.0.0.1 --port 5000</code></pre>
+<p><strong>Note:</strong> Use <code>127.0.0.1</code> to create a network socket and not <code>localhost</code> which will use a unix socket instead.</p>
+<p>Gven that you have ssh access, you can <strong>control the traffic on a remote server</strong> with a simple command and <strong>use locally installed utilities to use services available on remote machines</strong>. The syntax is not so intuitive at first, but once you get a hang of it, this is really powerful!</p>
+
+        </div>
+        <div class="footer">
+            <a href="mailto:ahmadnazir[at]gmail[dot]com"><i class="fa fa-2x fa-envelope-o fa-inverse"></i></a>
+            <!-- | -->
+            <a href="https://github.com/ahmadnazir"><i class="fa fa-2x fa-github fa-inverse"></i></a>
+            <!-- | -->
+            <a href="https://twitter.com/ahmadnazir"><i class="fa fa-2x fa-twitter fa-inverse"></i></a>
+            <!-- Powered by <a href="http://jaspervdj.be/hakyll">Hakyll</a> -->
+        </div>
+
+        <br />
+        <br />
+        <br />
+
+    </body>
+</html>
