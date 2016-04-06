@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>ahmadnazir - Fix a non-responsive USB device on Ubuntu</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    </head>
+    <body>
+        <div class="header">
+            <a href="../">
+                <i class="fa fa-file-text-o fa-inverse"> notes</i>
+            </a>
+            <a href="../about.html" ">
+                <i class="fa fa-info-circle fa-inverse"> about</i>
+            </a>
+                <!-- <a href="/archive.html">Archive</a> -->
+        </div>
+
+        <br />
+        <br />
+        <br />
+
+        <div id="content" class="content">
+            <!-- <h1>Fix a non-responsive USB device on Ubuntu</h1> -->
+
+            <h1>Fix a non-responsive USB device on Ubuntu</h1>
+
+<div class="info">
+    Posted on April  6, 2016
+    
+</div>
+
+<p>I use a wireless mouse that uses one of the usb ports on my machine. From time to time the usb needs to be restarted. I am not sure of the cause of the problem but it seems like rebinding the usb device fixes the issue.</p>
+<h2 id="get-a-list-of-usb-devices">Get a list of usb devices</h2>
+<pre><code>$ lspci | grep USB
+
+00:14.0 USB controller: Intel Corporation 8 Series USB xHCI HC (rev 04)
+00:1d.0 USB controller: Intel Corporation 8 Series USB EHCI #1 (rev 04)</code></pre>
+<h2 id="rebind-the-usb-device">Rebind the usb device</h2>
+<p>For my usb mouse, I know that I am using the xhci driver so I only rebind that:</p>
+<pre><code>sudo su
+echo -n '0000:00:14.0' | tee /sys/bus/pci/drivers/xhci_hcd/unbind
+echo -n '0000:00:14.0' | tee /sys/bus/pci/drivers/xhci_hcd/bind</code></pre>
+<!-- echo -n '0000:00:1d.0' | tee /sys/bus/pci/drivers/ehci-pci/unbind -->
+<!-- echo -n '0000:00:1d.0' | tee /sys/bus/pci/drivers/ehci-pci/bind -->
+<p>The above works for me. The solution and related ones can be found at <strong><a href="http://askubuntu.com/questions/645/how-do-you-reset-a-usb-device-from-the-command-line">askubuntu</a></strong></p>
+
+        </div>
+        <div class="footer">
+            <a href="mailto:ahmadnazir[at]gmail[dot]com"><i class="fa fa-2x fa-envelope-o fa-inverse"></i></a>
+            <!-- | -->
+            <a href="https://github.com/ahmadnazir"><i class="fa fa-2x fa-github fa-inverse"></i></a>
+            <!-- | -->
+            <a href="https://twitter.com/ahmadnazir"><i class="fa fa-2x fa-twitter fa-inverse"></i></a>
+            <!-- Powered by <a href="http://jaspervdj.be/hakyll">Hakyll</a> -->
+        </div>
+
+        <br />
+        <br />
+        <br />
+
+    </body>
+</html>
