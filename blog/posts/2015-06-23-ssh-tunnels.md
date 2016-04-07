@@ -2,11 +2,11 @@
 title:  Accessing remote services using SSH Tunnels
 ---
 
-Lately I have been using emacs **[SQLi][sqli]** mode to interact with the. Most
-of the times I can't access the database directly from my machine - I
-have to ssh into an intermediate server that has access to the
-database server. This strategy doesn't always work if the intermediate
-server doesn't have an sql client installed
+Lately I have been using emacs **[SQLi][sqli]** mode to interact with
+the database. Most of the times I can't access the database directly
+from my machine - I have to ssh into an intermediate server that has
+access to the database server. This strategy doesn't always work if
+the intermediate server doesn't have an sql client installed
 (e.g. `mysql-client`). What I really want is to make the database
 appear as if it were running locally. SSH tunnels solves this problem
 for me:
