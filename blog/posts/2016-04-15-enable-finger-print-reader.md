@@ -1,8 +1,8 @@
 ---
-title: Setup the finger print reader on Lenovo X1 Carbon on Ubuntu 14.04
+title: Setup the fingerprint reader on Lenovo X1 Carbon on Ubuntu 14.04
 ---
 
-Following libraries are required to use the finger print reader.
+Following libraries are required to use the fingerprint reader.
 
 ```
 sudo add-apt-repository -y ppa:fingerprint/fprint
