@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>ahmadnazir - Cloning private repositories inside docker</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    </head>
+    <body>
+        <div class="header">
+            <a href="../">
+                <i class="fa fa-file-text-o fa-inverse"> notes</i>
+            </a>
+            <a href="../about.html" ">
+                <i class="fa fa-info-circle fa-inverse"> about</i>
+            </a>
+                <!-- <a href="/archive.html">Archive</a> -->
+        </div>
+
+        <br />
+        <br />
+        <br />
+
+        <div id="content" class="content">
+            <!-- <h1>Cloning private repositories inside docker</h1> -->
+
+            <h1>Cloning private repositories inside docker</h1>
+
+<div class="info">
+    Posted on June 24, 2016
+    
+</div>
+
+<p><strong>tldr;</strong> The unix socket created by the <code>ssh-agent</code> can be mounted in the docker container. This gives the user access to the keys on the host, making it possible to clone private repositories (that rely on ssh keys to grant access) inside the container.</p>
+<h2 id="problem">Problem</h2>
+<p>Docker is a linux container technology which makes it really easy to package and deploy code. Just like with other container technologies, you can use it to package the environment / execution context along with the code i.e:</p>
+<p><strong>code + execution context = artifact</strong></p>
+<p>For example, if your project requires python 2.7, then you should package python 2.7 along with the code that you ship instead of relying on the host to provide those packages for you. This way you can ensure that no matter where the code runs; during development on the local machine, testing on travis, running in production etc, it will always run consistently or break in the same way. The same goes for configurations required for the code. However, we shouldn’t always package everything within the artifact e.g. secrets and keys should stay out of the artifact. This limitation comes with its own set of challenges..</p>
+<p>Recently I was working on a <strong>project that depended on some private repositories and I couldn’t clone inside the docker container since I had no access to the keys that were present on the host machine</strong>. I solved this by sharing my <code>ssh-agent</code> session with the docker container.</p>
+<h2 id="ssh-agent">SSH Agent</h2>
+<p><code>ssh-agent</code> is a utility that keep manages the private keys for the user when using <code>ssh</code>. It comes with the <code>openssh-client</code> package.</p>
+<p>If the <code>ssh-agent</code> is already running, you can find the environment variable related to <code>ssh</code> as follows:</p>
+<pre><code>$ printenv | grep SSH
+SSH_AGENT_PID=3010
+SSH_AUTH_SOCK=/tmp/ssh-5ymZpLJEA5Kq/agent.2946
+SSH_ASKPASS=/usr/bin/ssh-askpass</code></pre>
+<p>The <code>SSH_AUTH_SOCK</code> variable tells us that the agent is using a unix socket created in the <code>/tmp/ssh-*/</code> directory. Anyone having access to that socket can use the keys that are being held by the agent.</p>
+<h2 id="using-the-ssh-agent-session-inside-the-container">Using the ssh-agent session inside the container</h2>
+<p>You can run the <code>ssh-agent</code> inside the docker container but that would create a new session and will use another socket. Since unix sockets can be mapped as files, the container can be configured to reuse the agent running on the host machine, hence, getting access to the keys on the host machine.</p>
+<p>Here is how a sample <code>docker-composer.json</code> file can be setup:</p>
+<pre><code>app:
+  image: debian:jessie
+  volumes:
+    - $SSH_AUTH_SOCK:/ssh-agent
+  environment:
+    SSH_AUTH_SOCK: /ssh-agent</code></pre>
+<p>In order to verify that you can use your keys from the container, follow these steps:</p>
+<pre><code> $ docker-compose run app
+ root@xxxx :/# apt-get update
+ root@xxxx :/# apt-get install openssh-client
+ root@xxxx :/# ssh your-server-with-public-key.com # You're in !!</code></pre>
+<h2 id="testing-the-setup">Testing the Setup</h2>
+<p>I usually test my setup by trying to access <code>github.com</code> (since that’s one service I am sure of which has my public key setup properly):</p>
+<pre><code> root@xxxx :/# ssh -T git@github.com
+ [omitted for brevity]
+ Hi ahmadnazir! You've successfully authenticated, but GitHub does not provide shell access.</code></pre>
+
+        </div>
+        <div class="footer">
+            <a href="mailto:ahmadnazir[at]gmail[dot]com"><i class="fa fa-2x fa-envelope-o fa-inverse"></i></a>
+            <!-- | -->
+            <a href="https://github.com/ahmadnazir"><i class="fa fa-2x fa-github fa-inverse"></i></a>
+            <!-- | -->
+            <a href="https://twitter.com/ahmadnazir"><i class="fa fa-2x fa-twitter fa-inverse"></i></a>
+            <!-- Powered by <a href="http://jaspervdj.be/hakyll">Hakyll</a> -->
+        </div>
+
+        <br />
+        <br />
+        <br />
+
+    </body>
+</html>
