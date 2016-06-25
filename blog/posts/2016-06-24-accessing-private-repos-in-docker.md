@@ -35,7 +35,7 @@ container.
 
 ## SSH Agent
 
-`ssh-agent` is a utility that keep manages the private keys for the
+`ssh-agent` is a utility that manages the private keys for the
 user when using `ssh`. It comes with the `openssh-client` package.
 
 If the `ssh-agent` is already running, you can find the environment
