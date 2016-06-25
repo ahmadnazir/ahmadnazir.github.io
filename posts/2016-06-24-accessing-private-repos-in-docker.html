@@ -32,7 +32,7 @@
     
 </div>
 
-<p><strong>tldr;</strong> The unix socket created by the <code>ssh-agent</code> can be mounted in the docker container. This gives the user access to the keys on the host, making it possible to clone private repositories (that rely on ssh keys to grant access) inside the container.</p>
+<p><strong>TL;DR</strong> The unix socket created by the <code>ssh-agent</code> can be mounted in the docker container. This gives the user access to the keys on the host, making it possible to clone private repositories (that rely on ssh keys to grant access) inside the container.</p>
 <h2 id="problem">Problem</h2>
 <p>Docker is a linux container technology which makes it really easy to package and deploy code. Just like with other container technologies, you can use it to package the environment / execution context along with the code i.e:</p>
 <p><strong>code + execution context = artifact</strong></p>
