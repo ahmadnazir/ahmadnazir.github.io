@@ -22,7 +22,7 @@ cd blog
 or
 
 ```
-./site watch # localhost:8000
+./site watch -p 8989 # localhost:8989
 ```
 
 # Updating the master branch

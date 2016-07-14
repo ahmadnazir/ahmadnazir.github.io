@@ -89,7 +89,8 @@ one service I am sure of which has my public key setup properly):
 ```
  root@xxxx :/# ssh -T git@github.com
  [omitted for brevity]
- Hi ahmadnazir! You've successfully authenticated, but GitHub does not provide shell access.
+ Hi ahmadnazir! You've successfully authenticated, but GitHub does
+ not provide shell access.
 ```
 
 
