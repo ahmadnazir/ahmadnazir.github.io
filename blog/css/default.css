@@ -7,7 +7,7 @@
 
 /* Inline Tags */
 p code {
-    font-family: courier;
+    font-family: monospace;
     background: #FFF;
     padding: 1px 5px;
     color: #666;
@@ -26,7 +26,7 @@ pre {
 
 /* Remove background from text inside code block */
 pre code {
-    font-family: courier;
+    font-family: monospace;
     background: none;
 }
 
