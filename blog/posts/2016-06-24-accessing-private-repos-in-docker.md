@@ -2,10 +2,12 @@
 title:  Cloning private repositories inside docker
 ---
 
-**TL;DR** The unix socket created by the `ssh-agent` can be mounted in
+**tldr:** The unix socket created by the `ssh-agent` can be mounted in
   the docker container. This gives the user access to the keys on the
   host, making it possible to clone private repositories (that rely on
   ssh keys to grant access) inside the container.
+  
+<br />
 
 ## Problem
 
