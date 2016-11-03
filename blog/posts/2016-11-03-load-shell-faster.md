@@ -2,17 +2,18 @@
 title: Load the shell faster
 ---
 
-**tldr:** The shell can be started faster by running time-consuming scripts in
-the background
+**tldr:** The shell can be started faster by replacing the time consumming
+scripts with [shims](https://en.wikipedia.org/wiki/Shim_(computing)) which can
+lazy-load the functionality for those scripts
 
 <br />
 
 ## Problem
 
-Lately, zsh is taking way too long to boot up for me i.e. around .3 secs.. long
-enough for me to miss the first few key strokes when I spin up a new shell.
+Lately, zsh is taking way too long to boot-up for me i.e. around .3 secs.. long
+enough to annoy me. I normally reach for `Ctrl-R` to search the command history as soon as the shell starts and if the shell takes too long to start-up the control character gets lost.. forcing me to press that combination of keys again. Clearly, I can't be expected to live with this atrocity and something needs to be done.
 
-Here is some timing info:
+Here is some timing info for my shell:
 
 ```
 mandark@mandark ~$ time zsh -i -c exit
@@ -24,8 +25,8 @@ zsh -i -c exit  0.32s user 0.11s system 101% cpu 0.427 total
 ## Culprit
 
 After timing some of the suspects in my `.zshrc` file, I found out that loading
-`autojump.sh` and calling `compinit` was delaying the initial boot time by about
-.2 secs.
+`autojump` and calling `compinit` was delaying the initial boot time by about .2
+secs.
 
 
 Here are the calls in the `.zshrc` file that take the most time:
@@ -55,47 +56,54 @@ That is **75% of the total initialization time**.
 
 <br />
 
-## Solution .. or more like a hack!
+## Solution
 
-Wrap the calls that are taking the most time into a function and call the
-function by running it in the background:
+
+### Background processes?
+
+My first attempt as to wrap the time-consuming calls in a function and call that
+function by putting it in the background. That helps with the start-up times for
+sure but the variables and commands are not sourced to the shell calling that
+function .. hence this is useless. Here is what I had in mind.
 
 ```
-function init() {
-  # @prereq: https://github.com/wting/autojump
+function init ()
+{
   [[ -s $HOME/.autojump/etc/profile.d/autojump.sh ]] \
-	  && source $HOME/.autojump/etc/profile.d/autojump.sh \
-	  && autoload -U compinit && compinit -u \
-	  && echo "\n\ninit :: Autojump and comp init are loaded !"
+    && source $HOME/.autojump/etc/profile.d/autojump.sh \ # sourcing inside a function
+    && autoload -U compinit && compinit -u \
+    && echo "\n\ninit :: Autojump and comp init are loaded !"
 }
-
 init &
 ```
+
+I would like to understand why `source` behaves differently when called inside a function .. but I'll leave that for another day.
+
+
+### Lazy Load the functions!
+
+After googling a bit, I realized that other people have been solving this using shims that lazy-load the functionality. In my case, I created a shim for the `autojump` function `j`:
+
+```
+j() {
+    unset -f j
+    [[ -s $HOME/.autojump/etc/profile.d/autojump.sh ]] \
+        && source $HOME/.autojump/etc/profile.d/autojump.sh \
+        && autoload -U compinit && compinit -u
+    j "$@"
+}
+```
+
+This loads the functionality for autoloading when it is requested and not at shell start-up. Pretty neat!
 
 Here is the new timing information:
 
 ```
 mandark@mandark ~$ time-n-cmd 25 'zsh -i -c exit' 2>&1 > /dev/null
-..
-  2.03s user 0.94s system 101% cpu 2.935 total
+  2.07s user 0.91s system 101% cpu 2.946 total
 ```
 
 That is almost a **4 times performance increase!**
-
-However, I have an annoying message about the background processes that I can't
-get rid of. This is how it looks now at start-up:
-
-```
-[1] 17414
-mandark@mandark ~$                                                                                                 
-
-init :: Autojump and comp init are loaded !
-
-[1]  + 17414 done       init
-mandark@mandark ~$ 
-```
-
-.. but it's good enough for me!
 
 <br />
 
