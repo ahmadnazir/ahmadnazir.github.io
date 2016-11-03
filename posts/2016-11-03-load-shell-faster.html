@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>ahmadnazir - Load the shell faster</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    </head>
+    <body>
+        <div class="header">
+            <a href="../">
+                <i class="fa fa-file-text-o fa-inverse"> notes</i>
+            </a>
+            <a href="../about.html" ">
+                <i class="fa fa-info-circle fa-inverse"> about</i>
+            </a>
+                <!-- <a href="/archive.html">Archive</a> -->
+        </div>
+
+        <br />
+        <br />
+        <br />
+
+        <div id="content" class="content">
+            <!-- <h1>Load the shell faster</h1> -->
+
+            <h1>Load the shell faster</h1>
+
+<div class="info">
+    Posted on November  3, 2016
+    
+</div>
+
+<p><strong>tldr:</strong> The shell can be started faster by running time-consuming scripts in the background</p>
+<p><br /></p>
+<h2 id="problem">Problem</h2>
+<p>Lately, zsh is taking way too long to boot up for me i.e. around .3 secs.. long enough for me to miss the first few key strokes when I spin up a new shell.</p>
+<p>Here is some timing info:</p>
+<pre><code>mandark@mandark ~$ time zsh -i -c exit
+zsh -i -c exit  0.32s user 0.11s system 101% cpu 0.427 total</code></pre>
+<p><br /></p>
+<h2 id="culprit">Culprit</h2>
+<p>After timing some of the suspects in my <code>.zshrc</code> file, I found out that loading <code>autojump.sh</code> and calling <code>compinit</code> was delaying the initial boot time by about .2 secs.</p>
+<p>Here are the calls in the <code>.zshrc</code> file that take the most time:</p>
+<pre><code>[[ -s $HOME/.autojump/etc/profile.d/autojump.sh ]] \
+  &amp;&amp; source $HOME/.autojump/etc/profile.d/autojump.sh;
+autoload -U compinit &amp;&amp; compinit -u;</code></pre>
+<p>Here is the timing info over 25 runs of the initialization including calls to <code>autojump</code> and <code>compinit</code>:</p>
+<pre><code>mandark@mandark ~$ time-n-cmd 25 'zsh -i -c exit' 2&gt;&amp;1 &gt; /dev/null
+  7.92s user 2.33s system 101% cpu 10.118 total</code></pre>
+<p>and without loading <code>autojump</code> and <code>compinit</code>:</p>
+<pre><code>mandark@mandark ~$ time-n-cmd 25 'zsh -i -c exit' 2&gt;&amp;1 &gt; /dev/null
+  1.95s user 0.88s system 101% cpu 2.799 total</code></pre>
+<p>That is <strong>75% of the total initialization time</strong>.</p>
+<p><br /></p>
+<h2 id="solution-..-or-more-like-a-hack">Solution .. or more like a hack!</h2>
+<p>Wrap the calls that are taking the most time into a function and call the function by running it in the background:</p>
+<pre><code>function init() {
+  # @prereq: https://github.com/wting/autojump
+  [[ -s $HOME/.autojump/etc/profile.d/autojump.sh ]] \
+	  &amp;&amp; source $HOME/.autojump/etc/profile.d/autojump.sh \
+	  &amp;&amp; autoload -U compinit &amp;&amp; compinit -u \
+	  &amp;&amp; echo &quot;\n\ninit :: Autojump and comp init are loaded !&quot;
+}
+
+init &amp;</code></pre>
+<p>Here is the new timing information:</p>
+<pre><code>mandark@mandark ~$ time-n-cmd 25 'zsh -i -c exit' 2&gt;&amp;1 &gt; /dev/null
+..
+  2.03s user 0.94s system 101% cpu 2.935 total</code></pre>
+<p>That is almost a <strong>4 times performance increase!</strong></p>
+<p>However, I have an annoying message about the background processes that I can’t get rid of. This is how it looks now at start-up:</p>
+<pre><code>[1] 17414
+mandark@mandark ~$                                                                                                 
+
+init :: Autojump and comp init are loaded !
+
+[1]  + 17414 done       init
+mandark@mandark ~$ </code></pre>
+<p>.. but it’s good enough for me!</p>
+<p><br /></p>
+<h2 id="appendix">Appendix</h2>
+<p>Timing a command multiple times:</p>
+<pre><code># Usage: time-n-cmd TIMES CMD
+#
+time-n-cmd() {
+
+  # params
+  #
+  local times=$1
+  local command=$2
+
+  # Time the command by running mutiple times
+  #
+  time (
+  for run in {1..$times}
+  do
+    sh -c $command 2&gt;&amp;1 &gt; /dev/null
+  done
+  )
+
+}</code></pre>
+<br /> <br />
+<div id="disqus_thread">
+
+</div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    /*
+    var disqus_config = function () {
+        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() {  // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        
+        s.src = '//ahmadnazir.disqus.com/embed.js';
+        
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>
+Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
+</noscript>
+
+        </div>
+        <div class="footer">
+            <a href="mailto:ahmadnazir[at]gmail[dot]com"><i class="fa fa-2x fa-envelope-o fa-inverse"></i></a>
+            <!-- | -->
+            <a href="https://github.com/ahmadnazir"><i class="fa fa-2x fa-github fa-inverse"></i></a>
+            <!-- | -->
+            <a href="https://twitter.com/ahmadnazir"><i class="fa fa-2x fa-twitter fa-inverse"></i></a>
+            <!-- Powered by <a href="http://jaspervdj.be/hakyll">Hakyll</a> -->
+        </div>
+
+        <br />
+        <br />
+        <br />
+
+    </body>
+</html>
