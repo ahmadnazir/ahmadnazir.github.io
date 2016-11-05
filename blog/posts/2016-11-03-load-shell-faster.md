@@ -2,7 +2,7 @@
 title: Load the shell faster
 ---
 
-**tldr:** The shell can be started faster by replacing the time consumming
+**tldr:** The shell can be started faster by replacing the time consuming
 scripts with [shims](https://en.wikipedia.org/wiki/Shim_(computing)) which can
 lazy-load the functionality for those scripts
 
@@ -121,7 +121,7 @@ time-n-cmd() {
   local times=$1
   local command=$2
 
-  # Time the command by running mutiple times
+  # Time the command by running multiple times
   #
   time (
   for run in {1..$times}
