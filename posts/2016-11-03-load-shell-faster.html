@@ -32,7 +32,7 @@
     
 </div>
 
-<p><strong>tldr:</strong> The shell can be started faster by replacing the time consumming scripts with <a href="https://en.wikipedia.org/wiki/Shim_(computing)">shims</a> which can lazy-load the functionality for those scripts</p>
+<p><strong>tldr:</strong> The shell can be started faster by replacing the time consuming scripts with <a href="https://en.wikipedia.org/wiki/Shim_(computing)">shims</a> which can lazy-load the functionality for those scripts</p>
 <p><br /></p>
 <h2 id="problem">Problem</h2>
 <p>Lately, zsh is taking way too long to boot-up for me i.e. around .3 secs.. long enough to annoy me. I normally reach for <code>Ctrl-R</code> to search the command history as soon as the shell starts and if the shell takes too long to start-up the control character gets lost.. forcing me to press that combination of keys again. Clearly, I can’t be expected to live with this atrocity and something needs to be done.</p>
@@ -92,7 +92,7 @@ time-n-cmd() {
   local times=$1
   local command=$2
 
-  # Time the command by running mutiple times
+  # Time the command by running multiple times
   #
   time (
   for run in {1..$times}
