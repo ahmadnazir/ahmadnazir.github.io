@@ -26,12 +26,12 @@ M-x profiler-report
 
 This gave me a detailed overview such as:
 
-<img class="box" src="/images/slow_emacs-profile_report_overview.jpg" width="100%" />
+<img class="box" src="./images/slow_emacs-profile_report_overview.jpg" width="100%" />
 
 By expanding each item (default key for expand/collapse is `TAB`),
 further split can be seen:
 
-<img src="/images/slow_emacs-profile_report.jpg" width="100%" />
+<img src="./images/slow_emacs-profile_report.jpg" width="100%" />
 
 Clearly, I could see that the culprit was a hook that ran
 everytime I was changing the focus. It turned out that the

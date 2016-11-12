@@ -15,7 +15,7 @@ right index finger. Try swiping a few times and you are done. From now
 on, executing a command using `sudo` with prompt you for your finger
 print:
 
-<img class="box" src="/images/enable-finger-print-reader.jpg" width="60%" />
+<img class="box" src="./images/enable-finger-print-reader.jpg" width="60%" />
 
 For reference, see [askubuntu][askubuntu]
 
