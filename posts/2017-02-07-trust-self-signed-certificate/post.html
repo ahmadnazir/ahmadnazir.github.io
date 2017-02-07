@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>ahmadnazir - Trust a self-signed certificate in Debian</title>
+        <link rel="stylesheet" type="text/css" href="../../css/default.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    </head>
+    <body>
+        <div class="header">
+            <a href="../../">
+                <i class="fa fa-file-text-o fa-inverse"> notes</i>
+            </a>
+            <a href="../../about.html" ">
+                <i class="fa fa-info-circle fa-inverse"> about</i>
+            </a>
+                <!-- <a href="/archive.html">Archive</a> -->
+        </div>
+
+        <br />
+        <br />
+        <br />
+
+        <div id="content" class="content">
+            <!-- <h1>Trust a self-signed certificate in Debian</h1> -->
+
+            <h1>Trust a self-signed certificate in Debian</h1>
+
+<div class="info">
+    Posted on February  7, 2017
+    
+</div>
+
+<h2 id="generate-a-self-signed-certificate">Generate a self-signed certificate</h2>
+<pre><code>DOMAIN=anr.dev.penneo.com
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $DOMAIN.key -out $DOMAIN.pem</code></pre>
+<h2 id="trusting-the-certificate">Trusting the certificate</h2>
+<p>For making the OS trust the certificate, the requirements for Debian are:</p>
+<ul>
+<li>The certificate is in PEM format</li>
+<li>The certificate should be place in the certs directory i.e. /etc/ssl/certs</li>
+<li>The name of the symlink to the certificate is the hash of the certificate needs a .0 appended to it. Why we do that?? No idea.. let me know when you find out</li>
+</ul>
+<p>or in not so intuitive terms:</p>
+<pre><code>CERTS=/etc/ssl/certs
+cp $DOMAIN.pem $CERTS/
+cd $CERTS
+HASH=`openssl x509 -noout -hash -in $DOMAIN.crt`.0
+ln -s $DOMAIN.pem $HASH</code></pre>
+<p>Reference (Instructions for RedHat): http://serverfault.com/a/730234/286083</p>
+<!-- How is chrome and firefox affected? -->
+<!-- ## Add the key and certificate to the nginx confiruation -->
+<h2 id="what-is-pem-format">What is PEM format?</h2>
+<p>PEM is a container format for storing certificates. <a href="http://serverfault.com/a/9717/286083">There are a number of ways to store certificates</a> and here is a quick reference for some extensions that I have bumped into:</p>
+<ul>
+<li><strong>.pem</strong> : Base64 encoded form of DER</li>
+<li><strong>.der</strong> : Encoding data that uses the ASN.1 standard to represent the data</li>
+<li><strong>.key</strong> : A PEM file that contains just the private key</li>
+<li><strong>.crt</strong> : Same as .pem</li>
+</ul>
+
+        </div>
+        <div class="footer">
+            <a href="mailto:ahmadnazir[at]gmail[dot]com"><i class="fa fa-2x fa-envelope-o fa-inverse"></i></a>
+            <!-- | -->
+            <a href="https://github.com/ahmadnazir"><i class="fa fa-2x fa-github fa-inverse"></i></a>
+            <!-- | -->
+            <a href="https://twitter.com/ahmadnazir"><i class="fa fa-2x fa-twitter fa-inverse"></i></a>
+            <!-- Powered by <a href="http://jaspervdj.be/hakyll">Hakyll</a> -->
+        </div>
+
+        <br />
+        <br />
+        <br />
+
+    </body>
+</html>
