@@ -27,8 +27,7 @@ HASH=`openssl x509 -noout -hash -in $DOMAIN.crt`.0
 ln -s $DOMAIN.pem $HASH
 ```
 
-
-Reference (Instructions for RedHat): http://serverfault.com/a/730234/286083
+Source: [Trusting self-signed certificates in redhat][redhat]
 
 <!-- How is chrome and firefox affected? -->
 
@@ -45,3 +44,4 @@ PEM is a container format for storing certificates. [There are a number of ways 
 
 
 [diff-formats]: http://serverfault.com/a/9717/286083
+[redhat]: http://serverfault.com/a/730234/286083
