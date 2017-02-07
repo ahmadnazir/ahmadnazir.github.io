@@ -48,7 +48,7 @@ cp $DOMAIN.pem $CERTS/
 cd $CERTS
 HASH=`openssl x509 -noout -hash -in $DOMAIN.crt`.0
 ln -s $DOMAIN.pem $HASH</code></pre>
-<p>Reference (Instructions for RedHat): http://serverfault.com/a/730234/286083</p>
+<p>Source: <a href="http://serverfault.com/a/730234/286083">Trusting self-signed certificates in redhat</a></p>
 <!-- How is chrome and firefox affected? -->
 <!-- ## Add the key and certificate to the nginx confiruation -->
 <h2 id="what-is-pem-format">What is PEM format?</h2>
