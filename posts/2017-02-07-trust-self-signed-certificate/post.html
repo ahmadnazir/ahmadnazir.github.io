@@ -33,16 +33,17 @@
 </div>
 
 <h2 id="generate-a-self-signed-certificate">Generate a self-signed certificate</h2>
+<p>Generate a self-signed certificate in PEM format</p>
 <pre><code>DOMAIN=anr.dev.penneo.com
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $DOMAIN.key -out $DOMAIN.pem</code></pre>
 <h2 id="trusting-the-certificate">Trusting the certificate</h2>
 <p>For making the OS trust the certificate, the requirements for Debian are:</p>
 <ul>
-<li>The certificate is in PEM format</li>
-<li>The certificate should be place in the certs directory i.e. /etc/ssl/certs</li>
-<li>The name of the symlink to the certificate is the hash of the certificate needs a .0 appended to it. Why we do that?? No idea.. let me know when you find out</li>
+<li>The certificate should be in PEM format</li>
+<li>The certificate should be placed in the certificates directory i.e. /etc/ssl/certs</li>
+<li>The name of the symlink to the certificate is the hash of the certificate needs a <code>.0</code> appended to it. Why we do that? No idea.. let me know when you find out</li>
 </ul>
-<p>or in not so intuitive terms:</p>
+<p>or in bash lingo:</p>
 <pre><code>CERTS=/etc/ssl/certs
 cp $DOMAIN.pem $CERTS/
 cd $CERTS
@@ -55,7 +56,7 @@ ln -s $DOMAIN.pem $HASH</code></pre>
 <p>PEM is a container format for storing certificates. <a href="http://serverfault.com/a/9717/286083">There are a number of ways to store certificates</a> and here is a quick reference for some extensions that I have bumped into:</p>
 <ul>
 <li><strong>.pem</strong> : Base64 encoded form of DER</li>
-<li><strong>.der</strong> : Encoding data that uses the ASN.1 standard to represent the data</li>
+<li><strong>.der</strong> : Encoding data that uses the ASN.1 standard</li>
 <li><strong>.key</strong> : A PEM file that contains just the private key</li>
 <li><strong>.crt</strong> : Same as .pem</li>
 </ul>
