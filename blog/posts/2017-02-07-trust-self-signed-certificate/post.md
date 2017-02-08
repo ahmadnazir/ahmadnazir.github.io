@@ -4,6 +4,8 @@ title: Trust a self-signed certificate in Debian
 
 ## Generate a self-signed certificate
 
+Generate a self-signed certificate in PEM format
+
 ```
 DOMAIN=anr.dev.penneo.com
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $DOMAIN.key -out $DOMAIN.pem
@@ -13,11 +15,11 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $DOMAIN.key -out $DO
 
 For making the OS trust the certificate, the requirements for Debian are:
 
-- The certificate is in PEM format
-- The certificate should be place in the certs directory i.e. /etc/ssl/certs
-- The name of the symlink to the certificate is the hash of the certificate needs a .0 appended to it. Why we do that?? No idea.. let me know when you find out
+- The certificate should be in PEM format
+- The certificate should be placed in the certificates directory i.e. /etc/ssl/certs
+- The name of the symlink to the certificate is the hash of the certificate needs a `.0` appended to it. Why we do that? No idea.. let me know when you find out
 
-or in not so intuitive terms:
+or in bash lingo:
 
 ```
 CERTS=/etc/ssl/certs
@@ -38,7 +40,7 @@ Source: [Trusting self-signed certificates in redhat][redhat]
 PEM is a container format for storing certificates. [There are a number of ways to store certificates][diff-formats] and here is a quick reference for some extensions that I have bumped into:
 
 - **.pem** : Base64 encoded form of DER
-- **.der** : Encoding data that uses the ASN.1 standard to represent the data
+- **.der** : Encoding data that uses the ASN.1 standard
 - **.key** : A PEM file that contains just the private key
 - **.crt** : Same as .pem
 
