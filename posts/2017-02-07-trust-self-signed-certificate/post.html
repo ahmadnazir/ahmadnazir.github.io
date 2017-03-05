@@ -47,7 +47,7 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $DOMAIN.key -out $DO
 <pre><code>CERTS=/etc/ssl/certs
 cp $DOMAIN.pem $CERTS/
 cd $CERTS
-HASH=`openssl x509 -noout -hash -in $DOMAIN.crt`.0
+HASH=`openssl x509 -noout -hash -in $DOMAIN.pem`.0
 ln -s $DOMAIN.pem $HASH</code></pre>
 <p>Source: <a href="http://serverfault.com/a/730234/286083">Trusting self-signed certificates in redhat</a></p>
 <!-- How is chrome and firefox affected? -->
