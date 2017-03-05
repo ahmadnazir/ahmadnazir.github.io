@@ -25,7 +25,7 @@ or in bash lingo:
 CERTS=/etc/ssl/certs
 cp $DOMAIN.pem $CERTS/
 cd $CERTS
-HASH=`openssl x509 -noout -hash -in $DOMAIN.crt`.0
+HASH=`openssl x509 -noout -hash -in $DOMAIN.pem`.0
 ln -s $DOMAIN.pem $HASH
 ```
 
