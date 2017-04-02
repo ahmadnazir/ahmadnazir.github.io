@@ -35,7 +35,7 @@
 <h2 id="generate-a-self-signed-certificate">Generate a self-signed certificate</h2>
 <p>Generate a self-signed certificate in PEM format</p>
 <pre><code>DOMAIN=anr.dev.penneo.com
-openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $DOMAIN.key -out $DOMAIN.pem</code></pre>
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $DOMAIN.key -out $DOMAIN.crt</code></pre>
 <h2 id="trusting-the-certificate">Trusting the certificate</h2>
 <p>For making the OS trust the certificate, the requirements for Debian are:</p>
 <ul>
@@ -45,10 +45,10 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $DOMAIN.key -out $DO
 </ul>
 <p>or in bash lingo:</p>
 <pre><code>CERTS=/etc/ssl/certs
-cp $DOMAIN.pem $CERTS/
+sudo cp $DOMAIN.crt $CERTS/
 cd $CERTS
-HASH=`openssl x509 -noout -hash -in $DOMAIN.pem`.0
-ln -s $DOMAIN.pem $HASH</code></pre>
+HASH=`openssl x509 -noout -hash -in $DOMAIN.crt`.0
+sudo ln -s $DOMAIN.crt $HASH</code></pre>
 <p>Source: <a href="http://serverfault.com/a/730234/286083">Trusting self-signed certificates in redhat</a></p>
 <!-- How is chrome and firefox affected? -->
 <!-- ## Add the key and certificate to the nginx confiruation -->
@@ -56,9 +56,9 @@ ln -s $DOMAIN.pem $HASH</code></pre>
 <p>PEM is a container format for storing certificates. <a href="http://serverfault.com/a/9717/286083">There are a number of ways to store certificates</a> and here is a quick reference for some extensions that I have bumped into:</p>
 <ul>
 <li><strong>.pem</strong> : Base64 encoded form of DER</li>
+<li><strong>.crt</strong> : Same as .pem</li>
 <li><strong>.der</strong> : Encoding data that uses the ASN.1 standard</li>
 <li><strong>.key</strong> : A PEM file that contains just the private key</li>
-<li><strong>.crt</strong> : Same as .pem</li>
 </ul>
 
         </div>
