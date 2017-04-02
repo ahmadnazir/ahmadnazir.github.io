@@ -8,7 +8,7 @@ Generate a self-signed certificate in PEM format
 
 ```
 DOMAIN=anr.dev.penneo.com
-openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $DOMAIN.key -out $DOMAIN.pem
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $DOMAIN.key -out $DOMAIN.crt
 ```
 
 ## Trusting the certificate
@@ -23,10 +23,10 @@ or in bash lingo:
 
 ```
 CERTS=/etc/ssl/certs
-cp $DOMAIN.pem $CERTS/
+sudo cp $DOMAIN.crt $CERTS/
 cd $CERTS
-HASH=`openssl x509 -noout -hash -in $DOMAIN.pem`.0
-ln -s $DOMAIN.pem $HASH
+HASH=`openssl x509 -noout -hash -in $DOMAIN.crt`.0
+sudo ln -s $DOMAIN.crt $HASH
 ```
 
 Source: [Trusting self-signed certificates in redhat][redhat]
@@ -40,9 +40,9 @@ Source: [Trusting self-signed certificates in redhat][redhat]
 PEM is a container format for storing certificates. [There are a number of ways to store certificates][diff-formats] and here is a quick reference for some extensions that I have bumped into:
 
 - **.pem** : Base64 encoded form of DER
+- **.crt** : Same as .pem
 - **.der** : Encoding data that uses the ASN.1 standard
 - **.key** : A PEM file that contains just the private key
-- **.crt** : Same as .pem
 
 
 [diff-formats]: http://serverfault.com/a/9717/286083
