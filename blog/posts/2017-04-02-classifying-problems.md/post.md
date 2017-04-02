@@ -144,7 +144,7 @@ difficult problems as **problems that can be verified in polynomial time**.
 
 Such problems are formally known as *NP Problems* which stands for
 Non-deterministic polynomial time. Why such a difficult name? Well it comes from
-the concept of Non-deterministic Turning machines, which are capable of
+the concept of Non-deterministic Turing machines, which are capable of
 branching at every step of the problem and the whole thing runs in polynomial
 time. Such a machine is theoretical and only used in thought experiments.
 
@@ -179,7 +179,7 @@ Here are the 4 categories discussed:
 Categorizing a problem is related to discovering an algorithm for it. We
 categorize problems as NP or NP-Hard because **we are not aware of any
 algorithms that can run faster**. If we discover an algorithm that runs faster,
-the problem gets recategorized.
+the problem gets a different category assigned to it.
 
 # How do these categories overlap?
 
@@ -200,5 +200,11 @@ The two different ways to think about the categories overlapping is:
 
 If you can prove one or the other, you get a [million dollars as a reward for solving this mystery][prize].
 
-[mellenium]: http://www.claymath.org/millennium-problems/millennium-prize-problems
+[mellenium]: http://www.claymath.org/millennium-problems
 [prize]: http://www.claymath.org/millennium-problems/millennium-prize-problems
+
+<!-- Jdog's review: -->
+<!-- make links: target=_blank -->
+<!-- more explanation for the difficult problems -->
+<!-- didn't get the intuitive explanation about the polynomials -->
+<!-- - more like didn't understand the 'why' part i.e. why can they be visualized as smooth and continuous -->
