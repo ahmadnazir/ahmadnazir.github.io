@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>ahmadnazir - Computational Problems: Easy to Impossible</title>
+        <link rel="stylesheet" type="text/css" href="../../css/default.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    </head>
+    <body>
+        <div class="header">
+            <a href="../../">
+                <i class="fa fa-file-text-o fa-inverse"> notes</i>
+            </a>
+            <a href="../../about.html" ">
+                <i class="fa fa-info-circle fa-inverse"> about</i>
+            </a>
+                <!-- <a href="/archive.html">Archive</a> -->
+        </div>
+
+        <br />
+        <br />
+        <br />
+
+        <div id="content" class="content">
+            <!-- <h1>Computational Problems: Easy to Impossible</h1> -->
+
+            <h1>Computational Problems: Easy to Impossible</h1>
+
+<div class="info">
+    Posted on April  2, 2017
+    
+</div>
+
+<!-- It seems that in order to understand something, humans need to ?? -->
+<p>Classifying things makes it easier for humans to talk about them. It is a process in understanding the fundamental nature of those things and how they relate to each other. This concept is called <em>Taxonomy</em> (initially used for classification of living organisms). Examples are:</p>
+<ul>
+<li>Numbers: whole numbers, integers, real numbers etc</li>
+<li>Formal Languages of Computer Science (Chomsky hierarchy): Regular, Context Free, Context Sensitive, and Recursively Innumerable</li>
+<li>Computational Problems: P, NP, NP-Hard etc</li>
+</ul>
+<p>I want to focus on the last category i.e <strong>categories of Compuational Problems and my intuition behind them</strong>.</p>
+<p>Before I begin, just want to say that the categories don’t have to be mutually exclusive. The only requirement is that elements in the categories need to share some common characteristics and that doesn’t stop them from belonging to multiple categories.</p>
+<h1 id="classifying-problems">Classifying Problems</h1>
+<p>Categories of problems have been an elusive subject for me and it took me some time to get an intuitive idea of what they mean and how they are different. When I say problem, I am talking about a computational problem which is a question that can be encoded in a form that a computer can understand e.g:</p>
+<ul>
+<li>What is 2+2?</li>
+<li>What is the shortest distance from A to B?</li>
+</ul>
+<h2 id="easy-vs-difficult-problems">Easy vs Difficult problems</h2>
+<p>A easy problem is one that doesn’t take a lot of time or memory. For our discussion, I will only focus on the time constraint.</p>
+<p>If time is the only constraint, we can defined an easy problem that can be solved <strong>quickly</strong>..</p>
+<p>.. but what does <strong>quick</strong> mean?</p>
+<p>Let’s take run times for instances of two imaginary problems - Problem A and Problem B:</p>
+<p><strong>Problem A:</strong></p>
+<ul>
+<li>For 10 elements, it takes 5 secs to run</li>
+<li>For 11 elements, it takes 10 secs to run</li>
+</ul>
+<p><strong>Problem B:</strong></p>
+<ul>
+<li>For 10 elements, it takes 20 secs to run</li>
+<li>For 11 elements, it takes 21 secs to run</li>
+</ul>
+<p>Now, even though the run times for examples of problem B are more than that of problem A, the run times for problem A grows faster than B. If we think of quickness in this way, solving problem B in the general sense is quicker than problem A. If the input size is greater than 12, problem B will run faster than problem A.</p>
+<p>This way of thinking about <strong>quickness</strong> can be expressed mathematically using <strong>polynomials</strong>. Using polynomials makes the concept formal.. but what usually happens is that the formal version doesn’t do a good enough job at making the idea intuitive.</p>
+<h3 id="what-is-a-polynomial-..-intuitively">What is a polynomial .. intuitively?</h3>
+<p>Instead of explaining what a polynomial is, let me ask you the difference between the following two graphs:</p>
+<p>
+<img class="box" src="./images/p-1.png" width="45%" align="left" />   <img class="box" src="./images/np-1.png" width="45%" alignt="left" />
+</p>
+<p>or these two:</p>
+<p>
+<img class="box" src="./images/p-2.png" width="45%" align="left" />   <img class="box" src="./images/np-2.png" width="45%" alignt="left" />
+</p>
+<p>The graphs on the left are continuous and smooth i.e. they don’t break, don’t have any holes in them, they don’t have any points (cusps).. It turns out that <strong>polynomials can be visualized as smooth and continuous</strong>.. or you can also say that they are smooth and continuous functions since we are visualizing a function of the form <em>y = f(x)</em>. I am not saying that all smooth and continuous functions are polynomials but all polynomials look like smooth and continuous functions. Of course, this is an over simplification of what a polynomial is but for me this simplification helps me get some intuition of the idea.</p>
+<p>Literally, the word polynomial means multiple terms and mathematically it is a sum of algebraic expressions e.g.</p>
+<pre><code>x^2 + 3x + 4</code></pre>
+<p>Variables in polynomials can only have powers that are whole numbers i.e. 0, 1, 2, 3. So something like <code>1/x</code> is not a polynomial.</p>
+<h3 id="so..-what-does-quick-mean-in-terms-of-polynomials">So.. what does ‘quick’ mean in terms of polynomials?</h3>
+<p>An easy problem is one that can be solved quickly i.e. <strong>if we can express the total running time of the problem as a polynomial</strong>, that would be an easy problem.</p>
+<p>Or In other words, <strong>if we can express the relationship of the input size and the total running time as a polynomial</strong>, we can categorize it as an easy problem.</p>
+<p>Let’s look as an example:</p>
+<ul>
+<li>Given a list of numbers, does number <code>42</code> exist in the list?</li>
+</ul>
+<p>In order to find out whether 42 exists in the list, we have to go through all the numbers in the list. So for a list of size 10, we have to look at 10 items at most. For a list of size 1000, we have to look at 1000 items. By increasing one item to the list, we increase one lookup. Hence, we can express the running time as:</p>
+<pre><code>running time = k . n</code></pre>
+<p>where:</p>
+<ul>
+<li><em>n</em> is the number of items,</li>
+<li><em>k</em> is some constant that is the cost of performing a lookup for an item</li>
+</ul>
+<p>Since <code>k . n</code> is a polynomial, we categorize this as an easy problem.</p>
+<p>This category of problems is known as <strong>P problems</strong> which stands of Polynomial time and is the official term for this category of problems.</p>
+<h3 id="difficult-problems">Difficult Problems</h3>
+<p>A difficult problem would be one that can’t be solved quickly. However, <strong>given a solution it should be possible to quickly verify that the solution is correct</strong>.</p>
+<p>If we use the same notion of quickness discussed earlier, we can define difficult problems as <strong>problems that can be verified in polynomial time</strong>.</p>
+<p>Such problems are formally known as <em>NP Problems</em> which stands for Non-deterministic polynomial time. Why such a difficult name? Well it comes from the concept of Non-deterministic Turning machines, which are capable of branching at every step of the problem and the whole thing runs in polynomial time. Such a machine is theoretical and only used in thought experiments.</p>
+<!-- Example: What is the path from A to B that  -->
+<h2 id="even-more-difficult-problems">Even more difficult problems</h2>
+<p>There are problems that can’t even be verified in polynomial time. Such problems are formally known as <strong>NP-Hard</strong>.</p>
+<!-- Example: What is the shortest path from A to B? -->
+<h2 id="impossible-problems">Impossible Problems</h2>
+<p>There are some problems that can’t be solved in a general sense i.e. for all possible inputs. If we try to solve them, the computer will take forever to solve and never return an answer. Formally, these problems are known as <strong>Undecidable problems</strong>.</p>
+<p>An example would be, <strong>given a computer problem, find out if it has a security bug or not</strong>. You can think of some types of computer programs for which you can easily find out whether they have a bug or not. However, you can’t do it for all types of computer programs that can possibly exist.</p>
+<p>The most famous impossible problem is known as the <strong>Halting problem</strong> which is <strong>given a program, will it ever solve or will it keep executing?</strong> This can’t be solved in a general sense.</p>
+<!-- ### Brute forcing the impossible problems -->
+<h1 id="recap">Recap</h1>
+<p>Here are the 4 categories discussed:</p>
+<ul>
+<li><strong>P</strong> (Easy): Can be <strong>solved in polynomial time</strong></li>
+<li><strong>NP</strong> (Difficult): Can be <strong>verified in polynomial time</strong></li>
+<li><strong>NP-Hard</strong> (Even More Difficult): In addition to the hardest problems in NP, they also contain problems that <strong>cannot be verified in polynomial time</strong></li>
+<li><strong>Undecidable</strong> (Impossible): Cannot be solved at all</li>
+</ul>
+<h1 id="how-do-we-find-out-the-category-for-a-problem">How do we find out the category for a problem?</h1>
+<p>Categorizing a problem is related to discovering an algorithm for it. We categorize problems as NP or NP-Hard because <strong>we are not aware of any algorithms that can run faster</strong>. If we discover an algorithm that runs faster, the problem gets recategorized.</p>
+<h1 id="how-do-these-categories-overlap">How do these categories overlap?</h1>
+<p>No one knows the answer to this question at the moment. Basically, this boils down to the infamous <em>P = NP</em> <a href="http://www.claymath.org/millennium-problems/millennium-prize-problems">millennium problem</a> which asks the question, does there exist a polynomial time algorithm that solves an NP problem? If such an algorithm existed, we wouldn’t need the NP category since the P and NP would be the same as P. Most people think that no such algorithm exists but it hasn’t been mathematically proven yet.</p>
+<p>The two different ways to think about the categories overlapping is:</p>
+<p>
+<img class="box" src="./images/unequal.png" width="45%" align="left" />   <img class="box" src="./images/equal.png" width="45%" alignt="left" />
+</p>
+<p>If you can prove one or the other, you get a <a href="http://www.claymath.org/millennium-problems/millennium-prize-problems">million dollars as a reward for solving this mystery</a>.</p>
+
+        </div>
+        <div class="footer">
+            <a href="mailto:ahmadnazir[at]gmail[dot]com"><i class="fa fa-2x fa-envelope-o fa-inverse"></i></a>
+            <!-- | -->
+            <a href="https://github.com/ahmadnazir"><i class="fa fa-2x fa-github fa-inverse"></i></a>
+            <!-- | -->
+            <a href="https://twitter.com/ahmadnazir"><i class="fa fa-2x fa-twitter fa-inverse"></i></a>
+            <!-- Powered by <a href="http://jaspervdj.be/hakyll">Hakyll</a> -->
+        </div>
+
+        <br />
+        <br />
+        <br />
+
+    </body>
+</html>
