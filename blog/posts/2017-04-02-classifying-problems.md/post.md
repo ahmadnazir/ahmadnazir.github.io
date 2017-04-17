@@ -1,5 +1,6 @@
 ---
 title: Computational Problems: Easy to Impossible
+comments: true
 ---
 
 <!-- It seems that in order to understand something, humans need to ?? -->

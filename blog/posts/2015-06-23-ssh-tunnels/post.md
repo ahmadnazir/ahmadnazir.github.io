@@ -1,5 +1,6 @@
 ---
 title:  Accessing remote services using SSH Tunnels
+comments: true
 ---
 
 Lately I have been using emacs **[SQLi][sqli]** mode to interact with
