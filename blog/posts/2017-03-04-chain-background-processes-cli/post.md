@@ -1,5 +1,6 @@
 ---
 title: Chaining background processes in the shell
+comments: true
 tags: linux, shell
 ---
 
