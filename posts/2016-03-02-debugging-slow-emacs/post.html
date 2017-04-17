@@ -44,6 +44,8 @@
 <p><img src="./images/slow_emacs-profile_report.jpg" width="100%" /></p>
 <p>Clearly, I could see that the culprit was a hook that ran everytime I was changing the focus. It turned out that the <code>auto-dim-other-buffers-mode</code> was causing the problems. Disabling and re-enabling the mode fixed the problem. Though this didn’t fix the root cause of the problem but the profiler helped me point out what was the source of the problem.</p>
 
+
+
         </div>
         <div class="footer">
             <a href="mailto:ahmadnazir[at]gmail[dot]com"><i class="fa fa-2x fa-envelope-o fa-inverse"></i></a>
