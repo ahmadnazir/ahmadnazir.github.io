@@ -143,7 +143,7 @@ the brain free from the unnecessary details.
 
 The key to become effective at problem solving is to **maintain focus on the
 main objective and avoid context switches**. The idea is to keep thinking in
-terms of **what is it that we want to do** instead of the **how**.
+terms of **what is it that we want to do, instead of how we do it**.
 
 Internalizing the basic activities comes with time, but we can try to **automate
 the mundane tasks** and **build the tools that ask us the relevant questions**
