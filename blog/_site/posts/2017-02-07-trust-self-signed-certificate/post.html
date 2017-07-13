@@ -56,9 +56,9 @@ sudo ln -s $DOMAIN.crt $HASH</code></pre>
 <p>PEM is a container format for storing certificates. <a href="http://serverfault.com/a/9717/286083">There are a number of ways to store certificates</a> and here is a quick reference for some extensions that I have bumped into:</p>
 <ul>
 <li><strong>.pem</strong> : Base64 encoded form of DER</li>
-<li><strong>.crt</strong> : Same as .pem</li>
 <li><strong>.der</strong> : Encoding data that uses the ASN.1 standard</li>
-<li><strong>.key</strong> : A PEM file that contains just the private key</li>
+<li><strong>.crt</strong> : It could be .pem or .der. The extension just means that it is a certificate</li>
+<li><strong>.key</strong> : A .pem or .der file that contains just the private key</li>
 </ul>
 
 

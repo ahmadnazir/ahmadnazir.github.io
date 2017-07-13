@@ -40,9 +40,9 @@ Source: [Trusting self-signed certificates in redhat][redhat]
 PEM is a container format for storing certificates. [There are a number of ways to store certificates][diff-formats] and here is a quick reference for some extensions that I have bumped into:
 
 - **.pem** : Base64 encoded form of DER
-- **.crt** : Same as .pem
 - **.der** : Encoding data that uses the ASN.1 standard
-- **.key** : A PEM file that contains just the private key
+- **.crt** : It could be .pem or .der. The extension just means that it is a certificate
+- **.key** : A .pem or .der file that contains just the private key
 
 
 [diff-formats]: http://serverfault.com/a/9717/286083
