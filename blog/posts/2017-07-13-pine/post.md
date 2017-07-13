@@ -54,6 +54,8 @@ To begin with, I'll target Penneo's public API for this experiment. Inspired by
 pipes and focusing on Penneo's API as a starting point, I have named the
 language **pine**. Also, pine trees look kind of like pipes :)
 
+You can follow the project here: **[pine][pine]**
+
 I'll be writing about my progress related to building this language and share
 those 'aha' moments from time to time...
 
@@ -137,5 +139,6 @@ types in haskell can be achieved by adding the following at the top of the file:
 
 Stay tuned!
 
+[pine]: https://github.com/ahmadnazir/pine
 [stack-dep]: https://github.com/commercialhaskell/stack/issues/1933
 
