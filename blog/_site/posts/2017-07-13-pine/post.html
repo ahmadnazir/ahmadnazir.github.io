@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>ahmadnazir - Build me a DSL for great good [1]</title>
+        <link rel="stylesheet" type="text/css" href="../../css/default.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    </head>
+    <body>
+        <div class="header">
+            <a href="../../">
+                <i class="fa fa-file-text-o fa-inverse"> notes</i>
+            </a>
+            <a href="../../about.html" ">
+                <i class="fa fa-info-circle fa-inverse"> about</i>
+            </a>
+                <!-- <a href="/archive.html">Archive</a> -->
+        </div>
+
+        <br />
+        <br />
+        <br />
+
+        <div id="content" class="content">
+            <!-- <h1>Build me a DSL for great good [1]</h1> -->
+
+            <h1>Build me a DSL for great good [1]</h1>
+
+<div class="info">
+    Posted on July 13, 2017
+    
+</div>
+
+<h2 id="haskell-intrigues-me">Haskell intrigues me</h2>
+<p>Haskell is one of those languages that has a crazy learning curve - at least I have been struggling with it. However, the idea that one should first focus on the type of data in the domain and only then figure out transformations between them really appeals to me. It might be that after getting a good enough understanding of language, I’ll settle for something else like a more dynamic and permissive language for everyday hacking (like Clojure) but my curiosity for all the ideas that Haskell has to offer doesn’t seem to fade away - so I’ll continue to bang my head against the wall…</p>
+<h2 id="build-me-a-dsl-pine">Build me a DSL : “pine”</h2>
+<p>I have started building a domain specific language that will let me interact with rest APIs in a more intuitive manner. This is what I want to do:</p>
+<p>Let’s say I have the following resources in my API</p>
+<ul>
+<li><strong>Customer:</strong>
+<ul>
+<li>id</li>
+<li>name</li>
+</ul></li>
+<li><strong>User:</strong>
+<ul>
+<li>id</li>
+<li>name</li>
+<li>customerId</li>
+</ul></li>
+<li><strong>Address:</strong>
+<ul>
+<li>id</li>
+<li>street</li>
+<li>userId</li>
+</ul></li>
+</ul>
+<p>I would like to write something like this using the language:</p>
+<pre><code>customers &quot;Acme Inc.&quot; | addresses</code></pre>
+<p>and the language should be able to figure out the relationship between the customer “Acme” and all the addresses that belong to the users of the company. The runtime should fire the relevant requests using the rest API and find me what I need. I want to <strong>combine any number of resources and filter the data</strong>. It is basically <strong>unix pipes that work with types</strong> and have filtering functionality built in.</p>
+<p>At a later point, I would like to separate the data fetching layer (that fires API requests) and build a SQL component as well which will make it possible to fetch data from a database instead of only HTTP requests.</p>
+<p>To begin with, I’ll target Penneo’s public API for this experiment. Inspired by pipes and focusing on Penneo’s API as a starting point, I have named the language <strong>pine</strong>. Also, pine trees look kind of like pipes :)</p>
+<p>I’ll be writing about my progress related to building this language and share those ‘aha’ moments from time to time…</p>
+<h2 id="using-stack-instead-of-cabal">1. Using Stack instead of Cabal</h2>
+<p>Stack is the new way of setting up projects and I’ll use that from now on instead of cabal. Stack groks the cabal format (as it is the same on some level). Setting up a project in stack is simple:</p>
+<pre><code>stack new app
+cd app
+stack build app
+stack exec app-exe</code></pre>
+<h2 id="adding-dependencies-in-stack-is-inconvenient">2. Adding dependencies in Stack is inconvenient</h2>
+<p>Adding dependencies in stack is not as simple as it is when using npm (node) or composer (php). I would expect to add a dependency like this:</p>
+<pre><code>stack install --save lib # --save switch doesn't exist !!</code></pre>
+<p>I have to manually update the .cabal file for the project e.g. <code>app.cabal</code> that stack uses.</p>
+<p>The reason for this could be that stack sets up dependencies for all the things that it builds and therefore keeps the dependencies separate. Just using a <code>--save</code> switch without specifying the dependent module doesn’t make sense.</p>
+<p>Here is an issue open related to this: <a href="https://github.com/commercialhaskell/stack/issues/1933">stack install package –save to add a dependency to the cabal file</a></p>
+<p>Anyway, here is a snippet from the pine’s cabal file (<code>pine.cabal</code>) that I had to modify manually:</p>
+<pre><code>library
+  ... 
+  exposed-modules:     Lib
+                     , Model
+  build-depends:       base &gt;= 4.7 &amp;&amp; &lt; 5
+                     , lens
+                     , aeson
+
+executable pine-exe
+  ...
+  main-is:             Main.hs
+  ...
+  build-depends:       base
+                     , pine
+                     , bytestring</code></pre>
+<p>I think this makes it possible for to use two different versions of the same library in the project. Anyway, adding a dependency to stack becomes a little bit inconvenient because of this</p>
+<h2 id="language-extensions">3. Language Extensions</h2>
+<p>Haskell’s default behavior is quite restrictive. In order to loosen the behavior and make some cases more convenient to write, language extensions can be enabled either by using switches from the command line (<code>ghc</code> supports this, not sure about <code>hugs</code> and other compilers) or by adding language directives / <code>LANGUAGE PRAGMA</code> at the top of the file e.g. implicit conversion between different string types in haskell can be achieved by adding the following at the top of the file:</p>
+<pre><code>{-# LANGUAGE OverloadedStrings #-}</code></pre>
+<h2 id="whats-next">What’s next?</h2>
+<ul>
+<li>Use the <code>wreq</code> library to make API requests and the <code>lens</code> library to parse the responses</li>
+<li>Make authenticated requests to the server</li>
+<li>Write the basic domain model (with just one data type) and try to convert the json responses that type</li>
+<li>Use the <code>parsec</code> library to write the parser. I won’t focus on that part until I have the basic functionality in place</li>
+</ul>
+<p>Stay tuned!</p>
+
+
+
+<br />
+<br />
+<div id="disqus_thread"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    /*
+    var disqus_config = function () {
+        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() {  // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+
+        s.src = '//ahmadnazir.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+        </div>
+        <div class="footer">
+            <a href="mailto:ahmadnazir[at]gmail[dot]com"><i class="fa fa-2x fa-envelope-o fa-inverse"></i></a>
+            <!-- | -->
+            <a href="https://github.com/ahmadnazir"><i class="fa fa-2x fa-github fa-inverse"></i></a>
+            <!-- | -->
+            <a href="https://twitter.com/ahmadnazir"><i class="fa fa-2x fa-twitter fa-inverse"></i></a>
+            <!-- Powered by <a href="http://jaspervdj.be/hakyll">Hakyll</a> -->
+        </div>
+
+        <br />
+        <br />
+        <br />
+
+    </body>
+</html>
