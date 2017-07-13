@@ -61,6 +61,7 @@
 <p>and the language should be able to figure out the relationship between the customer “Acme” and all the addresses that belong to the users of the company. The runtime should fire the relevant requests using the rest API and find me what I need. I want to <strong>combine any number of resources and filter the data</strong>. It is basically <strong>unix pipes that work with types</strong> and have filtering functionality built in.</p>
 <p>At a later point, I would like to separate the data fetching layer (that fires API requests) and build a SQL component as well which will make it possible to fetch data from a database instead of only HTTP requests.</p>
 <p>To begin with, I’ll target Penneo’s public API for this experiment. Inspired by pipes and focusing on Penneo’s API as a starting point, I have named the language <strong>pine</strong>. Also, pine trees look kind of like pipes :)</p>
+<p>You can follow the project here: <strong><a href="https://github.com/ahmadnazir/pine">pine</a></strong></p>
 <p>I’ll be writing about my progress related to building this language and share those ‘aha’ moments from time to time…</p>
 <h2 id="using-stack-instead-of-cabal">1. Using Stack instead of Cabal</h2>
 <p>Stack is the new way of setting up projects and I’ll use that from now on instead of cabal. Stack groks the cabal format (as it is the same on some level). Setting up a project in stack is simple:</p>
