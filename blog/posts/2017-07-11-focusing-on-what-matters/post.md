@@ -11,7 +11,7 @@ thoughts about the matter.
 ## Software developers are problems solvers
 In order to answer what makes software developers good at what they do, we have
 to answer what is it that software developers do. Software developers are
-basically problems solvers and we rely on software as our main weapon. To become
+basically problems solvers and we rely on software as our main instrument. To become
 efficient, we will have to analyze the process of problem solving.
 
 ## Process of problem solving dissected!
