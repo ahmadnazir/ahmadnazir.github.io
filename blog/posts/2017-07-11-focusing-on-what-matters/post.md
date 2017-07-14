@@ -3,10 +3,10 @@ title: Focusing on *what* matters?
 comments: true
 ---
 
-**tldr:** I got into a discussion with my fellow workers about "What makes a
-software developer good?", and even though it seems like a simple question, we
-couldn't really answer it convincingly. I'll just use this post to ramble on my
-thoughts about the matter.
+**tldr:** I got into a discussion at work about "What makes a software developer
+good?", and even though it seems like a simple question, we couldn't really
+answer it convincingly. I'll just use this post to ramble on my thoughts about
+the matter.
 
 ## Software developers are problems solvers
 In order to answer what makes software developers good at what they do, we have
