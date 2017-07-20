@@ -84,7 +84,7 @@ your focus away from the main objective. If you spend too much time in the **how
 domain**, you can get distracted. There are some things that you can be done to
 minimize such context switches:
 
-### 1. Internalize the operation:
+### 1. Internalize the operation
 
 Do the task so many times that it becomes part of the muscle memory. Imagine
 this: when you speak something, you brain doesn't actively think about moving
