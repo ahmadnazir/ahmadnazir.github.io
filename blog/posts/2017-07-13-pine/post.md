@@ -116,7 +116,15 @@ I think this makes it possible for to use two different versions of the same
 library in the project. Anyway, adding a dependency to stack becomes a little
 bit inconvenient because of this
 
-## 3. Language Extensions
+## 3. Find the versions for dependencies
+
+Once you have dependencies installed and given that no version is specified in the cabal file, they can be found as follows:
+
+```
+stack list-dependencies | grep mysql-simple
+```
+
+## 4. Language Extensions
 Haskell's default behavior is quite restrictive. In order to loosen the behavior
 and make some cases more convenient to write, language extensions can be enabled
 either by using switches from the command line (`ghc` supports this, not sure
@@ -127,6 +135,7 @@ types in haskell can be achieved by adding the following at the top of the file:
 ```
 {-# LANGUAGE OverloadedStrings #-}
 ```
+
 
 ## What's next?
 
