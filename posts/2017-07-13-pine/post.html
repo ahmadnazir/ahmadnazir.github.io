@@ -92,7 +92,10 @@ executable pine-exe
                      , pine
                      , bytestring</code></pre>
 <p>I think this makes it possible for to use two different versions of the same library in the project. Anyway, adding a dependency to stack becomes a little bit inconvenient because of this</p>
-<h2 id="language-extensions">3. Language Extensions</h2>
+<h2 id="find-the-versions-for-dependencies">3. Find the versions for dependencies</h2>
+<p>Once you have dependencies installed and given that no version is specified in the cabal file, they can be found as follows:</p>
+<pre><code>stack list-dependencies | grep mysql-simple</code></pre>
+<h2 id="language-extensions">4. Language Extensions</h2>
 <p>Haskell’s default behavior is quite restrictive. In order to loosen the behavior and make some cases more convenient to write, language extensions can be enabled either by using switches from the command line (<code>ghc</code> supports this, not sure about <code>hugs</code> and other compilers) or by adding language directives / <code>LANGUAGE PRAGMA</code> at the top of the file e.g. implicit conversion between different string types in haskell can be achieved by adding the following at the top of the file:</p>
 <pre><code>{-# LANGUAGE OverloadedStrings #-}</code></pre>
 <h2 id="whats-next">What’s next?</h2>
