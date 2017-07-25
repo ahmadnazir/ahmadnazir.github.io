@@ -67,12 +67,12 @@ level as well. However, it is not always that easy to keep focusing on the
 *what* instead of the *how*. Imagine that the task is "show a list of items in a
 table", I tend to start thinking about "do I know of a library that would let me
 do it in *react*.. or *elm* ..". Immediately, I focus on the the *how* whereas I
-should be thinking of the *what* i.e. What type of data the table contain, what
-is the use case etc. This is the **curse of knowing** i.e. just because I have
-experience in a few tools, I start thinking of the implementation. Whenever
-something like this happens, the brain shifts from the **what domain** to the
-**how domain** and this comes at a cost. If the brain stays in the *how domain*
-for too long, it comes at a significant cost.
+should be thinking of the *what* i.e. What is the type of data that the table
+contains, what is the use case etc. This is the **curse of knowing** i.e. just
+because I have experience in a few tools, I start thinking of the
+implementation. Whenever something like this happens, the brain shifts from the
+**what domain** to the **how domain** and this comes at a cost. If the brain
+stays in the *how domain* for too long, the cost becomes significant.
 
 ## but then how do I actually *do* something?
 
