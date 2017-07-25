@@ -153,7 +153,7 @@ At Penneo, I am working with a fantastic team that is helping me build `aww
 yeah` that solves some of these problems for us and I am really excited about
 it!
 
-## Acknowledgments
+## Acknowledgements
 
 Thanks to [Alejandro Recoveri][aj] for coming up with the name for the tool `aww
 yeah`.The idea is that setting up services and working with them should be so
