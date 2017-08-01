@@ -1,5 +1,6 @@
 ---
 title: Trust a self-signed certificate in Debian
+changelog: 2017-08-01: Note about establishing trust in the browser
 ---
 
 ## Generate a self-signed certificate
@@ -7,7 +8,7 @@ title: Trust a self-signed certificate in Debian
 Generate a self-signed certificate in PEM format
 
 ```
-DOMAIN=anr.dev.penneo.com
+DOMAIN=dev.penneo.com
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $DOMAIN.key -out $DOMAIN.crt
 ```
 
@@ -35,9 +36,27 @@ Source: [Trusting self-signed certificates in redhat][redhat]
 
 <!-- ## Add the key and certificate to the nginx confiruation -->
 
-## What is PEM format?
+## FAQ
 
-PEM is a container format for storing certificates. [There are a number of ways to store certificates][diff-formats] and here is a quick reference for some extensions that I have bumped into:
+### Does this mean that the browsers also trust the certificate?
+
+Some applications rely on the OS level trusted certificates. Browsers have a
+different way to established trust. For Chrome, you have to add the certificate
+manually as a trusted certificate:
+
+```
+Chrome Settings
+  > Show advanced settings
+  > HTTPS/SSL
+  > Manage Certificates
+  > Import certificate
+```
+
+### What is PEM format?
+
+PEM is a container format for storing
+certificates. [There are a number of ways to store certificates][diff-formats]
+and here is a quick reference for some extensions that I have bumped into:
 
 - **.pem** : Base64 encoded form of DER
 - **.der** : Encoding data that uses the ASN.1 standard
