@@ -87,8 +87,8 @@ getId entity = case entity of
      _ (Just r)       -&gt; Just $ sel1 r
      _ Nothing        -&gt; Nothing</code></pre>
 <p>It is required to specify the value constructor which is either <code>CustomerEntity</code> or <code>UserEntity</code>. I can’t use a generalized pattern and use <code>_</code> in place of the value constructor. This results in code bloat and you know what happens when things bloats… well, somebody pukes! Quite possibly, there is a way to handle this… I can’t really figure it out.</p>
-<h2 id="conclusion">Conclusion</h2>
-<p>Haskell seems like a really powerful tool but <strong>if the nature of the problem is data exploration, a dynamic language might be a better fit</strong>. I’ll use the concepts that I have learned and try to solve this problem in another language. Only because I am familiar with javascript, I am tempted to implement this in <a href="http://ramdajs.com/">ramda</a> (library that supports programming using the functional style). Let’s see how that goes!</p>
+<h2 id="whats-next">What’s next?</h2>
+<p>Haskell seems like a really powerful tool but <strong>if the nature of the problem is data exploration, a dynamic language might be a better fit</strong>. I’ll use the concepts that I have learned and try to solve this problem in another language. I am tempted to try out clojure or even a library in javascript like <a href="http://ramdajs.com/">ramda</a>. Let’s see how that goes!</p>
 
 
 

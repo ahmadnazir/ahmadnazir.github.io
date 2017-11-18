@@ -136,14 +136,13 @@ value constructor. This results in code bloat and you know what happens when
 things bloats... well, somebody pukes! Quite possibly, there is a
 way to handle this... I can't really figure it out.
 
-## Conclusion
+## What's next?
 
 Haskell seems like a really powerful tool but **if the nature of the problem is
 data exploration, a dynamic language might be a better fit**. I'll use the
 concepts that I have learned and try to solve this problem in another language.
-Only because I am familiar with javascript, I am tempted to implement this
-in [ramda][ramda] (library that supports programming using the functional
-style). Let's see how that goes!
+I am tempted to try out clojure or even a library in javascript
+like [ramda][ramda]. Let's see how that goes!
 
 [focusing-on-what-matters]: https://ahmadnazir.github.io/posts/2017-07-11-focusing-on-what-matters/post.html
 [ramda]: http://ramdajs.com/
