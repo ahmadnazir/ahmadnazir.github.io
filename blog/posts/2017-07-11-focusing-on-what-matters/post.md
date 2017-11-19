@@ -1,5 +1,5 @@
 ---
-title: Focusing on *what* matters?
+title: Focusing on *what* matters
 comments: true
 ---
 
