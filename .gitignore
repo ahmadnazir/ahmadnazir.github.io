@@ -5,3 +5,4 @@ site
 _cache
 .cabal-sandbox
 node_modules
+blog/css/default.css
