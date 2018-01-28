@@ -1,0 +1,160 @@
+$dark        : rgba(50,50,50,1);
+$light       : rgba(240,240,240,2);
+$tinge       : rgb(255, 125, 50);
+$transparent : rgba(0,0,0,0);
+
+* {
+    color       : $dark;
+    background  : $light;
+    font-family : Verdana, Arial, sans-serif;
+    margin      :0px 0px;
+}
+
+/* Inline Tags */
+p code {
+    font-family   : monospace;
+    background    : #FFF;
+    padding       : 1px 5px;
+    color         : #666;
+    border-radius : 4px;
+    border        : 1px solid #ddd;
+}
+
+/* Code Blocks */
+pre {
+    padding       : 8px 10px;
+    border        : 1px solid #ccc;
+    border-radius : 4px;
+    background    : #fff;
+    margin        : 0px 0px 20px 0px;
+    /* overflow-x: scroll; */
+
+    code {
+        font-family : monospace;
+        background  : none;
+    }
+}
+
+
+.content {
+    margin      : 0px auto 0px auto;
+    width       : 700px;
+    line-height : 1.5;
+}
+
+.header {
+    width         : 100%;
+    background    : $dark;
+    border-bottom : solid 3px $tinge;
+    margin-bottom : 30px;
+    padding       : 9px 0px 9px 0px;
+    text-align    : center;
+    font-size     : 18px;
+    top           : -1px;
+    position      : fixed;
+}
+
+.header a {
+    text-decoration : none;
+    background      : $transparent;
+    padding         : 10px;
+}
+
+.footer {
+    color          : #555;
+    font-size      : 10px;
+    width          : 100%;
+    background     : $dark;
+    border-top     : solid 3px $tinge;
+    padding        : 9px 0px 9px 0px;
+    text-align     : center;
+    vertical-align : text-center;
+    bottom         : -1px;
+    position       : fixed;
+}
+
+.footer a {
+    text-decoration : none;
+    background      : $transparent;
+    color           : $light;
+    padding         : 10px;
+    font-weight     : bold;
+
+}
+
+/* .footer a:hover { */
+/*     -webkit-transition : color 0.4s ease; */
+/*     -moz-transition    : color 0.4s ease; */
+/*     -o-transition      : color 0.4s ease; */
+/*     -ms-transition     : color 0.4s ease; */
+/*     transition         : color 0.4s ease; */
+/* } */
+
+h1 {
+    font-size : 24px;
+    margin    : 15px 0px 15px 0px;
+}
+
+h2 {
+    font-size : 20px;
+    margin    : 15px 0px 15px 0px;
+}
+
+div.info {
+    color      : #555;
+    font-size  : 14px;
+    font-style : bold;
+}
+
+img {
+    border : 5px solid $dark;
+}
+
+p {
+    margin : 15px 0px 15px 0px;
+}
+
+/* LISTS */
+
+.ul {
+  list-style-type : none;
+  margin          : 0;
+  padding         : 0;
+}
+
+.li {
+  border-bottom : 1px solid #ccc;
+  padding       : 10px;
+}
+
+.li:last-child {
+  border : none;
+}
+
+.li a {
+  text-decoration : none;
+}
+
+/* FONT AWESOME */
+
+.fa-github.fa-inverse {
+    color      : $tinge;
+    background : $dark;
+}
+.fa-envelope-o.fa-inverse {
+    color      : $tinge;
+    background : $dark;
+
+}
+.fa-twitter.fa-inverse {
+    color      : $tinge;
+    background : $dark;
+}
+.fa-info-circle.fa-inverse {
+    color      : $tinge;
+    background : $dark;
+}
+.fa-file-text-o.fa-inverse {
+    color      : $tinge;
+    background : $dark;
+}

@@ -9,6 +9,22 @@ cabal install hakyll
 cabal exec ghc blog/site.hs
 ```
 
+## Dependencies
+
+```
+npm install node-sass
+```
+
+## Updating Assets
+
+### Development
+```
+./node_modules/node-sass/bin/node-sass --watch blog/css/default.scss --recursive --output blog/css --source-map true --source-map-contents scss
+```
+
+<!-- ### Production -->
+<!-- write about this -->
+
 # Adding posts
 
 Once a post is added, the site has to be built again. This can be done

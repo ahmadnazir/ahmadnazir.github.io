@@ -4,3 +4,4 @@
 site
 _cache
 .cabal-sandbox
+node_modules
