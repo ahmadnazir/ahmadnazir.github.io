@@ -37,19 +37,13 @@ pre {
     }
 }
 
-.content {
-    margin      : 150px auto 0px auto;
-    width       : 700px;
-    line-height : 1.5;
-}
-
 .header {
-    height        : 7em;
+    height        : 40px;
     width         : 100%;
     background    : $light;
     border-bottom : solid 3px $dark;
     margin-bottom : 30px;
-    padding       : 9px 0px 9px 0px;
+    padding       : 15px 0px 10px 0px;
     text-align    : center;
     top           : -1px;
     position      : fixed;
@@ -60,11 +54,32 @@ pre {
     }
 }
 
+.title {
+    font-weight: bold;
+    display: inline;
+    font-size : 24px;
+}
+
+.content {
+    margin      : 80px auto 0px auto;
+    width       : 700px;
+    line-height : 1.5;
+}
+
+/* @media not screen and (min-width: 600px) { */
+/*   &.header { */
+/*     visibility: hidden; */
+/*   } */
+/*   &.content { */
+/*     margin : 0px auto 0px auto; */
+/*   } */
+/* } */
+
 // HACK
-svg.svg-inline--fa.fa-chevron-right.fa-w-10.fa-3x path{
+svg.svg-inline--fa.fa-chevron-right.fa-w-10.fa-2x path{
     color: $secondDark;
 }
-svg.svg-inline--fa.fa-chevron-left.fa-w-10.fa-3x path{
+svg.svg-inline--fa.fa-chevron-left.fa-w-10.fa-2x path{
     color: $secondDark;
 }
 
