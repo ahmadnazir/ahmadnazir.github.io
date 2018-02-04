@@ -1,13 +1,36 @@
+/// Small Breakpoint for Media Queries
+/// Mobile Size (~400px)
+/// @group breakpoints
+$break-xsmall: 380px;
+$breakpoint-xsmall: "screen and (min-width: #{$break-xsmall})";
+
+/// Small Breakpoint for Media Queries
+/// Mobile Size (~400px)
+/// @group breakpoints
+$break-small:  480px;
+$breakpoint-small: "screen and (min-width: #{$break-small})";
+
+/// Medium Breakpoint for Media Queries
+/// Tablet Size (~600px)
+/// @group breakpoints
+$break-medium: 768px;
+$breakpoint-medium: "screen and (min-width: #{$break-medium})";
+
+/// Large Breakpoint for Media Queries
+/// Desktop Size (~1400px)
+/// @group breakpoints
+$break-large:  1200px;
+$breakpoint-large: "screen and (min-width: #{$break-large})";
+
 $dark        : rgba(50,50,50,1);
 $secondDark  : rgba(204,204,204,1);
-/* $light       : rgba(240,240,240,2); */
 $light       : rgba(255,255,255,2);
-$tinge       : rgb(255, 125, 50);
+/* $tinge       : rgb(255, 125, 50); */
 $transparent : rgba(0,0,0,0);
+$contentWidth: 780px;
 
 * {
     color       : $dark;
-    background  : $light;
     font-family : Verdana, Arial, sans-serif;
     margin      : 0px 0px;
 }
@@ -29,28 +52,41 @@ pre {
     border-radius : 4px;
     background    : #fff;
     margin        : 0px 0px 20px 0px;
-    /* overflow-x: scroll; */
+    overflow-x: auto;
 
     code {
         font-family : monospace;
         background  : none;
     }
+
 }
 
 .header {
-    height        : 40px;
-    width         : 100%;
-    background    : $light;
     border-bottom : solid 3px $dark;
-    margin-bottom : 30px;
     padding       : 15px 0px 10px 0px;
     text-align    : center;
-    top           : -1px;
-    position      : fixed;
+
+    @media #{$breakpoint-small} {
+        text-align    : left;
+    }
 
     a {
         text-decoration : none;
         margin : 3px;
+    }
+
+    /* .brand { */
+    /* } */
+
+    .links {
+        display: none;
+
+        @media #{$breakpoint-small} {
+            display: block;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
     }
 }
 
@@ -61,27 +97,17 @@ pre {
 }
 
 .content {
-    margin      : 80px auto 0px auto;
-    width       : 700px;
+    margin: 0 auto;
     line-height : 1.5;
+    width       : 90%;
+    max-width: $contentWidth;
+    position: relative;
 }
 
-/* @media not screen and (min-width: 600px) { */
-/*   &.header { */
-/*     visibility: hidden; */
-/*   } */
-/*   &.content { */
-/*     margin : 0px auto 0px auto; */
-/*   } */
-/* } */
+body {
+    width: 100%;
+}
 
-// HACK
-svg.svg-inline--fa.fa-chevron-right.fa-w-10.fa-2x path{
-    color: $secondDark;
-}
-svg.svg-inline--fa.fa-chevron-left.fa-w-10.fa-2x path{
-    color: $secondDark;
-}
 
 /* .footer a:hover { */
 /*     -webkit-transition : color 0.4s ease; */
@@ -124,7 +150,7 @@ p {
 }
 
 .li {
-  border-bottom : 1px solid #ccc;
+  border-bottom : 1px solid $secondDark;
   padding       : 10px;
   &:last-child {
       border : none;
@@ -134,17 +160,12 @@ p {
   }
 }
 
-
-
 /* FONT AWESOME */
 
-/* .fa-inverse { */
-/*     &.fa-file-text-o , */
-/*     &.fa-info-circle , */
-/*     &.fa-github      , */
-/*     &.fa-twitter     , */
-/*     &.fa-envelope-o { */
-/*         color      : $tinge; */
-/*         background : $dark; */
-/*     } */
-/* } */
+// HACK
+svg.svg-inline--fa.fa-chevron-right.fa-w-10.fa-2x path{
+    color: $secondDark;
+}
+svg.svg-inline--fa.fa-chevron-left.fa-w-10.fa-2x path{
+    color: $secondDark;
+}
