@@ -14,23 +14,26 @@
 
             <div class="content">
                 <div class="brand">
-                    <div class="title">
-                        $if(posts)$
-                        <a href="#">
-                            ahmadnazir.github.io
-                        </a>
-                        $else$
-                        <a href="/">
-                            ahmadnazir.github.io
-                        </a>
-                        $endif$
-                    </div>
+                    <a href= $if(posts)$ "#" $else$ "/" $endif$>ahmadnazir.github.io</a>
                 </div>
 
                 <div class="links">
-                    <!-- <a href="/archive.html">Archive</a> -->
+                    <a href= $if(about)$ "#" $else$ "/about.html" $endif$>About</a>
+                </div>
+            </div>
 
-                    <i class="fas fa-2x fa-chevron-left"></i>
+        </div>
+
+        <div id="content" class="content">
+            <div class="after-header">
+                $body$
+            </div>
+        </div>
+
+
+        <div class="footer">
+                <div class="links">
+                    <!-- <a href="/archive.html">Archive</a> -->
 
                     <a href="https://github.com/ahmadnazir" target="_blank">
                         <i class="fab fa-2x fa-github-square"></i>
@@ -44,34 +47,8 @@
                     <a href="mailto:ahmadnazir@gmail.com">
                         <i class="fas fa-2x fa-envelope-square"></i>
                     </a>
-                    <i class="fas fa-2x fa-chevron-right"></i>
-
-                    $if(about)$
-                    <a href="#">
-                        <i class="fas fa-2x fa-question"></i>
-                    </a>
-                    $else$
-                    <a href="/about.html">
-                        <i class="fas fa-2x fa-question"></i>
-                    </a>
-                    $endif$
                 </div>
-            </div>
-
-        </div>
-
-        <div id="content" class="content">
-            <!-- <h1>$title$</h1> -->
-
-            $body$
-        </div>
-        <div class="footer">
             <!-- Powered by <a href="http://jaspervdj.be/hakyll">Hakyll</a> -->
         </div>
-
-        <br/>
-        <br/>
-        <br/>
-
     </body>
 </html>

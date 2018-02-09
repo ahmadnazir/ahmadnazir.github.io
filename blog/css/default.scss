@@ -22,17 +22,24 @@ $breakpoint-medium: "screen and (min-width: #{$break-medium})";
 $break-large:  1200px;
 $breakpoint-large: "screen and (min-width: #{$break-large})";
 
-$dark        : rgba(50,50,50,1);
-$secondDark  : rgba(204,204,204,1);
-$light       : rgba(255,255,255,2);
+$darkGrey        : rgba(50,50,50,1);
+$lightGrey  : rgba(204,204,204,1);
+$white       : rgba(255,255,255,2);
 /* $tinge       : rgb(255, 125, 50); */
 $transparent : rgba(0,0,0,0);
 $contentWidth: 780px;
 
-* {
-    color       : $dark;
+
+body {
+    color       : $darkGrey;
     font-family : Verdana, Arial, sans-serif;
     margin      : 0px 0px;
+    width       : 100%;
+    overflow-y: scroll;
+
+    a {
+        color : $darkGrey;
+    }
 }
 
 /* Inline Tags */
@@ -62,12 +69,18 @@ pre {
 }
 
 .header {
-    border-bottom : solid 3px $dark;
+    border-top: solid 2px $darkGrey;
+    border-bottom: solid 2px $darkGrey;
     padding       : 15px 0px 10px 0px;
     text-align    : center;
 
     @media #{$breakpoint-small} {
         text-align    : left;
+        width: 100%;
+        top: 0px;
+        position: fixed;
+        background: $white;
+        z-index: 999999;
     }
 
     a {
@@ -87,6 +100,36 @@ pre {
             right: 0;
             top: 0;
         }
+
+        .arrow {
+            color: $lightGrey;
+        }
+    }
+
+}
+
+.footer{
+    border-top: solid 2px $darkGrey;
+    border-bottom : solid 2px $darkGrey;
+    padding       : 15px 0px 10px 0px;
+    text-align    : center;
+
+    a {
+        text-decoration : none;
+        margin : 3px;
+    }
+
+    .links {
+        .arrow {
+            color: $lightGrey;
+        }
+    }
+
+    @media #{$breakpoint-small} {
+        width: 100%;
+        bottom: -1px;
+        position: fixed;
+        background: $white;
     }
 }
 
@@ -104,10 +147,14 @@ pre {
     position: relative;
 }
 
-body {
-    width: 100%;
-}
+.after-header {
+    margin: 1em auto;
 
+    @media #{$breakpoint-small} {
+        margin: 4em auto;
+    }
+
+}
 
 /* .footer a:hover { */
 /*     -webkit-transition : color 0.4s ease; */
@@ -134,7 +181,7 @@ div.info {
 }
 
 img {
-    border : 5px solid $dark;
+    border : 5px solid $darkGrey;
 }
 
 p {
@@ -143,29 +190,21 @@ p {
 
 /* LISTS */
 
-.ul {
+.post-list {
   list-style-type : none;
   margin          : 0;
   padding         : 0;
 }
 
-.li {
-  border-bottom : 1px solid $secondDark;
-  padding       : 10px;
-  &:last-child {
-      border : none;
-  }
-  a {
-      text-decoration : none;
-  }
-}
+.post-item {
+    padding       : 10px 0px;
 
-/* FONT AWESOME */
+    /* border-bottom : 1px solid $lightGrey; */
+    /* &:last-child { */
+    /*     border : none; */
+    /* } */
 
-// HACK
-svg.svg-inline--fa.fa-chevron-right.fa-w-10.fa-2x path{
-    color: $secondDark;
-}
-svg.svg-inline--fa.fa-chevron-left.fa-w-10.fa-2x path{
-    color: $secondDark;
+    a {
+            text-decoration : none;
+    }
 }
