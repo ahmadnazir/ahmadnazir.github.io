@@ -71,7 +71,7 @@ pre {
 .header {
     border-top: solid 2px $darkGrey;
     border-bottom: solid 2px $darkGrey;
-    padding       : 15px 0px 10px 0px;
+    padding       : 10px 0px 10px 0px;
     text-align    : center;
 
     @media #{$breakpoint-small} {
@@ -85,24 +85,37 @@ pre {
 
     a {
         text-decoration : none;
-        margin : 3px;
     }
 
-    /* .brand { */
+    .title {
+        font: {
+            family: courier;
+            weight: bold;
+        }
+
+        .sub-title{
+            color: $lightGrey;
+            font: {
+                size: .75em;
+            }
+        }
+    }
+
+    /* .about { */
+    /*     position: relative; */
     /* } */
 
     .links {
         display: none;
-
+        font: {
+            family: courier;
+            weight: bold;
+        }
         @media #{$breakpoint-small} {
             display: block;
             position: absolute;
             right: 0;
-            top: 0;
-        }
-
-        .arrow {
-            color: $lightGrey;
+            top: 0.5em;
         }
     }
 
@@ -133,12 +146,6 @@ pre {
     }
 }
 
-.title {
-    font-weight: bold;
-    display: inline;
-    font-size : 24px;
-}
-
 .content {
     margin: 0 auto;
     line-height : 1.5;
@@ -151,17 +158,27 @@ pre {
     margin: 1em auto;
 
     @media #{$breakpoint-small} {
-        margin: 4em auto;
+        margin: 5em auto;
     }
-
 }
 
-/* .footer a:hover { */
-/*     -webkit-transition : color 0.4s ease; */
-/*     -moz-transition    : color 0.4s ease; */
-/*     -o-transition      : color 0.4s ease; */
-/*     -ms-transition     : color 0.4s ease; */
-/*     transition         : color 0.4s ease; */
+/* .eval { */
+/*     position: absolute; */
+/*     visibility: hidden; */
+/*     @media #{$breakpoint-small} { */
+/*         visibility: visible; */
+/*         left: 1em; */
+/*         top: 5.6em; */
+/*         font: { */
+/*             family: courier; */
+/*             weight: bold; */
+/*         } */
+/*         -webkit-transition: opacity 1s ease-out; */
+/*         -moz-transition: opacity 1s ease-out; */
+/*         -ms-transition: opacity 1s ease-out; */
+/*         -o-transition: opacity 1s ease-out; */
+/*         opacity: 0; */
+/*     } */
 /* } */
 
 h1 {
