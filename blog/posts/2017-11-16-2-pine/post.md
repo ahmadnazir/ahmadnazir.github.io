@@ -29,7 +29,7 @@ person like me will try to find a shorter syntax for `SELECT` statements and
 So, if I want to ask the system about all the users for customer 'Acme Inc',
 instead of the following:
 
-```
+``` sql
 SELECT *
 FROM users AS u
 JOIN customer AS c
@@ -39,7 +39,7 @@ WHERE c.name = 'Acme Inc'
 
 I want something like:
 
-```
+``` bash
 customers "Acme" | users *
 ```
 
@@ -76,7 +76,7 @@ because the record fields act as functions which would lead to two functions
 with the same name in the module. Without enabling any extension, the following
 does not work:
 
-```
+``` haskell
 data Customer = Customer
   { name :: String
   } deriving (Show)
@@ -92,7 +92,7 @@ about `name` being unambiguous. You can enable the extension
 `DuplicateRecordFields` to overcome this however when you'll get a problem when
 using the record fields as selectors e.g. the following will not work:
 
-```
+``` haskell
 name $ customer
 name $ user
 ```
@@ -101,14 +101,14 @@ name $ user
 
 Allow me to explain, here is a data type:
 
-```
+``` haskell
 data Bool = True | False
 ```
 
 `True` and `False` are functions, also known as `value constructors`. In this
 example they don't need any arguments. Here is another example:
 
-```
+``` haskell
 type String     = Name
 type CustomerId = Int
 
@@ -123,7 +123,7 @@ data Entity
 
 Let's say I want to extract the id of an entity. I don't care what the type of entity it is. So, I want to be able to do this (which won't work):
 
-```
+``` haskell
 getId :: Entity -> Maybe Id
 getId entity = case entity of
      _ (Just r)       -> Just $ sel1 r

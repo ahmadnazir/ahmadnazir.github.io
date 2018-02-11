@@ -35,7 +35,7 @@ Let's say I have the following resources in my API
 
 I would like to write something like this using the language:
 
-```
+``` bash
 customers "Acme Inc." | addresses
 ```
 
@@ -64,7 +64,7 @@ Stack is the new way of setting up projects and I'll use that from now on
 instead of cabal. Stack groks the cabal format (as it is the same on some
 level). Setting up a project in stack is simple:
 
-```
+``` bash
 stack new app
 cd app
 stack build app
@@ -75,7 +75,7 @@ stack exec app-exe
 Adding dependencies in stack is not as simple as it is when using npm (node) or
 composer (php). I would expect to add a dependency like this:
 
-```
+``` bash
 stack install --save lib # --save switch doesn't exist !!
 ```
 
@@ -120,7 +120,7 @@ bit inconvenient because of this
 
 Once you have dependencies installed and given that no version is specified in the cabal file, they can be found as follows:
 
-```
+``` bash
 stack list-dependencies | grep mysql-simple
 ```
 
@@ -132,7 +132,7 @@ about `hugs` and other compilers) or by adding language directives / `LANGUAGE
 PRAGMA` at the top of the file e.g. implicit conversion between different string
 types in haskell can be achieved by adding the following at the top of the file:
 
-```
+``` haskell
 {-# LANGUAGE OverloadedStrings #-}
 ```
 
