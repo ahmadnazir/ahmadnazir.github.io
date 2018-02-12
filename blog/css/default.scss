@@ -22,24 +22,23 @@ $breakpoint-medium: "screen and (min-width: #{$break-medium})";
 $break-large:  1200px;
 $breakpoint-large: "screen and (min-width: #{$break-large})";
 
-$brandColor   : rgba(50,50,50,1);
-$darkGrey     : rgba(70,70,70,1);
-$grey     : rgba(85,85,85,1);
-$lightGrey    : rgba(204,204,204,1);
-$white        : rgba(255,255,255,2);
-$transparent  : rgba(0,0,0,0);
-$contentWidth : 720px;
-
+$brandTextColor       : rgba(100,154,178,1);
+$brandBackgroundColor : rgba(41,43,46,1);
+$darkGrey             : rgba(70,70,70,1);
+$grey                 : rgba(85,85,85,1);
+$lightGrey            : rgba(204,204,204,1);
+$white                : rgba(255,255,255,2);
+$contentWidth         : 720px;
 
 body {
     color       : $grey;
+    line-height : 1.5;
+    margin      : 0px 0px;
+    width       : 100%;
+    overflow-y  : scroll;
     font: {
         family : "Merriweather", Georgia, serif;
     }
-    line-height: 1.5;
-    margin      : 0px 0px;
-    width       : 100%;
-    overflow-y: scroll;
     a {
         color : $grey;
     }
@@ -72,118 +71,92 @@ pre {
 }
 
 .header {
-    border-top: solid 2px $brandColor;
-    border-bottom: solid 2px $brandColor;
-    padding       : 10px 0px 10px 0px;
-    text-align    : center;
+    /* border-top: solid 2px $brandBackgroundColor; */
+    /* border-bottom: solid 2px $brandBackgroundColor; */
+    background : $brandBackgroundColor;
+    padding    : 10px 0px 10px 0px;
+    text-align : center;
 
     @media #{$breakpoint-small} {
-        text-align    : left;
-        width: 100%;
-        top: 0px;
-        position: fixed;
-        background: $white;
-        z-index: 999999;
+        text-align : left;
+        width      : 100%;
+        top        : 0px;
+        position   : fixed;
+        z-index    : 999999;
     }
 
     a {
         text-decoration : none;
-        color: $brandColor;
+        color           : $brandTextColor;
     }
 
     .title {
         font: {
-            family: courier;
-            weight: bold;
+            size   : 24px;
+            family : courier;
+            weight : bold;
         }
 
         .sub-title{
             color: $lightGrey;
             font: {
-                size: .75em;
+                size: 16px;
             }
         }
     }
 
-    /* .about { */
-    /*     position: relative; */
-    /* } */
-
     .links {
         display: none;
         font: {
-            family: courier;
-            weight: bold;
+            family : courier;
+            weight : bold;
         }
         @media #{$breakpoint-small} {
-            display: block;
-            position: absolute;
-            right: 0;
-            top: 0.5em;
+            display  : block;
+            position : absolute;
+            right    : 0;
+            top      : 1.2em;
         }
     }
 
 }
 
 .footer{
-    border-top: solid 2px $grey;
-    border-bottom : solid 2px $grey;
-    padding       : 15px 0px 10px 0px;
-    text-align    : center;
+    background: $white;
+    padding    : 15px 0px 10px 0px;
+    text-align : center;
 
     a {
         text-decoration : none;
         margin : 3px;
+        color: $lightGrey;
     }
 
-    .links {
-        .arrow {
-            color: $lightGrey;
-        }
-    }
+    /* border-top: solid 2px $grey; */
+    border-bottom : solid .5em $brandBackgroundColor;
 
     @media #{$breakpoint-small} {
         width: 100%;
         bottom: -1px;
         position: fixed;
-        background: $white;
     }
 }
 
 .content {
-    margin: 0 auto;
+    margin      : 0 auto;
     line-height : 1.5;
     width       : 90%;
-    max-width: $contentWidth;
-    position: relative;
+    max-width   : $contentWidth;
+    position    : relative;
 }
 
 .after-header {
     margin: 1em auto;
 
     @media #{$breakpoint-small} {
-        margin: 5em auto;
+        margin: 6em auto;
     }
 }
-
-/* .eval { */
-/*     position: absolute; */
-/*     visibility: hidden; */
-/*     @media #{$breakpoint-small} { */
-/*         visibility: visible; */
-/*         left: 1em; */
-/*         top: 5.6em; */
-/*         font: { */
-/*             family: courier; */
-/*             weight: bold; */
-/*         } */
-/*         -webkit-transition: opacity 1s ease-out; */
-/*         -moz-transition: opacity 1s ease-out; */
-/*         -ms-transition: opacity 1s ease-out; */
-/*         -o-transition: opacity 1s ease-out; */
-/*         opacity: 0; */
-/*     } */
-/* } */
 
 h1 {
     font-size : 24px;
