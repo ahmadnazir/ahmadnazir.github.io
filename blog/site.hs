@@ -68,7 +68,7 @@ main = hakyll $ do
         route idRoute
         compile $ do
             let feedCtx = postCtx `mappend` bodyField "description"
-            posts <- fmap (take 10) . recentFirst =<<
+            posts <- fmap (take 25) . recentFirst =<<
                 loadAllSnapshots "posts/*/post.md" "content"
             renderAtom myFeedConfiguration feedCtx posts
 
