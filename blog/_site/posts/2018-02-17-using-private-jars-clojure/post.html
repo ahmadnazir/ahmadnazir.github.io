@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>ahmadnazir - Using private jars in Clojure</title>
+        <link rel="stylesheet" type="text/css" href="../../css/default.css" />
+        <link rel="stylesheet" type="text/css" href="../../css/syntax-highlight-default.css" />
+         <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:900italic,900,700italic,400italic,700,400,300italic,300" />
+        <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+    </head>
+    <body>
+        <div class="header">
+
+            <div class="content">
+                <div class="title">
+                    <a href="../../">(map reflect shtuff)</a>
+                    <div class="sub-title">
+                        &nbsp;=> ramblings by Ahmad Nazir
+                    </div>
+                </div>
+
+                <div class="links">
+                    <a href="../../about.html">(about)</a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- <div class="eval">
+             =>
+             </div> -->
+
+
+        <div id="content" class="content">
+            <div class="after-header">
+                <h1>Using private jars in Clojure</h1>
+
+<div class="info">
+    February 17, 2018
+    
+</div>
+
+<p>One of the many things that makes clojure an extremely practical tool is that it can be used to explore other java libraries - no compiling needed - <em>a faster feed back loop!</em> However, we need to ensure a few things before loading <em>private</em> jar files into clojure. In this post, I am documenting what works for me for a test project packaged as <code>com.acme.soup</code>.</p>
+<p>Let’s say that we have the following:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">package com.acme.soup;</span>
+
+<span class="kw">public</span> <span class="kw">class</span> Soup
+{
+    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">make</span>()
+    {
+        System.<span class="fu">out</span>.<span class="fu">println</span>( <span class="st">&quot;Making soup!&quot;</span> );
+    }
+}</code></pre></div>
+<p>The objective is to call <code>make</code> on an instance of <code>Soup</code> inside Clojure.</p>
+<p>For Java projects, I am using <a href="https://maven.apache.org/">maven</a> and for Clojure I am using <a href="https://leiningen.org/">leiningen</a>.</p>
+<h2 id="create-the-jars-from-the-maven-project">Create the jars from the maven project</h2>
+<p>The jars can be created using:</p>
+<pre><code>mvn package</code></pre>
+<p>However, this doesn’t create the check sums (which is needed by leiningen in order to load the jar files). So, we can call <code>install</code> with the <code>createChecksum</code> switch:</p>
+<pre><code>mvn install -DcreateChecksum=true</code></pre>
+<p>Considering that the project is packaged as <code>com.acme.soup</code>, all relevant files will be available at <code>~/.m2/repository/com/acme/soup</code></p>
+<h2 id="using-the-jars-in-the-leiningen-project">Using the jars in the leiningen project</h2>
+<h3 id="create-a-directory-structure-that-acts-as-a-local-repository">Create a directory structure that acts as a local repository</h3>
+<pre><code>mkdir localrepo</code></pre>
+<p>The local repository can’t just contain plain jar files, the structure needs to match the package structure of the jars being imported. Once you have copied the files, it should like like this:</p>
+<pre><code>tree localrepo -L 5
+
+localrepo
+└── com
+    └── acme
+        └── soup
+            └── soup
+                ├── 1.0-SNAPSHOT
+                ├── maven-metadata-local.xml
+                ├── maven-metadata-local.xml.md5
+                └── maven-metadata-local.xml.sha1</code></pre>
+<h3 id="configure-leiningen">Configure leiningen</h3>
+<p>The local repository needs to be added to the project so that leiningen knows where to load the dependencies from, in case they are not found in any public maven repository or clojars. The following needs to be added to the <code>project.clj</code> file:</p>
+<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">  <span class="kw">:repositories</span> {<span class="st">&quot;project&quot;</span> <span class="st">&quot;file:repo&quot;</span>}</code></pre></div>
+<p>Continue to add the dependencies you would normally do:</p>
+<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">  <span class="kw">:dependencies</span> [
+    [com.acme.soup/soup <span class="st">&quot;1.0-SNAPSHOT&quot;</span>]
+  ]</code></pre></div>
+<h3 id="loading-the-dependency-in-clojure-code">Loading the dependency in clojure code</h3>
+<p>The dependency needs to be <em>imported</em>, e.g. if the namespace is <code>com.acme.soup</code> and the class is <code>Soup</code>, then the following needs to be added to the <code>ns</code> expression</p>
+<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">ns</span> soup.core
+  (<span class="kw">:import</span> [com.acme.soup Soup]))</code></pre></div>
+<p>A new instance of <code>Soup</code> is created as follows:</p>
+<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(.make (Soup.))</code></pre></div>
+<p>or something that I prefer:</p>
+<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">-&gt;</span> (Soup.)  <span class="co">;; Create a instance of soup</span>
+    (.make)) <span class="co">;; Call native functions on it</span></code></pre></div>
+<p>That makes me very <em>happy happy joy joy!</em> :D</p>
+
+
+
+<br />
+<br />
+<div id="disqus_thread"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    /*
+    var disqus_config = function () {
+        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() {  // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+
+        s.src = '//ahmadnazir.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+<br />
+
+            </div>
+        </div>
+
+
+        <div class="footer">
+                <div class="links">
+                    <!-- <a href="/archive.html">Archive</a> -->
+
+                    <a href="https://github.com/ahmadnazir" target="_blank">
+                        <i class="fab fa-2x fa-github-square"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/ahmad-raja-052a3a3" target="_blank">
+                        <i class="fab fa-2x fa-linkedin"></i>
+                    </a>
+                    <a href="https://twitter.com/ahmadnazir" target="_blank">
+                        <i class="fab fa-2x fa-twitter-square"></i>
+                    </a>
+                    <a href="mailto:ahmadnazir@gmail.com">
+                        <i class="fas fa-2x fa-envelope-square"></i>
+                    </a>
+                </div>
+            <!-- Powered by <a href="http://jaspervdj.be/hakyll">Hakyll</a> -->
+        </div>
+    </body>
+</html>
