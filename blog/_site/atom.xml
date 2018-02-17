@@ -15,14 +15,7 @@
     <id>https://ahmadnazir.github.io/posts/2018-02-17-using-private-jars-clojure/post.html</id>
     <published>2018-02-17T00:00:00Z</published>
     <updated>2018-02-17T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<h1>Using private jars in Clojure</h1>
-
-<div class="info">
-    February 17, 2018
-    
-</div>
-
-<p>One of the many things that makes clojure an extremely practical tool is that it can be used to explore other java libraries - no compiling needed - <em>a faster feed back loop!</em> However, we need to ensure a few things before loading <em>private</em> jar files into clojure. In this post, I am documenting what works for me for a test project packaged as <code>com.acme.soup</code>.</p>
+    <summary type="html"><![CDATA[<p>One of the many things that makes clojure an extremely practical tool is that it can be used to explore other java libraries - no compiling needed - <em>a faster feed back loop!</em> However, we need to ensure a few things before loading <em>private</em> jar files into clojure. In this post, I am documenting what works for me for a test project packaged as <code>com.acme.soup</code>.</p>
 <p>Let’s say that we have the following:</p>
 <div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">package com.acme.soup;</span>
 
@@ -72,40 +65,7 @@ localrepo
 <p>or something that I prefer:</p>
 <div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">-&gt;</span> (Soup.)  <span class="co">;; Create a instance of soup</span>
     (.make)) <span class="co">;; Call native functions on it</span></code></pre></div>
-<p>That makes me very <em>happy happy joy joy!</em> :D</p>
-
-
-
-<br />
-<br />
-<div id="disqus_thread"></div>
-<script>
-    /**
-     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
-     */
-    /*
-    var disqus_config = function () {
-        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
-        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-    };
-    */
-    (function() {  // DON'T EDIT BELOW THIS LINE
-        var d = document, s = d.createElement('script');
-
-        s.src = '//ahmadnazir.disqus.com/embed.js';
-
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
-
-
-
-<br/>
-]]></summary>
+<p>That makes me very <em>happy happy joy joy!</em> :D</p>]]></summary>
 </entry>
 <entry>
     <title>Build me a DSL for great good [2]</title>
@@ -113,14 +73,7 @@ localrepo
     <id>https://ahmadnazir.github.io/posts/2017-11-16-2-pine/post.html</id>
     <published>2017-11-16T00:00:00Z</published>
     <updated>2017-11-16T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<h1>Build me a DSL for great good [2]</h1>
-
-<div class="info">
-    November 16, 2017
-    
-</div>
-
-<p><strong>tldr:</strong> Some problems are dynamic in nature and tackling them using a statically typed language might be a struggle. I have been working on a domain specific language <code>pine</code>, that will hopefully let me query data conveniently than writing <code>SELECT</code> statements. I have been struggling to implement it in Haskell but it seems like there might be a better tool for the job.</p>
+    <summary type="html"><![CDATA[<p><strong>tldr:</strong> Some problems are dynamic in nature and tackling them using a statically typed language might be a struggle. I have been working on a domain specific language <code>pine</code>, that will hopefully let me query data conveniently than writing <code>SELECT</code> statements. I have been struggling to implement it in Haskell but it seems like there might be a better tool for the job.</p>
 <h2 id="recap-of-pine-building-a-convenient-querying-functionality">Recap of “Pine” : Building a convenient querying functionality</h2>
 <p>I was trying to figure out a different way to interactively and conveniently query a relational dataset. A relational dataset could be:</p>
 <ul>
@@ -176,40 +129,7 @@ getId entity <span class="fu">=</span> <span class="kw">case</span> entity <span
      _ <span class="dt">Nothing</span>        <span class="ot">-&gt;</span> <span class="dt">Nothing</span></code></pre></div>
 <p>It is required to specify the value constructor which is either <code>CustomerEntity</code> or <code>UserEntity</code>. I can’t use a generalized pattern and use <code>_</code> in place of the value constructor. This results in code bloat and you know what happens when things bloats… well, somebody pukes! Quite possibly, there is a way to handle this… I can’t really figure it out.</p>
 <h2 id="whats-next">What’s next?</h2>
-<p>Haskell seems like a really powerful tool but <strong>if the nature of the problem is data exploration, a dynamic language might be a better fit</strong>. I’ll use the concepts that I have learned and try to solve this problem in another language. I am tempted to try out clojure or even a library in javascript like <a href="http://ramdajs.com/">ramda</a>. Let’s see how that goes!</p>
-
-
-
-<br />
-<br />
-<div id="disqus_thread"></div>
-<script>
-    /**
-     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
-     */
-    /*
-    var disqus_config = function () {
-        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
-        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-    };
-    */
-    (function() {  // DON'T EDIT BELOW THIS LINE
-        var d = document, s = d.createElement('script');
-
-        s.src = '//ahmadnazir.disqus.com/embed.js';
-
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
-
-
-
-<br/>
-]]></summary>
+<p>Haskell seems like a really powerful tool but <strong>if the nature of the problem is data exploration, a dynamic language might be a better fit</strong>. I’ll use the concepts that I have learned and try to solve this problem in another language. I am tempted to try out clojure or even a library in javascript like <a href="http://ramdajs.com/">ramda</a>. Let’s see how that goes!</p>]]></summary>
 </entry>
 <entry>
     <title>Build me a DSL for great good [1]</title>
@@ -217,14 +137,7 @@ getId entity <span class="fu">=</span> <span class="kw">case</span> entity <span
     <id>https://ahmadnazir.github.io/posts/2017-07-13-pine/post.html</id>
     <published>2017-07-13T00:00:00Z</published>
     <updated>2017-07-13T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<h1>Build me a DSL for great good [1]</h1>
-
-<div class="info">
-    July 13, 2017
-    
-</div>
-
-<h2 id="haskell-intrigues-me">Haskell intrigues me</h2>
+    <summary type="html"><![CDATA[<h2 id="haskell-intrigues-me">Haskell intrigues me</h2>
 <p>Haskell is one of those languages that has a crazy learning curve - at least I have been struggling with it. However, the idea that one should first focus on the type of data in the domain and only then figure out transformations between them really appeals to me. It might be that after getting a good enough understanding of language, I’ll settle for something else like a more dynamic and permissive language for everyday hacking (like Clojure) but my curiosity for all the ideas that Haskell has to offer doesn’t seem to fade away - so I’ll continue to bang my head against the wall…</p>
 <h2 id="build-me-a-dsl-pine">Build me a DSL : “pine”</h2>
 <p>I have started building a domain specific language that will let me interact with rest APIs in a more intuitive manner. This is what I want to do:</p>
@@ -297,40 +210,7 @@ executable pine-exe
 <li>Write the basic domain model (with just one data type) and try to convert the json responses that type</li>
 <li>Use the <code>parsec</code> library to write the parser. I won’t focus on that part until I have the basic functionality in place</li>
 </ul>
-<p>Stay tuned!</p>
-
-
-
-<br />
-<br />
-<div id="disqus_thread"></div>
-<script>
-    /**
-     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
-     */
-    /*
-    var disqus_config = function () {
-        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
-        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-    };
-    */
-    (function() {  // DON'T EDIT BELOW THIS LINE
-        var d = document, s = d.createElement('script');
-
-        s.src = '//ahmadnazir.disqus.com/embed.js';
-
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
-
-
-
-<br/>
-]]></summary>
+<p>Stay tuned!</p>]]></summary>
 </entry>
 <entry>
     <title>Focusing on *what* matters</title>
@@ -338,14 +218,7 @@ executable pine-exe
     <id>https://ahmadnazir.github.io/posts/2017-07-11-focusing-on-what-matters/post.html</id>
     <published>2017-07-11T00:00:00Z</published>
     <updated>2017-07-11T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<h1>Focusing on *what* matters</h1>
-
-<div class="info">
-    July 11, 2017
-    
-</div>
-
-<p><strong>tldr:</strong> I got into a discussion at work about “What makes a software developer good?”, and even though it seems like a simple question, we couldn’t really answer it convincingly. I’ll just use this post to ramble on my thoughts about the matter.</p>
+    <summary type="html"><![CDATA[<p><strong>tldr:</strong> I got into a discussion at work about “What makes a software developer good?”, and even though it seems like a simple question, we couldn’t really answer it convincingly. I’ll just use this post to ramble on my thoughts about the matter.</p>
 <h2 id="software-developers-are-problems-solvers">Software developers are problems solvers</h2>
 <p>In order to answer what makes software developers good at what they do, we have to answer what is it that software developers do. Software developers are basically problems solvers and we rely on software as our main instrument. To become efficient, we will have to analyze the process of problem solving.</p>
 <h2 id="process-of-problem-solving-dissected">Process of problem solving dissected!</h2>
@@ -387,40 +260,7 @@ executable pine-exe
 <p>Internalizing the basic activities comes with time, but we can try to <strong>automate the mundane tasks</strong> and <strong>build the tools that ask us the relevant questions</strong> instead of the other way around.</p>
 <p>At Penneo, I am working with a fantastic team that is helping me build <code>aww yeah</code> that solves some of these problems for us and I am really excited about it!</p>
 <h2 id="acknowledgements">Acknowledgements</h2>
-<p>Thanks to <a href="https://github.com/axltxl">Alejandro Recoveri</a> for coming up with the name for the tool <code>aww yeah</code>.The idea is that setting up services and working with them should be so easy that you go <em>awhawwwnw yeahh!!</em> :D</p>
-
-
-
-<br />
-<br />
-<div id="disqus_thread"></div>
-<script>
-    /**
-     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
-     */
-    /*
-    var disqus_config = function () {
-        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
-        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-    };
-    */
-    (function() {  // DON'T EDIT BELOW THIS LINE
-        var d = document, s = d.createElement('script');
-
-        s.src = '//ahmadnazir.disqus.com/embed.js';
-
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
-
-
-
-<br/>
-]]></summary>
+<p>Thanks to <a href="https://github.com/axltxl">Alejandro Recoveri</a> for coming up with the name for the tool <code>aww yeah</code>.The idea is that setting up services and working with them should be so easy that you go <em>awhawwwnw yeahh!!</em> :D</p>]]></summary>
 </entry>
 <entry>
     <title>Computational Problems: Easy to Impossible</title>
@@ -428,14 +268,7 @@ executable pine-exe
     <id>https://ahmadnazir.github.io/posts/2017-04-02-classifying-problems.md/post.html</id>
     <published>2017-04-02T00:00:00Z</published>
     <updated>2017-04-02T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<h1>Computational Problems: Easy to Impossible</h1>
-
-<div class="info">
-    April  2, 2017
-    
-</div>
-
-<!-- It seems that in order to understand something, humans need to ?? -->
+    <summary type="html"><![CDATA[<!-- It seems that in order to understand something, humans need to ?? -->
 <p>Classifying things makes it easier for humans to talk about them. It is a process in understanding the fundamental nature of those things and how they relate to each other. This concept is called <em>Taxonomy</em> (initially used for classification of living organisms). Examples are:</p>
 <ul>
 <li>Numbers: whole numbers, integers, real numbers etc</li>
@@ -530,40 +363,7 @@ executable pine-exe
 <!-- make links: target=_blank -->
 <!-- more explanation for the difficult problems -->
 <!-- didn't get the intuitive explanation about the polynomials -->
-<!-- - more like didn't understand the 'why' part i.e. why can they be visualized as smooth and continuous -->
-
-
-
-<br />
-<br />
-<div id="disqus_thread"></div>
-<script>
-    /**
-     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
-     */
-    /*
-    var disqus_config = function () {
-        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
-        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-    };
-    */
-    (function() {  // DON'T EDIT BELOW THIS LINE
-        var d = document, s = d.createElement('script');
-
-        s.src = '//ahmadnazir.disqus.com/embed.js';
-
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
-
-
-
-<br/>
-]]></summary>
+<!-- - more like didn't understand the 'why' part i.e. why can they be visualized as smooth and continuous -->]]></summary>
 </entry>
 <entry>
     <title>Chaining background processes in the shell</title>
@@ -571,14 +371,7 @@ executable pine-exe
     <id>https://ahmadnazir.github.io/posts/2017-03-04-chain-background-processes-cli/post.html</id>
     <published>2017-03-04T00:00:00Z</published>
     <updated>2017-03-04T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<h1>Chaining background processes in the shell</h1>
-
-<div class="info">
-    March  4, 2017
-    
-</div>
-
-<h1 id="scenario">Scenario</h1>
+    <summary type="html"><![CDATA[<h1 id="scenario">Scenario</h1>
 <p>Suppose you have the following operations:</p>
 <pre><code>a
 b
@@ -640,40 +433,7 @@ c() {
 <p>Of course, the order of execution is affected as you can see that 3 appears before 2.</p>
 <p>If any command fails in the chain, the execution stops there.</p>
 <h1 id="when-do-i-use-this">When do I use this?</h1>
-<p>I use this mostly during initialization of various setups. I don’t always want to wait for all the commands to successfully complete before running the next command. It is a quick way to run processes in parallel while ensuring that the chain stops executing if invocation fails for any command.</p>
-
-
-
-<br />
-<br />
-<div id="disqus_thread"></div>
-<script>
-    /**
-     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
-     */
-    /*
-    var disqus_config = function () {
-        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
-        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-    };
-    */
-    (function() {  // DON'T EDIT BELOW THIS LINE
-        var d = document, s = d.createElement('script');
-
-        s.src = '//ahmadnazir.disqus.com/embed.js';
-
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
-
-
-
-<br/>
-]]></summary>
+<p>I use this mostly during initialization of various setups. I don’t always want to wait for all the commands to successfully complete before running the next command. It is a quick way to run processes in parallel while ensuring that the chain stops executing if invocation fails for any command.</p>]]></summary>
 </entry>
 <entry>
     <title>Trust a self-signed certificate in Debian</title>
@@ -681,14 +441,7 @@ c() {
     <id>https://ahmadnazir.github.io/posts/2017-02-07-trust-self-signed-certificate/post.html</id>
     <published>2017-02-07T00:00:00Z</published>
     <updated>2017-02-07T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<h1>Trust a self-signed certificate in Debian</h1>
-
-<div class="info">
-    February  7, 2017
-    
-</div>
-
-<h2 id="generate-a-self-signed-certificate">Generate a self-signed certificate</h2>
+    <summary type="html"><![CDATA[<h2 id="generate-a-self-signed-certificate">Generate a self-signed certificate</h2>
 <p>Generate a self-signed certificate in PEM format</p>
 <pre><code>DOMAIN=dev.penneo.com
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $DOMAIN.key -out $DOMAIN.crt</code></pre>
@@ -723,12 +476,7 @@ sudo ln -s $DOMAIN.crt $HASH</code></pre>
 <li><strong>.der</strong> : Encoding data that uses the ASN.1 standard</li>
 <li><strong>.crt</strong> : It could be .pem or .der. The extension just means that it is a certificate</li>
 <li><strong>.key</strong> : A .pem or .der file that contains just the private key</li>
-</ul>
-
-
-
-<br/>
-]]></summary>
+</ul>]]></summary>
 </entry>
 <entry>
     <title>Load the shell faster</title>
@@ -736,14 +484,7 @@ sudo ln -s $DOMAIN.crt $HASH</code></pre>
     <id>https://ahmadnazir.github.io/posts/2016-11-03-load-shell-faster/post.html</id>
     <published>2016-11-03T00:00:00Z</published>
     <updated>2016-11-03T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<h1>Load the shell faster</h1>
-
-<div class="info">
-    November  3, 2016
-    
-</div>
-
-<p><strong>tldr:</strong> The shell can be started faster by replacing the time consuming scripts with <a href="https://en.wikipedia.org/wiki/Shim_(computing)">shims</a> which can lazy-load the functionality for those scripts</p>
+    <summary type="html"><![CDATA[<p><strong>tldr:</strong> The shell can be started faster by replacing the time consuming scripts with <a href="https://en.wikipedia.org/wiki/Shim_(computing)">shims</a> which can lazy-load the functionality for those scripts</p>
 <p><br /></p>
 <h2 id="problem">Problem</h2>
 <p>Lately, zsh is taking way too long to boot-up for me i.e. around .3 secs.. long enough to annoy me. I normally reach for <code>Ctrl-R</code> to search the command history as soon as the shell starts and if the shell takes too long to start-up the control character gets lost.. forcing me to press that combination of keys again. Clearly, I can’t be expected to live with this atrocity and something needs to be done.</p>
@@ -812,40 +553,7 @@ time-n-cmd() {
   done
   )
 
-}</code></pre>
-
-
-
-<br />
-<br />
-<div id="disqus_thread"></div>
-<script>
-    /**
-     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
-     */
-    /*
-    var disqus_config = function () {
-        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
-        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-    };
-    */
-    (function() {  // DON'T EDIT BELOW THIS LINE
-        var d = document, s = d.createElement('script');
-
-        s.src = '//ahmadnazir.disqus.com/embed.js';
-
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
-
-
-
-<br/>
-]]></summary>
+}</code></pre>]]></summary>
 </entry>
 <entry>
     <title>Cloning private repositories inside docker</title>
@@ -853,14 +561,7 @@ time-n-cmd() {
     <id>https://ahmadnazir.github.io/posts/2016-06-24-accessing-private-repos-in-docker/post.html</id>
     <published>2016-06-24T00:00:00Z</published>
     <updated>2016-06-24T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<h1>Cloning private repositories inside docker</h1>
-
-<div class="info">
-    June 24, 2016
-    
-</div>
-
-<p><strong>tldr:</strong> The unix socket created by the <code>ssh-agent</code> can be mounted in the docker container. This gives the user access to the keys on the host, making it possible to clone private repositories (that rely on ssh keys to grant access) inside the container.</p>
+    <summary type="html"><![CDATA[<p><strong>tldr:</strong> The unix socket created by the <code>ssh-agent</code> can be mounted in the docker container. This gives the user access to the keys on the host, making it possible to clone private repositories (that rely on ssh keys to grant access) inside the container.</p>
 <p><br /></p>
 <h2 id="problem">Problem</h2>
 <p>Docker is a linux container technology which makes it really easy to package and deploy code. Just like with other container technologies, you can use it to package the environment / execution context along with the code i.e:</p>
@@ -894,40 +595,7 @@ SSH_ASKPASS=/usr/bin/ssh-askpass</code></pre>
 <pre><code> root@xxxx :/# ssh -T git@github.com
  [omitted for brevity]
  Hi ahmadnazir! You&#39;ve successfully authenticated, but GitHub does
- not provide shell access.</code></pre>
-
-
-
-<br />
-<br />
-<div id="disqus_thread"></div>
-<script>
-    /**
-     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
-     */
-    /*
-    var disqus_config = function () {
-        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
-        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-    };
-    */
-    (function() {  // DON'T EDIT BELOW THIS LINE
-        var d = document, s = d.createElement('script');
-
-        s.src = '//ahmadnazir.disqus.com/embed.js';
-
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
-
-
-
-<br/>
-]]></summary>
+ not provide shell access.</code></pre>]]></summary>
 </entry>
 <entry>
     <title>Setup the fingerprint reader on Lenovo X1 Carbon on Ubuntu 14.04</title>
@@ -935,25 +603,13 @@ SSH_ASKPASS=/usr/bin/ssh-askpass</code></pre>
     <id>https://ahmadnazir.github.io/posts/2016-04-15-enable-finger-print-reader/post.html</id>
     <published>2016-04-15T00:00:00Z</published>
     <updated>2016-04-15T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<h1>Setup the fingerprint reader on Lenovo X1 Carbon on Ubuntu 14.04</h1>
-
-<div class="info">
-    April 15, 2016
-    
-</div>
-
-<p>Following libraries are required to use the fingerprint reader.</p>
+    <summary type="html"><![CDATA[<p>Following libraries are required to use the fingerprint reader.</p>
 <pre><code>sudo add-apt-repository -y ppa:fingerprint/fprint
 sudo apt-get update
 sudo apt-get install libfprint0 fprint-demo libpam-fprintd</code></pre>
 <p>After that, the <code>fprintd-enroll</code> command can be used to enroll the right index finger. Try swiping a few times and you are done. From now on, executing a command using <code>sudo</code> with prompt you for your finger print:</p>
 <p><img class="box" src="./images/enable-finger-print-reader.jpg" width="60%" /></p>
-<p>For reference, see <a href="http://askubuntu.com/questions/511876/how-to-install-a-fingerprint-reader-on-lenovo-thinkpad">askubuntu</a></p>
-
-
-
-<br/>
-]]></summary>
+<p>For reference, see <a href="http://askubuntu.com/questions/511876/how-to-install-a-fingerprint-reader-on-lenovo-thinkpad">askubuntu</a></p>]]></summary>
 </entry>
 
 </feed>
