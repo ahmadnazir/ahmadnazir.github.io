@@ -1,0 +1,959 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>(map reflect shtuff)</title>
+    <link href="https://ahmadnazir.github.io/atom.xml" rel="self" />
+    <link href="https://ahmadnazir.github.io" />
+    <id>https://ahmadnazir.github.io/atom.xml</id>
+    <author>
+        <name>Ahmad Nazir Raja</name>
+        <email>ahmadnazir@gmail.com</email>
+    </author>
+    <updated>2018-02-17T00:00:00Z</updated>
+    <entry>
+    <title>Using private jars in Clojure</title>
+    <link href="https://ahmadnazir.github.io/posts/2018-02-17-using-private-jars-clojure/post.html" />
+    <id>https://ahmadnazir.github.io/posts/2018-02-17-using-private-jars-clojure/post.html</id>
+    <published>2018-02-17T00:00:00Z</published>
+    <updated>2018-02-17T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<h1>Using private jars in Clojure</h1>
+
+<div class="info">
+    February 17, 2018
+    
+</div>
+
+<p>One of the many things that makes clojure an extremely practical tool is that it can be used to explore other java libraries - no compiling needed - <em>a faster feed back loop!</em> However, we need to ensure a few things before loading <em>private</em> jar files into clojure. In this post, I am documenting what works for me for a test project packaged as <code>com.acme.soup</code>.</p>
+<p>Let’s say that we have the following:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">package com.acme.soup;</span>
+
+<span class="kw">public</span> <span class="kw">class</span> Soup
+{
+    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">make</span>()
+    {
+        System.<span class="fu">out</span>.<span class="fu">println</span>( <span class="st">&quot;Making soup!&quot;</span> );
+    }
+}</code></pre></div>
+<p>The objective is to call <code>make</code> on an instance of <code>Soup</code> inside Clojure.</p>
+<p>For Java projects, I am using <a href="https://maven.apache.org/">maven</a> and for Clojure I am using <a href="https://leiningen.org/">leiningen</a>.</p>
+<h2 id="create-the-jars-from-the-maven-project">Create the jars from the maven project</h2>
+<p>The jars can be created using:</p>
+<pre><code>mvn package</code></pre>
+<p>However, this doesn’t create the check sums (which is needed by leiningen in order to load the jar files). So, we can call <code>install</code> with the <code>createChecksum</code> switch:</p>
+<pre><code>mvn install -DcreateChecksum=true</code></pre>
+<p>Considering that the project is packaged as <code>com.acme.soup</code>, all relevant files will be available at <code>~/.m2/repository/com/acme/soup</code></p>
+<h2 id="using-the-jars-in-the-leiningen-project">Using the jars in the leiningen project</h2>
+<h3 id="create-a-directory-structure-that-acts-as-a-local-repository">Create a directory structure that acts as a local repository</h3>
+<pre><code>mkdir localrepo</code></pre>
+<p>The local repository can’t just contain plain jar files, the structure needs to match the package structure of the jars being imported. Once you have copied the files, it should like like this:</p>
+<pre><code>tree localrepo -L 5
+
+localrepo
+└── com
+    └── acme
+        └── soup
+            └── soup
+                ├── 1.0-SNAPSHOT
+                ├── maven-metadata-local.xml
+                ├── maven-metadata-local.xml.md5
+                └── maven-metadata-local.xml.sha1</code></pre>
+<h3 id="configure-leiningen">Configure leiningen</h3>
+<p>The local repository needs to be added to the project so that leiningen knows where to load the dependencies from, in case they are not found in any public maven repository or clojars. The following needs to be added to the <code>project.clj</code> file:</p>
+<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">  <span class="kw">:repositories</span> {<span class="st">&quot;project&quot;</span> <span class="st">&quot;file:repo&quot;</span>}</code></pre></div>
+<p>Continue to add the dependencies you would normally do:</p>
+<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">  <span class="kw">:dependencies</span> [
+    [com.acme.soup/soup <span class="st">&quot;1.0-SNAPSHOT&quot;</span>]
+  ]</code></pre></div>
+<h3 id="loading-the-dependency-in-clojure-code">Loading the dependency in clojure code</h3>
+<p>The dependency needs to be <em>imported</em>, e.g. if the namespace is <code>com.acme.soup</code> and the class is <code>Soup</code>, then the following needs to be added to the <code>ns</code> expression</p>
+<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">ns</span> soup.core
+  (<span class="kw">:import</span> [com.acme.soup Soup]))</code></pre></div>
+<p>A new instance of <code>Soup</code> is created as follows:</p>
+<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(.make (Soup.))</code></pre></div>
+<p>or something that I prefer:</p>
+<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">-&gt;</span> (Soup.)  <span class="co">;; Create a instance of soup</span>
+    (.make)) <span class="co">;; Call native functions on it</span></code></pre></div>
+<p>That makes me very <em>happy happy joy joy!</em> :D</p>
+
+
+
+<br />
+<br />
+<div id="disqus_thread"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    /*
+    var disqus_config = function () {
+        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() {  // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+
+        s.src = '//ahmadnazir.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+<br/>
+]]></summary>
+</entry>
+<entry>
+    <title>Build me a DSL for great good [2]</title>
+    <link href="https://ahmadnazir.github.io/posts/2017-11-16-2-pine/post.html" />
+    <id>https://ahmadnazir.github.io/posts/2017-11-16-2-pine/post.html</id>
+    <published>2017-11-16T00:00:00Z</published>
+    <updated>2017-11-16T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<h1>Build me a DSL for great good [2]</h1>
+
+<div class="info">
+    November 16, 2017
+    
+</div>
+
+<p><strong>tldr:</strong> Some problems are dynamic in nature and tackling them using a statically typed language might be a struggle. I have been working on a domain specific language <code>pine</code>, that will hopefully let me query data conveniently than writing <code>SELECT</code> statements. I have been struggling to implement it in Haskell but it seems like there might be a better tool for the job.</p>
+<h2 id="recap-of-pine-building-a-convenient-querying-functionality">Recap of “Pine” : Building a convenient querying functionality</h2>
+<p>I was trying to figure out a different way to interactively and conveniently query a relational dataset. A relational dataset could be:</p>
+<ul>
+<li><p><strong>REST API:</strong> where for every resource I am interested in the <code>GET</code> method and based on the result, I should be able to get the related resources.</p></li>
+<li><p><strong>Relational database:</strong> In this case I want a convenient way to write <code>SELECT</code> statements.</p></li>
+</ul>
+<p>For me, convenience is about staying on the command line (or inside the editor) - basically using text to search the data with the minimum number of characters. It turns out that when you have to write a lot of queries, a lazy person like me will try to find a shorter syntax for <code>SELECT</code> statements and <code>JOIN</code>s.</p>
+<p>So, if I want to ask the system about all the users for customer ‘Acme Inc’, instead of the following:</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> *
+<span class="kw">FROM</span> users <span class="kw">AS</span> u
+<span class="kw">JOIN</span> customer <span class="kw">AS</span> c
+<span class="kw">ON</span> (u.customer_id = c.id)
+<span class="kw">WHERE</span> c.name = <span class="st">&#39;Acme Inc&#39;</span></code></pre></div>
+<p>I want something like:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">customers</span> <span class="st">&quot;Acme&quot;</span> <span class="kw">|</span> <span class="kw">users</span> *</code></pre></div>
+<p>Unix Pipes Rules!</p>
+<p>A query in the latter form supports my chain of thought and helps me stay in the <em>what</em> domain i.e. <a href="https://ahmadnazir.github.io/posts/2017-07-11-focusing-on-what-matters/post.html">I should tell the machine what I want instead of how I want it</a>.</p>
+<h2 id="attempting-an-implementation-in-haskell">Attempting an implementation in Haskell</h2>
+<p>I wanted to solve this problem using Haskell because I thought it would help me learn it - and indeed it turned out to be a valuable learning experience. However, it didn’t feel like the right tool for this job. The nature of the problem that I am trying to solve is dynamic and I was jumping through hoops to achieve this in Haskell. I am probably offending a few haskell fans but I would love to hear from anyone who can show me the light.</p>
+<h3 id="why-choose-a-statically-type-language-when-you-need-dynamic-types">1. Why choose a statically type language when you need dynamic types?</h3>
+<p>I want to <strong>explore the domain of my data set</strong> - I don’t really know the types at compile time, or I don’t want to be tied with a specific domain. For example, if I have a MySql database, I could create types corresponding to every table in the database but then my implementation would be specific for that schema. I wanted to be able to to feed the program any schema and start exploring the relationships between the data. In other words, I want to be able to generate types at run time, which goes against static typing. So… no bueno!</p>
+<h3 id="working-with-records-is-sometimes-frustrating">2. Working with records is sometimes frustrating</h3>
+<p>I can’t include two records with the same fields in the same module. This is because the record fields act as functions which would lead to two functions with the same name in the module. Without enabling any extension, the following does not work:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">Customer</span> <span class="fu">=</span> <span class="dt">Customer</span>
+  {<span class="ot"> name ::</span> <span class="dt">String</span>
+  } <span class="kw">deriving</span> (<span class="dt">Show</span>)
+  
+<span class="kw">data</span> <span class="dt">User</span> <span class="fu">=</span> <span class="dt">User</span>
+  {<span class="ot"> name ::</span> <span class="dt">String</span>
+  ,<span class="ot"> gender ::</span> <span class="dt">String</span>
+  } <span class="kw">deriving</span> (<span class="dt">Show</span>)</code></pre></div>
+<p>The record field <code>name</code> is used in two places so the compiler will complain about <code>name</code> being unambiguous. You can enable the extension <code>DuplicateRecordFields</code> to overcome this however when you’ll get a problem when using the record fields as selectors e.g. the following will not work:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">name <span class="fu">$</span> customer
+name <span class="fu">$</span> user</code></pre></div>
+<h3 id="how-to-pattern-match-on-only-the-arguments-of-value-constructors-wait-what">3. How to pattern match on only the arguments of value constructors… wait, what?</h3>
+<p>Allow me to explain, here is a data type:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">Bool</span> <span class="fu">=</span> <span class="dt">True</span> <span class="fu">|</span> <span class="dt">False</span></code></pre></div>
+<p><code>True</code> and <code>False</code> are functions, also known as <code>value constructors</code>. In this example they don’t need any arguments. Here is another example:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">type</span> <span class="dt">String</span>     <span class="fu">=</span> <span class="dt">Name</span>
+<span class="kw">type</span> <span class="dt">CustomerId</span> <span class="fu">=</span> <span class="dt">Int</span>
+
+<span class="kw">type</span> <span class="dt">Customer</span> <span class="fu">=</span> (<span class="dt">Id</span>, <span class="dt">Name</span>)
+<span class="kw">type</span> <span class="dt">User</span>     <span class="fu">=</span> (<span class="dt">Id</span>, <span class="dt">Name</span>, <span class="dt">CustomerId</span>)
+
+<span class="kw">data</span> <span class="dt">Entity</span>
+  <span class="fu">=</span>
+    <span class="dt">CustomerEntity</span> (<span class="dt">Maybe</span> <span class="dt">Customer</span>)
+  <span class="fu">|</span> <span class="dt">UserEntity</span>     (<span class="dt">Maybe</span> <span class="dt">User</span>)</code></pre></div>
+<p>Let’s say I want to extract the id of an entity. I don’t care what the type of entity it is. So, I want to be able to do this (which won’t work):</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">getId ::</span> <span class="dt">Entity</span> <span class="ot">-&gt;</span> <span class="dt">Maybe</span> <span class="dt">Id</span>
+getId entity <span class="fu">=</span> <span class="kw">case</span> entity <span class="kw">of</span>
+     _ (<span class="dt">Just</span> r)       <span class="ot">-&gt;</span> <span class="dt">Just</span> <span class="fu">$</span> sel1 r
+     _ <span class="dt">Nothing</span>        <span class="ot">-&gt;</span> <span class="dt">Nothing</span></code></pre></div>
+<p>It is required to specify the value constructor which is either <code>CustomerEntity</code> or <code>UserEntity</code>. I can’t use a generalized pattern and use <code>_</code> in place of the value constructor. This results in code bloat and you know what happens when things bloats… well, somebody pukes! Quite possibly, there is a way to handle this… I can’t really figure it out.</p>
+<h2 id="whats-next">What’s next?</h2>
+<p>Haskell seems like a really powerful tool but <strong>if the nature of the problem is data exploration, a dynamic language might be a better fit</strong>. I’ll use the concepts that I have learned and try to solve this problem in another language. I am tempted to try out clojure or even a library in javascript like <a href="http://ramdajs.com/">ramda</a>. Let’s see how that goes!</p>
+
+
+
+<br />
+<br />
+<div id="disqus_thread"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    /*
+    var disqus_config = function () {
+        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() {  // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+
+        s.src = '//ahmadnazir.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+<br/>
+]]></summary>
+</entry>
+<entry>
+    <title>Build me a DSL for great good [1]</title>
+    <link href="https://ahmadnazir.github.io/posts/2017-07-13-pine/post.html" />
+    <id>https://ahmadnazir.github.io/posts/2017-07-13-pine/post.html</id>
+    <published>2017-07-13T00:00:00Z</published>
+    <updated>2017-07-13T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<h1>Build me a DSL for great good [1]</h1>
+
+<div class="info">
+    July 13, 2017
+    
+</div>
+
+<h2 id="haskell-intrigues-me">Haskell intrigues me</h2>
+<p>Haskell is one of those languages that has a crazy learning curve - at least I have been struggling with it. However, the idea that one should first focus on the type of data in the domain and only then figure out transformations between them really appeals to me. It might be that after getting a good enough understanding of language, I’ll settle for something else like a more dynamic and permissive language for everyday hacking (like Clojure) but my curiosity for all the ideas that Haskell has to offer doesn’t seem to fade away - so I’ll continue to bang my head against the wall…</p>
+<h2 id="build-me-a-dsl-pine">Build me a DSL : “pine”</h2>
+<p>I have started building a domain specific language that will let me interact with rest APIs in a more intuitive manner. This is what I want to do:</p>
+<p>Let’s say I have the following resources in my API</p>
+<ul>
+<li><strong>Customer:</strong>
+<ul>
+<li>id</li>
+<li>name</li>
+</ul></li>
+<li><strong>User:</strong>
+<ul>
+<li>id</li>
+<li>name</li>
+<li>customerId</li>
+</ul></li>
+<li><strong>Address:</strong>
+<ul>
+<li>id</li>
+<li>street</li>
+<li>userId</li>
+</ul></li>
+</ul>
+<p>I would like to write something like this using the language:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">customers</span> <span class="st">&quot;Acme Inc.&quot;</span> <span class="kw">|</span> <span class="kw">addresses</span></code></pre></div>
+<p>and the language should be able to figure out the relationship between the customer “Acme” and all the addresses that belong to the users of the company. The runtime should fire the relevant requests using the rest API and find me what I need. I want to <strong>combine any number of resources and filter the data</strong>. It is basically <strong>unix pipes that work with types</strong> and have filtering functionality built in.</p>
+<p>At a later point, I would like to separate the data fetching layer (that fires API requests) and build a SQL component as well which will make it possible to fetch data from a database instead of only HTTP requests.</p>
+<p>To begin with, I’ll target Penneo’s public API for this experiment. Inspired by pipes and focusing on Penneo’s API as a starting point, I have named the language <strong>pine</strong>. Also, pine trees look kind of like pipes :)</p>
+<p>You can follow the project here: <strong><a href="https://github.com/ahmadnazir/pine">pine</a></strong></p>
+<p>I’ll be writing about my progress related to building this language and share those ‘aha’ moments from time to time…</p>
+<h2 id="using-stack-instead-of-cabal">1. Using Stack instead of Cabal</h2>
+<p>Stack is the new way of setting up projects and I’ll use that from now on instead of cabal. Stack groks the cabal format (as it is the same on some level). Setting up a project in stack is simple:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">stack</span> new app
+<span class="kw">cd</span> app
+<span class="kw">stack</span> build app
+<span class="kw">stack</span> exec app-exe</code></pre></div>
+<h2 id="adding-dependencies-in-stack-is-inconvenient">2. Adding dependencies in Stack is inconvenient</h2>
+<p>Adding dependencies in stack is not as simple as it is when using npm (node) or composer (php). I would expect to add a dependency like this:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">stack</span> install --save lib <span class="co"># --save switch doesn&#39;t exist !!</span></code></pre></div>
+<p>I have to manually update the .cabal file for the project e.g. <code>app.cabal</code> that stack uses.</p>
+<p>The reason for this could be that stack sets up dependencies for all the things that it builds and therefore keeps the dependencies separate. Just using a <code>--save</code> switch without specifying the dependent module doesn’t make sense.</p>
+<p>Here is an issue open related to this: <a href="https://github.com/commercialhaskell/stack/issues/1933">stack install package –save to add a dependency to the cabal file</a></p>
+<p>Anyway, here is a snippet from the pine’s cabal file (<code>pine.cabal</code>) that I had to modify manually:</p>
+<pre><code>library
+  ... 
+  exposed-modules:     Lib
+                     , Model
+  build-depends:       base &gt;= 4.7 &amp;&amp; &lt; 5
+                     , lens
+                     , aeson
+
+executable pine-exe
+  ...
+  main-is:             Main.hs
+  ...
+  build-depends:       base
+                     , pine
+                     , bytestring</code></pre>
+<p>I think this makes it possible for to use two different versions of the same library in the project. Anyway, adding a dependency to stack becomes a little bit inconvenient because of this</p>
+<h2 id="find-the-versions-for-dependencies">3. Find the versions for dependencies</h2>
+<p>Once you have dependencies installed and given that no version is specified in the cabal file, they can be found as follows:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">stack</span> list-dependencies <span class="kw">|</span> <span class="kw">grep</span> mysql-simple</code></pre></div>
+<h2 id="language-extensions">4. Language Extensions</h2>
+<p>Haskell’s default behavior is quite restrictive. In order to loosen the behavior and make some cases more convenient to write, language extensions can be enabled either by using switches from the command line (<code>ghc</code> supports this, not sure about <code>hugs</code> and other compilers) or by adding language directives / <code>LANGUAGE PRAGMA</code> at the top of the file e.g. implicit conversion between different string types in haskell can be achieved by adding the following at the top of the file:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">{-# LANGUAGE OverloadedStrings #-}</span></code></pre></div>
+<h2 id="whats-next">What’s next?</h2>
+<ul>
+<li>Use the <code>wreq</code> library to make API requests and the <code>lens</code> library to parse the responses</li>
+<li>Make authenticated requests to the server</li>
+<li>Write the basic domain model (with just one data type) and try to convert the json responses that type</li>
+<li>Use the <code>parsec</code> library to write the parser. I won’t focus on that part until I have the basic functionality in place</li>
+</ul>
+<p>Stay tuned!</p>
+
+
+
+<br />
+<br />
+<div id="disqus_thread"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    /*
+    var disqus_config = function () {
+        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() {  // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+
+        s.src = '//ahmadnazir.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+<br/>
+]]></summary>
+</entry>
+<entry>
+    <title>Focusing on *what* matters</title>
+    <link href="https://ahmadnazir.github.io/posts/2017-07-11-focusing-on-what-matters/post.html" />
+    <id>https://ahmadnazir.github.io/posts/2017-07-11-focusing-on-what-matters/post.html</id>
+    <published>2017-07-11T00:00:00Z</published>
+    <updated>2017-07-11T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<h1>Focusing on *what* matters</h1>
+
+<div class="info">
+    July 11, 2017
+    
+</div>
+
+<p><strong>tldr:</strong> I got into a discussion at work about “What makes a software developer good?”, and even though it seems like a simple question, we couldn’t really answer it convincingly. I’ll just use this post to ramble on my thoughts about the matter.</p>
+<h2 id="software-developers-are-problems-solvers">Software developers are problems solvers</h2>
+<p>In order to answer what makes software developers good at what they do, we have to answer what is it that software developers do. Software developers are basically problems solvers and we rely on software as our main instrument. To become efficient, we will have to analyze the process of problem solving.</p>
+<h2 id="process-of-problem-solving-dissected">Process of problem solving dissected!</h2>
+<p><strong>Disclaimer:</strong> I like to simplify things, even sometimes oversimplify them. The model might be wrong but it gives me a reference point, so bear with me while I ramble on :)</p>
+<p>When we attempt to solve any problem, we first try to <strong>gather information</strong> about that problem and once we think that we have enough, we start tackling the problem. Usually, we try to <strong>break the problem down into smaller problems</strong> and keep doing that until we reach a point where the solution of the smaller problem is simple enough. Once all the smaller problems are solved, we <strong>combined the solutions</strong> and the bigger problem is solved. (Yeah, divide and conquer!)</p>
+<p>At any time, our brain is either gathering information or breaking down the problem. We keep going back and forth and this is what I believe are the two activities that our brain is involved in.</p>
+<p>I feel this is a natural way of problem solving and you can apply that same principle on an organizational level. Here is an example of a hypothetical company that wants to dominate the world by helping people sign their documents digitally and securely, let’s call it .. mmm .. <strong>Penneo</strong>. Let’s say the board of directors decide that the company has to provide solutions in the Nordic region. This is how the interactions are going to take place:</p>
+<ul>
+<li><strong>Board -&gt; CEO :</strong> We want Penneo to be present in the Nordic countries</li>
+</ul>
+<p>The CEO thinks about how to do this, breaks it into smaller tasks that can be delegated. One of the tasks that he delegates is:</p>
+<ul>
+<li><strong>CEO -&gt; CTO :</strong> Build me an integration with Sweden</li>
+</ul>
+<p>The CTO thinks about this and splits it further.</p>
+<ul>
+<li><strong>CTO -&gt; Back-end Team :</strong> Build a service that enables Swedish customers to login and sign</li>
+<li><strong>CTO -&gt; Front-end Team :</strong> Build a new shiny login page</li>
+</ul>
+<p>Something that is quite interesting about the tasks being delegated is that all of them are about <strong>what</strong> was it that is need, and <strong>how</strong> to achieve that objective is not relevant. This is what makes it possible for anyone to break it down according to how they see it best. Once a problem is broken down to a point where we need to think about <strong>how</strong> to do it, we lose the ability to further split it down or further delegate it. Also, if someone does try to delegate something in terms of <em>how</em> and not <em>what</em>, you would call that <em>micro-management</em>, and that isn’t always effective.</p>
+<h2 id="curse-of-knowing">Curse of knowing</h2>
+<p>Breaking down problems into smaller <strong>what</strong> problems seems to be a natural way to solving the overall problem. It seems like this is how we can work together efficiently, and it seems that this is how we should be working on an individual level as well. However, it is not always that easy to keep focusing on the <em>what</em> instead of the <em>how</em>. Imagine that the task is “show a list of items in a table”, I tend to start thinking about “do I know of a library that would let me do it in <em>react</em>.. or <em>elm</em> ..”. Immediately, I focus on the the <em>how</em> whereas I should be thinking of the <em>what</em> i.e. What is the type of data that the table contains, what is the use case etc. This is the <strong>curse of knowing</strong> i.e. just because I have experience in a few tools, I start thinking of the implementation. Whenever something like this happens, the brain shifts from the <strong>what domain</strong> to the <strong>how domain</strong> and this comes at a cost. If the brain stays in the <em>how domain</em> for too long, the cost becomes significant.</p>
+<h2 id="but-then-how-do-i-actually-do-something">but then how do I actually <em>do</em> something?</h2>
+<p>Of course, you can’t always keep thinking in terms of <em>what</em>. At some point, you have the execute and that is when you need to know <em>how</em> to do it.</p>
+<p>My point is that the <em>how</em> problems should be so simple that they shouldn’t move your focus away from the main objective. If you spend too much time in the <strong>how domain</strong>, you can get distracted. There are some things that you can be done to minimize such context switches:</p>
+<h3 id="internalize-the-operation">1. Internalize the operation</h3>
+<p>Do the task so many times that it becomes part of the muscle memory. Imagine this: when you speak something, you brain doesn’t actively think about moving the tongue to produce sound. Similarly, when you walk, you don’t actively think about moving your legs, it just happens, while your brain thinks about other things.</p>
+<p>As software developers, there are certain operations that we shouldn’t have to think about while working e.g. searching for things (files with a name that matches a pattern, or specific text in files), using version control (checking out a branch, rebasing your commits on top of something else etc), etc.</p>
+<h3 id="automate-the-monotonous-tasks">2. Automate the monotonous tasks</h3>
+<p>However, there are certain tasks that despite being simple, they take enough time to cause a context switch for the brain. Every single time that happens, we lose focus from the main objective and that affects our productivity. Automating such tasks can help us stay in the <em>what domain</em> and maintain focus.</p>
+<p>These tasks are usually very specific to individuals or teams (solutions for the generic tasks are often available, specially in the open source community). As an example, at Penneo, we have a lot of micro services, and setting up every service can be slightly different from the other. I started working on a tool named <a href="https://github.com/ahmadnazir/aww-yeah">aww yeah</a> that gives me and my team a consistent interface when developing features for these services. A simple example is viewing logs for the services. Each service can have different types of logs in different locations. Using a consistent interface, the developers don’t have to find the logs, instead give a command such as:</p>
+<pre><code>aww monitor auth</code></pre>
+<p>The <code>aww</code> tool knows where the logs are for the authentication service and starts showing them as they come.</p>
+<h3 id="shift-the-burden-of-domain-knowledge-to-tools">3. Shift the burden of domain knowledge to tools</h3>
+<p>It usually happens that there is one guy in the team that other developers seek help from when setting things up and getting up to speed. This reliance on people is not always needed. I am not saying that team members shouldn’t talk, all I am saying is that this dependency on some key people can be avoided; either by creating good documentation, or better yet by building tools that help developers do what they are trying to do.</p>
+<p>In my experience, I have seen people somewhat ignoring the README files just because it is time consuming to read or too boring to go through all that text. Also, READMEs can sometimes get a bit out of hand describing all the details that might not have any immediate relevance. A better way would be to <strong>create tools that let you perform the tasks and that also ask relevant questions when needed</strong>. Building helper tools like these that have the domain knowledge requires time and commitment but are totally worth the effort as they keep the brain free from the unnecessary details.</p>
+<h2 id="wrapping-it-up">Wrapping it up</h2>
+<p>The key to become effective at problem solving is to <strong>maintain focus on the main objective and avoid context switches</strong>. The idea is to keep thinking in terms of <strong>what is it that we want to do, instead of how we do it</strong>.</p>
+<p>Internalizing the basic activities comes with time, but we can try to <strong>automate the mundane tasks</strong> and <strong>build the tools that ask us the relevant questions</strong> instead of the other way around.</p>
+<p>At Penneo, I am working with a fantastic team that is helping me build <code>aww yeah</code> that solves some of these problems for us and I am really excited about it!</p>
+<h2 id="acknowledgements">Acknowledgements</h2>
+<p>Thanks to <a href="https://github.com/axltxl">Alejandro Recoveri</a> for coming up with the name for the tool <code>aww yeah</code>.The idea is that setting up services and working with them should be so easy that you go <em>awhawwwnw yeahh!!</em> :D</p>
+
+
+
+<br />
+<br />
+<div id="disqus_thread"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    /*
+    var disqus_config = function () {
+        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() {  // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+
+        s.src = '//ahmadnazir.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+<br/>
+]]></summary>
+</entry>
+<entry>
+    <title>Computational Problems: Easy to Impossible</title>
+    <link href="https://ahmadnazir.github.io/posts/2017-04-02-classifying-problems.md/post.html" />
+    <id>https://ahmadnazir.github.io/posts/2017-04-02-classifying-problems.md/post.html</id>
+    <published>2017-04-02T00:00:00Z</published>
+    <updated>2017-04-02T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<h1>Computational Problems: Easy to Impossible</h1>
+
+<div class="info">
+    April  2, 2017
+    
+</div>
+
+<!-- It seems that in order to understand something, humans need to ?? -->
+<p>Classifying things makes it easier for humans to talk about them. It is a process in understanding the fundamental nature of those things and how they relate to each other. This concept is called <em>Taxonomy</em> (initially used for classification of living organisms). Examples are:</p>
+<ul>
+<li>Numbers: whole numbers, integers, real numbers etc</li>
+<li>Formal Languages of Computer Science (Chomsky hierarchy): Regular, Context Free, Context Sensitive, and Recursively Innumerable</li>
+<li>Computational Problems: P, NP, NP-Hard etc</li>
+</ul>
+<p>I want to focus on the last category i.e <strong>categories of Compuational Problems and my intuition behind them</strong>.</p>
+<p>Before I begin, just want to say that the categories don’t have to be mutually exclusive. The only requirement is that elements in the categories need to share some common characteristics and that doesn’t stop them from belonging to multiple categories.</p>
+<h1 id="classifying-problems">Classifying Problems</h1>
+<p>Categories of problems have been an elusive subject for me and it took me some time to get an intuitive idea of what they mean and how they are different. When I say problem, I am talking about a computational problem which is a question that can be encoded in a form that a computer can understand e.g:</p>
+<ul>
+<li>What is 2+2?</li>
+<li>What is the shortest distance from A to B?</li>
+</ul>
+<h2 id="easy-vs-difficult-problems">Easy vs Difficult problems</h2>
+<p>A easy problem is one that doesn’t take a lot of time or memory. For our discussion, I will only focus on the time constraint.</p>
+<p>If time is the only constraint, we can defined an easy problem that can be solved <strong>quickly</strong>..</p>
+<p>.. but what does <strong>quick</strong> mean?</p>
+<p>Let’s take run times for instances of two imaginary problems - Problem A and Problem B:</p>
+<p><strong>Problem A:</strong></p>
+<ul>
+<li>For 10 elements, it takes 5 secs to run</li>
+<li>For 11 elements, it takes 10 secs to run</li>
+</ul>
+<p><strong>Problem B:</strong></p>
+<ul>
+<li>For 10 elements, it takes 20 secs to run</li>
+<li>For 11 elements, it takes 21 secs to run</li>
+</ul>
+<p>Now, even though the run times for examples of problem B are more than that of problem A, the run times for problem A grows faster than B. If we think of quickness in this way, solving problem B in the general sense is quicker than problem A. If the input size is greater than 12, problem B will run faster than problem A.</p>
+<p>This way of thinking about <strong>quickness</strong> can be expressed mathematically using <strong>polynomials</strong>. Using polynomials makes the concept formal.. but what usually happens is that the formal version doesn’t do a good enough job at making the idea intuitive.</p>
+<h3 id="what-is-a-polynomial-..-intuitively">What is a polynomial .. intuitively?</h3>
+<p>Instead of explaining what a polynomial is, let me ask you the difference between the following two graphs:</p>
+<p>
+<img class="box" src="./images/p-1.png" width="45%" align="left"/>   <img class="box" src="./images/np-1.png" width="45%" alignt="left"/>
+</p>
+<p>or these two:</p>
+<p>
+<img class="box" src="./images/p-2.png" width="45%" align="left"/>   <img class="box" src="./images/np-2.png" width="45%" alignt="left"/>
+</p>
+<p>The graphs on the left are continuous and smooth i.e. they don’t break, don’t have any holes in them, they don’t have any points (cusps).. It turns out that <strong>polynomials can be visualized as smooth and continuous</strong>.. or you can also say that they are smooth and continuous functions since we are visualizing a function of the form <em>y = f(x)</em>. I am not saying that all smooth and continuous functions are polynomials but all polynomials look like smooth and continuous functions. Of course, this is an over simplification of what a polynomial is but for me this simplification helps me get some intuition of the idea.</p>
+<p>Literally, the word polynomial means multiple terms and mathematically it is a sum of algebraic expressions e.g.</p>
+<pre><code>x^2 + 3x + 4</code></pre>
+<p>Variables in polynomials can only have powers that are whole numbers i.e. 0, 1, 2, 3. So something like <code>1/x</code> is not a polynomial.</p>
+<h3 id="so..-what-does-quick-mean-in-terms-of-polynomials">So.. what does ‘quick’ mean in terms of polynomials?</h3>
+<p>An easy problem is one that can be solved quickly i.e. <strong>if we can express the total running time of the problem as a polynomial</strong>, that would be an easy problem.</p>
+<p>Or In other words, <strong>if we can express the relationship of the input size and the total running time as a polynomial</strong>, we can categorize it as an easy problem.</p>
+<p>Let’s look as an example:</p>
+<ul>
+<li>Given a list of numbers, does number <code>42</code> exist in the list?</li>
+</ul>
+<p>In order to find out whether 42 exists in the list, we have to go through all the numbers in the list. So for a list of size 10, we have to look at 10 items at most. For a list of size 1000, we have to look at 1000 items. By increasing one item to the list, we increase one lookup. Hence, we can express the running time as:</p>
+<pre><code>running time = k . n</code></pre>
+<p>where:</p>
+<ul>
+<li><em>n</em> is the number of items,</li>
+<li><em>k</em> is some constant that is the cost of performing a lookup for an item</li>
+</ul>
+<p>Since <code>k . n</code> is a polynomial, we categorize this as an easy problem.</p>
+<p>This category of problems is known as <strong>P problems</strong> which stands of Polynomial time and is the official term for this category of problems.</p>
+<h3 id="difficult-problems">Difficult Problems</h3>
+<p>A difficult problem would be one that can’t be solved quickly. However, <strong>given a solution it should be possible to quickly verify that the solution is correct</strong>.</p>
+<p>If we use the same notion of quickness discussed earlier, we can define difficult problems as <strong>problems that can be verified in polynomial time</strong>.</p>
+<p>Such problems are formally known as <em>NP Problems</em> which stands for Non-deterministic polynomial time. Why such a difficult name? Well it comes from the concept of Non-deterministic Turing machines, which are capable of branching at every step of the problem and the whole thing runs in polynomial time. Such a machine is theoretical and only used in thought experiments.</p>
+<!-- Example: What is the path from A to B that  -->
+<h2 id="even-more-difficult-problems">Even more difficult problems</h2>
+<p>There are problems that can’t even be verified in polynomial time. Such problems are formally known as <strong>NP-Hard</strong>.</p>
+<!-- Example: What is the shortest path from A to B? -->
+<h2 id="impossible-problems">Impossible Problems</h2>
+<p>There are some problems that can’t be solved in a general sense i.e. for all possible inputs. If we try to solve them, the computer will take forever to solve and never return an answer. Formally, these problems are known as <strong>Undecidable problems</strong>.</p>
+<p>An example would be, <strong>given a computer problem, find out if it has a security bug or not</strong>. You can think of some types of computer programs for which you can easily find out whether they have a bug or not. However, you can’t do it for all types of computer programs that can possibly exist.</p>
+<p>The most famous impossible problem is known as the <strong>Halting problem</strong> which is <strong>given a program, will it ever solve or will it keep executing?</strong> This can’t be solved in a general sense.</p>
+<!-- ### Brute forcing the impossible problems -->
+<h1 id="recap">Recap</h1>
+<p>Here are the 4 categories discussed:</p>
+<ul>
+<li><strong>P</strong> (Easy): Can be <strong>solved in polynomial time</strong></li>
+<li><strong>NP</strong> (Difficult): Can be <strong>verified in polynomial time</strong></li>
+<li><strong>NP-Hard</strong> (Even More Difficult): In addition to the hardest problems in NP, they also contain problems that <strong>cannot be verified in polynomial time</strong></li>
+<li><strong>Undecidable</strong> (Impossible): Cannot be solved at all</li>
+</ul>
+<h1 id="how-do-we-find-out-the-category-for-a-problem">How do we find out the category for a problem?</h1>
+<p>Categorizing a problem is related to discovering an algorithm for it. We categorize problems as NP or NP-Hard because <strong>we are not aware of any algorithms that can run faster</strong>. If we discover an algorithm that runs faster, the problem gets a different category assigned to it.</p>
+<h1 id="how-do-these-categories-overlap">How do these categories overlap?</h1>
+<p>No one knows the answer to this question at the moment. Basically, this boils down to the infamous <em>P = NP</em> <a href="http://www.claymath.org/millennium-problems">millennium problem</a> which asks the question, does there exist a polynomial time algorithm that solves an NP problem? If such an algorithm existed, we wouldn’t need the NP category since the P and NP would be the same as P. Most people think that no such algorithm exists but it hasn’t been mathematically proven yet.</p>
+<p>The two different ways to think about the categories overlapping is:</p>
+<p>
+<img class="box" src="./images/unequal.png" width="45%" align="left"/>   <img class="box" src="./images/equal.png" width="45%" alignt="left"/>
+</p>
+<p>If you can prove one or the other, you get a <a href="http://www.claymath.org/millennium-problems/millennium-prize-problems">million dollars as a reward for solving this mystery</a>.</p>
+<!-- Jdog's review: -->
+<!-- make links: target=_blank -->
+<!-- more explanation for the difficult problems -->
+<!-- didn't get the intuitive explanation about the polynomials -->
+<!-- - more like didn't understand the 'why' part i.e. why can they be visualized as smooth and continuous -->
+
+
+
+<br />
+<br />
+<div id="disqus_thread"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    /*
+    var disqus_config = function () {
+        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() {  // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+
+        s.src = '//ahmadnazir.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+<br/>
+]]></summary>
+</entry>
+<entry>
+    <title>Chaining background processes in the shell</title>
+    <link href="https://ahmadnazir.github.io/posts/2017-03-04-chain-background-processes-cli/post.html" />
+    <id>https://ahmadnazir.github.io/posts/2017-03-04-chain-background-processes-cli/post.html</id>
+    <published>2017-03-04T00:00:00Z</published>
+    <updated>2017-03-04T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<h1>Chaining background processes in the shell</h1>
+
+<div class="info">
+    March  4, 2017
+    
+</div>
+
+<h1 id="scenario">Scenario</h1>
+<p>Suppose you have the following operations:</p>
+<pre><code>a
+b
+c</code></pre>
+<p>You can chain them using the <code>&amp;&amp;</code> operator so that they execute in a sequential manner:</p>
+<pre><code>a &amp;&amp; b &amp;&amp; c</code></pre>
+<p>In layman terms, this means is:</p>
+<ul>
+<li>run a</li>
+<li>if a completes, run b</li>
+<li>if b completes, run c</li>
+</ul>
+<h1 id="problem">Problem</h1>
+<p>What if <code>b</code> takes a really long time to execute and you don’t want to wait until it finishes execution?</p>
+<p>So, what you want is:</p>
+<ul>
+<li>run a</li>
+<li>if a successfully completes, run b</li>
+<li>if b successfully <strong><em>starts</em></strong>, run c</li>
+</ul>
+<p>We don’t care if <code>b</code> executes successfully. All we care about is that <code>b</code> is successfully invoked.</p>
+<h1 id="solution">Solution</h1>
+<p>It is possible to use subshells to make the long running processes run in the background and chain the operations. It would look something like:</p>
+<pre><code>a &amp;&amp; (b &amp;) &amp;&amp; c</code></pre>
+<h1 id="example">Example</h1>
+<p>Let’s define our operations so that can actually be called:</p>
+<pre><code>a() {
+  echo 1
+}
+
+b() {
+  echo 2
+}
+
+c() {
+  echo 3
+}</code></pre>
+<p>If we chain them, we get the following output:</p>
+<pre><code>a &amp;&amp; b &amp;&amp; c
+1
+2
+3</code></pre>
+<p>Let’s say that the middle operation takes too long to complete. Hence redefining <code>b</code>:</p>
+<pre><code>b() {
+  sleep 5
+  echo 2
+}</code></pre>
+<p>Calling the chained operations again, we see a 5 second delay after <code>a</code> is executed:</p>
+<pre><code>a &amp;&amp; b &amp;&amp; c
+1
+&lt; .. 5 second delay .. &gt;
+2
+3</code></pre>
+<p>Using subshells, the <code>b</code> can be sent to the background and chained as follows:</p>
+<pre><code>a &amp;&amp; (b &amp;) &amp;&amp; c
+1
+3
+2</code></pre>
+<p>Of course, the order of execution is affected as you can see that 3 appears before 2.</p>
+<p>If any command fails in the chain, the execution stops there.</p>
+<h1 id="when-do-i-use-this">When do I use this?</h1>
+<p>I use this mostly during initialization of various setups. I don’t always want to wait for all the commands to successfully complete before running the next command. It is a quick way to run processes in parallel while ensuring that the chain stops executing if invocation fails for any command.</p>
+
+
+
+<br />
+<br />
+<div id="disqus_thread"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    /*
+    var disqus_config = function () {
+        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() {  // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+
+        s.src = '//ahmadnazir.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+<br/>
+]]></summary>
+</entry>
+<entry>
+    <title>Trust a self-signed certificate in Debian</title>
+    <link href="https://ahmadnazir.github.io/posts/2017-02-07-trust-self-signed-certificate/post.html" />
+    <id>https://ahmadnazir.github.io/posts/2017-02-07-trust-self-signed-certificate/post.html</id>
+    <published>2017-02-07T00:00:00Z</published>
+    <updated>2017-02-07T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<h1>Trust a self-signed certificate in Debian</h1>
+
+<div class="info">
+    February  7, 2017
+    
+</div>
+
+<h2 id="generate-a-self-signed-certificate">Generate a self-signed certificate</h2>
+<p>Generate a self-signed certificate in PEM format</p>
+<pre><code>DOMAIN=dev.penneo.com
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $DOMAIN.key -out $DOMAIN.crt</code></pre>
+<h2 id="trusting-the-certificate">Trusting the certificate</h2>
+<p>For making the OS trust the certificate, the requirements for Debian are:</p>
+<ul>
+<li>The certificate should be in PEM format</li>
+<li>The certificate should be placed in the certificates directory i.e. /etc/ssl/certs</li>
+<li>The name of the symlink to the certificate is the hash of the certificate needs a <code>.0</code> appended to it. Why we do that? No idea.. let me know when you find out</li>
+</ul>
+<p>or in bash lingo:</p>
+<pre><code>CERTS=/etc/ssl/certs
+sudo cp $DOMAIN.crt $CERTS/
+cd $CERTS
+HASH=`openssl x509 -noout -hash -in $DOMAIN.crt`.0
+sudo ln -s $DOMAIN.crt $HASH</code></pre>
+<p>Source: <a href="http://serverfault.com/a/730234/286083">Trusting self-signed certificates in redhat</a></p>
+<!-- How is chrome and firefox affected? -->
+<!-- ## Add the key and certificate to the nginx confiruation -->
+<h2 id="faq">FAQ</h2>
+<h3 id="does-this-mean-that-the-browsers-also-trust-the-certificate">Does this mean that the browsers also trust the certificate?</h3>
+<p>Some applications rely on the OS level trusted certificates. Browsers have a different way to established trust. For Chrome, you have to add the certificate manually as a trusted certificate:</p>
+<pre><code>Chrome Settings
+  &gt; Show advanced settings
+  &gt; HTTPS/SSL
+  &gt; Manage Certificates
+  &gt; Import certificate</code></pre>
+<h3 id="what-is-pem-format">What is PEM format?</h3>
+<p>PEM is a container format for storing certificates. <a href="http://serverfault.com/a/9717/286083">There are a number of ways to store certificates</a> and here is a quick reference for some extensions that I have bumped into:</p>
+<ul>
+<li><strong>.pem</strong> : Base64 encoded form of DER</li>
+<li><strong>.der</strong> : Encoding data that uses the ASN.1 standard</li>
+<li><strong>.crt</strong> : It could be .pem or .der. The extension just means that it is a certificate</li>
+<li><strong>.key</strong> : A .pem or .der file that contains just the private key</li>
+</ul>
+
+
+
+<br/>
+]]></summary>
+</entry>
+<entry>
+    <title>Load the shell faster</title>
+    <link href="https://ahmadnazir.github.io/posts/2016-11-03-load-shell-faster/post.html" />
+    <id>https://ahmadnazir.github.io/posts/2016-11-03-load-shell-faster/post.html</id>
+    <published>2016-11-03T00:00:00Z</published>
+    <updated>2016-11-03T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<h1>Load the shell faster</h1>
+
+<div class="info">
+    November  3, 2016
+    
+</div>
+
+<p><strong>tldr:</strong> The shell can be started faster by replacing the time consuming scripts with <a href="https://en.wikipedia.org/wiki/Shim_(computing)">shims</a> which can lazy-load the functionality for those scripts</p>
+<p><br /></p>
+<h2 id="problem">Problem</h2>
+<p>Lately, zsh is taking way too long to boot-up for me i.e. around .3 secs.. long enough to annoy me. I normally reach for <code>Ctrl-R</code> to search the command history as soon as the shell starts and if the shell takes too long to start-up the control character gets lost.. forcing me to press that combination of keys again. Clearly, I can’t be expected to live with this atrocity and something needs to be done.</p>
+<p>Here is some timing info for my shell:</p>
+<pre><code>mandark@mandark ~$ time zsh -i -c exit
+zsh -i -c exit  0.32s user 0.11s system 101% cpu 0.427 total</code></pre>
+<p><br /></p>
+<h2 id="culprit">Culprit</h2>
+<p>After timing some of the suspects in my <code>.zshrc</code> file, I found out that loading <code>autojump</code> and calling <code>compinit</code> was delaying the initial boot time by about .2 secs.</p>
+<p>Here are the calls in the <code>.zshrc</code> file that take the most time:</p>
+<pre><code>[[ -s $HOME/.autojump/etc/profile.d/autojump.sh ]] \
+  &amp;&amp; source $HOME/.autojump/etc/profile.d/autojump.sh;
+autoload -U compinit &amp;&amp; compinit -u;</code></pre>
+<p>Here is the timing info over 25 runs of the initialization including calls to <code>autojump</code> and <code>compinit</code>:</p>
+<pre><code>mandark@mandark ~$ time-n-cmd 25 &#39;zsh -i -c exit&#39; 2&gt;&amp;1 &gt; /dev/null
+  7.92s user 2.33s system 101% cpu 10.118 total</code></pre>
+<p>and without loading <code>autojump</code> and <code>compinit</code>:</p>
+<pre><code>mandark@mandark ~$ time-n-cmd 25 &#39;zsh -i -c exit&#39; 2&gt;&amp;1 &gt; /dev/null
+  1.95s user 0.88s system 101% cpu 2.799 total</code></pre>
+<p>That is <strong>75% of the total initialization time</strong>.</p>
+<p><br /></p>
+<h2 id="solution">Solution</h2>
+<h3 id="background-processes">Background processes?</h3>
+<p>My first attempt as to wrap the time-consuming calls in a function and call that function by putting it in the background. That helps with the start-up times for sure but the variables and commands are not sourced to the shell calling that function .. hence this is useless. Here is what I had in mind.</p>
+<pre><code>function init ()
+{
+  [[ -s $HOME/.autojump/etc/profile.d/autojump.sh ]] \
+    &amp;&amp; source $HOME/.autojump/etc/profile.d/autojump.sh \ # sourcing inside a function
+    &amp;&amp; autoload -U compinit &amp;&amp; compinit -u \
+    &amp;&amp; echo &quot;\n\ninit :: Autojump and comp init are loaded !&quot;
+}
+init &amp;</code></pre>
+<p>I would like to understand why <code>source</code> behaves differently when called inside a function .. but I’ll leave that for another day.</p>
+<h3 id="lazy-load-the-functions">Lazy Load the functions!</h3>
+<p>After googling a bit, I realized that other people have been solving this using shims that lazy-load the functionality. In my case, I created a shim for the <code>autojump</code> function <code>j</code>:</p>
+<pre><code>j() {
+    unset -f j
+    [[ -s $HOME/.autojump/etc/profile.d/autojump.sh ]] \
+        &amp;&amp; source $HOME/.autojump/etc/profile.d/autojump.sh \
+        &amp;&amp; autoload -U compinit &amp;&amp; compinit -u
+    j &quot;$@&quot;
+}</code></pre>
+<p>This loads the functionality for autoloading when it is requested and not at shell start-up. Pretty neat!</p>
+<p>Here is the new timing information:</p>
+<pre><code>mandark@mandark ~$ time-n-cmd 25 &#39;zsh -i -c exit&#39; 2&gt;&amp;1 &gt; /dev/null
+  2.07s user 0.91s system 101% cpu 2.946 total</code></pre>
+<p>That is almost a <strong>4 times performance increase!</strong></p>
+<p><br /></p>
+<h2 id="appendix">Appendix</h2>
+<p>Timing a command multiple times:</p>
+<pre><code># Usage: time-n-cmd TIMES CMD
+#
+time-n-cmd() {
+
+  # params
+  #
+  local times=$1
+  local command=$2
+
+  # Time the command by running multiple times
+  #
+  time (
+  for run in {1..$times}
+  do
+    sh -c $command 2&gt;&amp;1 &gt; /dev/null
+  done
+  )
+
+}</code></pre>
+
+
+
+<br />
+<br />
+<div id="disqus_thread"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    /*
+    var disqus_config = function () {
+        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() {  // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+
+        s.src = '//ahmadnazir.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+<br/>
+]]></summary>
+</entry>
+<entry>
+    <title>Cloning private repositories inside docker</title>
+    <link href="https://ahmadnazir.github.io/posts/2016-06-24-accessing-private-repos-in-docker/post.html" />
+    <id>https://ahmadnazir.github.io/posts/2016-06-24-accessing-private-repos-in-docker/post.html</id>
+    <published>2016-06-24T00:00:00Z</published>
+    <updated>2016-06-24T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<h1>Cloning private repositories inside docker</h1>
+
+<div class="info">
+    June 24, 2016
+    
+</div>
+
+<p><strong>tldr:</strong> The unix socket created by the <code>ssh-agent</code> can be mounted in the docker container. This gives the user access to the keys on the host, making it possible to clone private repositories (that rely on ssh keys to grant access) inside the container.</p>
+<p><br /></p>
+<h2 id="problem">Problem</h2>
+<p>Docker is a linux container technology which makes it really easy to package and deploy code. Just like with other container technologies, you can use it to package the environment / execution context along with the code i.e:</p>
+<p><strong>code + execution context = artifact</strong></p>
+<p>For example, if your project requires python 2.7, then you should package python 2.7 along with the code that you ship instead of relying on the host to provide those packages for you. This way you can ensure that no matter where the code runs; during development on the local machine, testing on travis, running in production etc, it will always run consistently or break in the same way. The same goes for configurations required for the code. However, we shouldn’t always package everything within the artifact e.g. secrets and keys should stay out of the artifact. This limitation comes with its own set of challenges..</p>
+<p>Recently I was working on a <strong>project that depended on some private repositories and I couldn’t clone inside the docker container since I had no access to the keys that were present on the host machine</strong>. I solved this by sharing my <code>ssh-agent</code> session with the docker container.</p>
+<h2 id="ssh-agent">SSH Agent</h2>
+<p><code>ssh-agent</code> is a utility that manages the private keys for the user when using <code>ssh</code>. It comes with the <code>openssh-client</code> package.</p>
+<p>If the <code>ssh-agent</code> is already running, you can find the environment variable related to <code>ssh</code> as follows:</p>
+<pre><code>$ printenv | grep SSH
+SSH_AGENT_PID=3010
+SSH_AUTH_SOCK=/tmp/ssh-5ymZpLJEA5Kq/agent.2946
+SSH_ASKPASS=/usr/bin/ssh-askpass</code></pre>
+<p>The <code>SSH_AUTH_SOCK</code> variable tells us that the agent is using a unix socket created in the <code>/tmp/ssh-*/</code> directory. Anyone having access to that socket can use the keys that are being held by the agent.</p>
+<h2 id="using-the-ssh-agent-session-inside-the-container">Using the ssh-agent session inside the container</h2>
+<p>You can run the <code>ssh-agent</code> inside the docker container but that would create a new session and will use another socket. Since unix sockets can be mapped as files, the container can be configured to reuse the agent running on the host machine, hence, getting access to the keys on the host machine.</p>
+<p>Here is how a sample <code>docker-composer.json</code> file can be setup:</p>
+<pre><code>app:
+  image: debian:jessie
+  volumes:
+    - $SSH_AUTH_SOCK:/ssh-agent
+  environment:
+    SSH_AUTH_SOCK: /ssh-agent</code></pre>
+<p>In order to verify that you can use your keys from the container, follow these steps:</p>
+<pre><code> $ docker-compose run app
+ root@xxxx :/# apt-get update
+ root@xxxx :/# apt-get install openssh-client
+ root@xxxx :/# ssh your-server-with-public-key.com # You&#39;re in !!</code></pre>
+<h2 id="testing-the-setup">Testing the Setup</h2>
+<p>I usually test my setup by trying to access <code>github.com</code> (since that’s one service I am sure of which has my public key setup properly):</p>
+<pre><code> root@xxxx :/# ssh -T git@github.com
+ [omitted for brevity]
+ Hi ahmadnazir! You&#39;ve successfully authenticated, but GitHub does
+ not provide shell access.</code></pre>
+
+
+
+<br />
+<br />
+<div id="disqus_thread"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    /*
+    var disqus_config = function () {
+        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() {  // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+
+        s.src = '//ahmadnazir.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+<br/>
+]]></summary>
+</entry>
+<entry>
+    <title>Setup the fingerprint reader on Lenovo X1 Carbon on Ubuntu 14.04</title>
+    <link href="https://ahmadnazir.github.io/posts/2016-04-15-enable-finger-print-reader/post.html" />
+    <id>https://ahmadnazir.github.io/posts/2016-04-15-enable-finger-print-reader/post.html</id>
+    <published>2016-04-15T00:00:00Z</published>
+    <updated>2016-04-15T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<h1>Setup the fingerprint reader on Lenovo X1 Carbon on Ubuntu 14.04</h1>
+
+<div class="info">
+    April 15, 2016
+    
+</div>
+
+<p>Following libraries are required to use the fingerprint reader.</p>
+<pre><code>sudo add-apt-repository -y ppa:fingerprint/fprint
+sudo apt-get update
+sudo apt-get install libfprint0 fprint-demo libpam-fprintd</code></pre>
+<p>After that, the <code>fprintd-enroll</code> command can be used to enroll the right index finger. Try swiping a few times and you are done. From now on, executing a command using <code>sudo</code> with prompt you for your finger print:</p>
+<p><img class="box" src="./images/enable-finger-print-reader.jpg" width="60%" /></p>
+<p>For reference, see <a href="http://askubuntu.com/questions/511876/how-to-install-a-fingerprint-reader-on-lenovo-thinkpad">askubuntu</a></p>
+
+
+
+<br/>
+]]></summary>
+</entry>
+
+</feed>
