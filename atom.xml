@@ -611,5 +611,68 @@ sudo apt-get install libfprint0 fprint-demo libpam-fprintd</code></pre>
 <p><img class="box" src="./images/enable-finger-print-reader.jpg" width="60%" /></p>
 <p>For reference, see <a href="http://askubuntu.com/questions/511876/how-to-install-a-fingerprint-reader-on-lenovo-thinkpad">askubuntu</a></p>]]></summary>
 </entry>
+<entry>
+    <title>Fix a non-responsive USB on Ubuntu 14.04</title>
+    <link href="https://ahmadnazir.github.io/posts/2016-04-06-reset-usb/post.html" />
+    <id>https://ahmadnazir.github.io/posts/2016-04-06-reset-usb/post.html</id>
+    <published>2016-04-06T00:00:00Z</published>
+    <updated>2016-04-06T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>I use a wireless mouse that uses one of the usb ports on my machine. From time to time the usb stops responding. I am not what causes it but it can be fixed by rebinding the usb controller:</p>
+<h2 id="get-a-list-of-usb-controllers">Get a list of usb controllers</h2>
+<pre><code>$ lspci | grep USB
+
+00:14.0 USB controller: Intel Corporation 8 Series USB xHCI HC (rev 04)
+00:1d.0 USB controller: Intel Corporation 8 Series USB EHCI #1 (rev 04)</code></pre>
+<h2 id="rebind-the-usb-controller">Rebind the usb controller</h2>
+<p>For my usb mouse, I know that I am using the xhci driver so I only rebind the relevant connector:</p>
+<pre><code>sudo su
+echo -n &#39;0000:00:14.0&#39; | tee /sys/bus/pci/drivers/xhci_hcd/unbind
+echo -n &#39;0000:00:14.0&#39; | tee /sys/bus/pci/drivers/xhci_hcd/bind</code></pre>
+<!-- echo -n '0000:00:1d.0' | tee /sys/bus/pci/drivers/ehci-pci/unbind -->
+<!-- echo -n '0000:00:1d.0' | tee /sys/bus/pci/drivers/ehci-pci/bind -->
+<p>The solution and related ones can be found at <strong><a href="http://askubuntu.com/questions/645/how-do-you-reset-a-usb-device-from-the-command-line">askubuntu</a></strong></p>]]></summary>
+</entry>
+<entry>
+    <title>Debugging a slow emacs</title>
+    <link href="https://ahmadnazir.github.io/posts/2016-03-02-debugging-slow-emacs/post.html" />
+    <id>https://ahmadnazir.github.io/posts/2016-03-02-debugging-slow-emacs/post.html</id>
+    <published>2016-03-02T00:00:00Z</published>
+    <updated>2016-03-02T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>Emacs keeps running for several days on my machine and from time to time I notice that it starts to get slow. I recently found a very easy way to debug a slow emacs instance i.e. using the emacs profiler.</p>
+<h2 id="start-the-profiler">Start the profiler</h2>
+<pre><code>M-x profiler-start</code></pre>
+<p>You need to specify what is it that needs to be profiled i.e. cpu, memory or both. Once the profiler is active, you need to perform the operations that cause the delay. In my case, switching the focus in and out of emacs was causing a delay. So, I just changed the focus a couple of times so that the profiler could record the actions.</p>
+<h2 id="generate-the-report">Generate the report</h2>
+<pre><code>M-x profiler-report</code></pre>
+<p>This gave me a detailed overview such as:</p>
+<p><img class="box" src="./images/slow_emacs-profile_report_overview.jpg" width="100%" /></p>
+<p>By expanding each item (default key for expand/collapse is <code>TAB</code>), further split can be seen:</p>
+<p><img src="./images/slow_emacs-profile_report.jpg" width="100%" /></p>
+<p>Clearly, I could see that the culprit was a hook that ran everytime I was changing the focus. It turned out that the <code>auto-dim-other-buffers-mode</code> was causing the problems. Disabling and re-enabling the mode fixed the problem. Though this didn’t fix the root cause of the problem but the profiler helped me point out what was the source of the problem.</p>]]></summary>
+</entry>
+<entry>
+    <title>Accessing remote services using SSH Tunnels</title>
+    <link href="https://ahmadnazir.github.io/posts/2015-06-23-ssh-tunnels/post.html" />
+    <id>https://ahmadnazir.github.io/posts/2015-06-23-ssh-tunnels/post.html</id>
+    <published>2015-06-23T00:00:00Z</published>
+    <updated>2015-06-23T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>Lately I have been using emacs <strong><a href="https://www.emacswiki.org/emacs/SqlMode">SQLi</a></strong> mode to interact with the database. Most of the times I can’t access the database directly from my machine - I have to ssh into an intermediate server that has access to the database server. This strategy doesn’t always work if the intermediate server doesn’t have an sql client installed (e.g. <code>mysql-client</code>). What I really want is to make the database appear as if it were running locally. SSH tunnels solves this problem for me:</p>
+<p>Let’s say you have the following servers running:</p>
+<ul>
+<li><code>app.com</code></li>
+<li><code>db.com</code> (only accessible via <code>app.com</code>)</li>
+</ul>
+<p>Here is how the database on <code>db.com</code> can be accessed locally:</p>
+<pre><code>ssh app.com -L 5000:db.com:3306 -N</code></pre>
+<p>We are instructing the ssh utility to create a tunnel that can redirect your traffic to <code>db.com</code> via <code>app.com</code>:</p>
+<ul>
+<li>Forward all traffic coming on <code>localhost:5000</code> to <code>app.com</code></li>
+<li>All traffic terminating on <code>app.com</code> within the tunnel is redirected to <code>db.com:3306</code></li>
+</ul>
+<p>Now you can try:</p>
+<pre><code>mysql --host 127.0.0.1 --port 5000</code></pre>
+<p><strong>Note:</strong> Use <code>127.0.0.1</code> to create a network socket and not <code>localhost</code> which will use a unix socket instead.</p>
+<p>Gven that you have ssh access, you can <strong>control the traffic on a remote server</strong> with a simple command and <strong>use locally installed utilities to use services available on remote machines</strong>. The syntax is not so intuitive at first, but once you get a hang of it, this is really powerful!</p>]]></summary>
+</entry>
 
 </feed>
