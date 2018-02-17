@@ -1,5 +1,6 @@
 ---
 title: Using private jars in Clojure
+comments: true
 ---
 
 One of the many things that makes clojure an extremely practical tool is that it can be used to explore other java libraries - no compiling needed - *a faster feed back loop!* However, we need to ensure a few things before loading *private* jar files into clojure. In this post, I am documenting what works for me for a test project packaged as `com.acme.soup`.
