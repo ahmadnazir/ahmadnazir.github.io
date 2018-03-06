@@ -27,9 +27,9 @@ main = hakyll $ do
         route   idRoute
         compile copyFileCompiler
 
-    match "posts/*/assets/*" $ do
-        route   idRoute
-        compile copyFileCompiler
+    -- match "posts/*/assets/*" $ do
+    --     route   idRoute
+    --     compile copyFileCompiler
 
     match (fromList ["about.md"]) $ do
         route   $ setExtension "html"
