@@ -23,14 +23,7 @@ choice - [Org journal][org-journal].
 
 Here is how it looks after a full year of tracking my activities:
 
-<style>
-  .axis .domain {
-    display: none;
-  }
-</style>
-<svg id="graph"></svg>
-<script src="https://d3js.org/d3.v4.min.js"></script>
-<script src="assets/graph.js" />
+<img src="./images/2017.png" width="100%" />
 
 Not surprisingly, I can see that during the months where I have been busy with
 support, I haven't been able to spend much time on other activities such as

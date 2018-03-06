@@ -70,17 +70,17 @@ Instead of explaining what a polynomial is, let me ask you the difference
 between the following two graphs:
 
 <p>
-  <img class="box" src="./images/p-1.png" width="45%" align="left"/>
+  <img class="border" src="./images/p-1.png" width="45%" align="left"/>
   &nbsp;
-  <img class="box" src="./images/np-1.png" width="45%" alignt="left"/>
+  <img class="border" src="./images/np-1.png" width="45%" alignt="left"/>
 </p>
 
 or these two:
 
 <p>
-  <img class="box" src="./images/p-2.png" width="45%" align="left"/>
+  <img class="border" src="./images/p-2.png" width="45%" align="left"/>
   &nbsp;
-  <img class="box" src="./images/np-2.png" width="45%" alignt="left"/>
+  <img class="border" src="./images/np-2.png" width="45%" alignt="left"/>
 </p>
 
 The graphs on the left are continuous and smooth i.e. they don't break, don't
@@ -194,9 +194,9 @@ exists but it hasn't been mathematically proven yet.
 The two different ways to think about the categories overlapping is:
 
 <p>
-  <img class="box" src="./images/unequal.png" width="45%" align="left"/>
+  <img class="border" src="./images/unequal.png" width="45%" align="left"/>
   &nbsp;
-  <img class="box" src="./images/equal.png" width="45%" alignt="left"/>
+  <img class="border" src="./images/equal.png" width="45%" alignt="left"/>
 </p>
 
 If you can prove one or the other, you get a [million dollars as a reward for solving this mystery][prize].
