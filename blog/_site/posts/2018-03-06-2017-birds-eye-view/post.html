@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>ahmadnazir - 2017 - A Bird's Eye View</title>
+        <link rel="stylesheet" type="text/css" href="../../css/default.css" />
+        <link rel="stylesheet" type="text/css" href="../../css/syntax-highlight-default.css" />
+         <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:900italic,900,700italic,400italic,700,400,300italic,300" />
+        <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+    </head>
+    <body>
+        <div class="header">
+
+            <div class="content">
+                <div class="title">
+                    <a href="../../">(map reflect shtuff)</a>
+                    <div class="sub-title">
+                        &nbsp;=> ramblings by Ahmad Nazir
+                    </div>
+                </div>
+
+                <div class="links">
+                    <a href="../../about.html">(about)</a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- <div class="eval">
+             =>
+             </div> -->
+
+
+        <div id="content" class="content">
+            <div class="after-header">
+                <h1>2017 - A Bird's Eye View</h1>
+
+<div class="info">
+    March  6, 2018
+    
+</div>
+
+<p>2016 had gone by in a flash. By the end of it, I was trying to figure out <em>what the hell</em> did I do for the whole year - I couldn’t remember squat! It was difficult to recall what had happened a few weeks back, let alone what happened months ago.</p>
+<p>It was perfect timing for a new year’s resolution - <strong>maintain a log of how I spend my time.</strong></p>
+<p>I needed something that could blend into my workflow instead of being a distraction. The requirements were simple:</p>
+<ul>
+<li>Creating a new journal entry should be easy</li>
+<li>Time spend on an activity should be automatically calculated</li>
+<li>It should be easy to generate a time summary for the day</li>
+</ul>
+<p>Being a long <strong>Emacs</strong> user, I went with the obvious choice - <a href="https://github.com/bastibe/org-journal">Org journal</a>.</p>
+<p>Here is how it looks after a full year of tracking my activities:</p>
+<style>
+  .axis .domain {
+    display: none;
+  }
+</style>
+<svg id="graph">
+</svg>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="assets/graph.js"></script>
+<p>Not surprisingly, I can see that during the months where I have been busy with support, I haven’t been able to spend much time on other activities such as feature development, bug fixes, etc.</p>
+<p>In case you are interested how I crunched the data, I have been working on a simple library using Clojure that reads the journal files, extracts the time summaries and calculates total times. You can check it out here: <a href="https://github.com/ahmadnazir/org-clock-stats">org-clock-stats</a>.</p>
+
+
+
+<br />
+<br />
+<div id="disqus_thread"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    /*
+    var disqus_config = function () {
+        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() {  // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+
+        s.src = '//ahmadnazir.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+<br />
+
+            </div>
+        </div>
+
+
+        <div class="footer">
+                <div class="links">
+                    <!-- <a href="/archive.html">Archive</a> -->
+
+                    <a href="https://ahmadnazir.github.io/atom.xml" target="_blank">
+                        <i class="fas fa-2x fa-rss-square"></i>
+                    </a>
+                    <a href="https://github.com/ahmadnazir" target="_blank">
+                        <i class="fab fa-2x fa-github-square"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/ahmad-raja-052a3a3" target="_blank">
+                        <i class="fab fa-2x fa-linkedin"></i>
+                    </a>
+                    <a href="https://twitter.com/ahmadnazir" target="_blank">
+                        <i class="fab fa-2x fa-twitter-square"></i>
+                    </a>
+                    <a href="mailto:ahmadnazir@gmail.com">
+                        <i class="fas fa-2x fa-envelope-square"></i>
+                    </a>
+                </div>
+            <!-- Powered by <a href="http://jaspervdj.be/hakyll">Hakyll</a> -->
+        </div>
+    </body>
+</html>

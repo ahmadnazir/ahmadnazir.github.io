@@ -206,3 +206,10 @@ p {
             text-decoration : none;
     }
 }
+
+/* Visualizations */
+
+svg {
+    width: $contentWidth;
+    height: 500px;
+}
