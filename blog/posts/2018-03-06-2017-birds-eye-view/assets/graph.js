@@ -1,4 +1,5 @@
 // Modified from https://bl.ocks.org/mbostock/3887051
+// Released under the GNU General Public License, version 3.
 
 var dim = document.getElementById('graph').getBoundingClientRect(),
     containerWidth = dim.width,
