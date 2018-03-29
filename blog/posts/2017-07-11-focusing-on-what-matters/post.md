@@ -10,9 +10,9 @@ the matter.
 
 ## Software developers are problems solvers
 In order to answer what makes software developers good at what they do, we have
-to answer what is it that software developers do. Software developers are
-basically problems solvers and we rely on software as our main instrument. To become
-efficient, we will have to analyze the process of problem solving.
+to answer what is it that they do. Software developers are basically problem
+solvers and they rely on software as the main instrument. To become efficient at
+problem solving, we will have to analyze the process of problem solving.
 
 ## Process of problem solving dissected!
 
@@ -20,23 +20,23 @@ efficient, we will have to analyze the process of problem solving.
 model might be wrong but it gives me a reference point, so bear with me while I
 ramble on :)
 
-When we attempt to solve any problem, we first try to **gather information** about
-that problem and once we think that we have enough, we start tackling the
+When we attempt to solve any problem, we first try to **gather information**
+about that problem and once we think that we have enough, we start tackling the
 problem. Usually, we try to **break the problem down into smaller problems** and
 keep doing that until we reach a point where the solution of the smaller problem
-is simple enough. Once all the smaller problems are solved, we **combined the
+is simple enough. Once all the smaller problems are solved, we **combine the
 solutions** and the bigger problem is solved. (Yeah, divide and conquer!)
 
 At any time, our brain is either gathering information or breaking down the
 problem. We keep going back and forth and this is what I believe are the two
 activities that our brain is involved in.
 
-I feel this is a natural way of problem solving and you can apply that same
-principle on an organizational level. Here is an example of a hypothetical
-company that wants to dominate the world by helping people sign their documents
-digitally and securely, let's call it .. mmm .. **Penneo**. Let's say the
-board of directors decide that the company has to provide solutions in the Nordic
-region. This is how the interactions are going to take place:
+I feel this is a natural way of problem solving and you can apply the same
+principle on an organizational level. Let's take an an example of a hypothetical
+company that wants to dominate the world by helping people sign their documents,
+digitally and securely. Let's call it ... mmm ... **Penneo**. Let's say the board
+of directors decide that the company has to provide solutions in the Nordic
+region. This is how the interactions within the company are going to take place:
 
 - **Board -> CEO :** We want Penneo to be present in the Nordic countries
 
@@ -61,18 +61,19 @@ delegate something in terms of *how* and not *what*, you would call that
 ## Curse of knowing
 
 Breaking down problems into smaller **what** problems seems to be a natural way
-to solving the overall problem. It seems like this is how we can work together
+to solve the overall problem. It seems that this is how we can work together
 efficiently, and it seems that this is how we should be working on an individual
-level as well. However, it is not always that easy to keep focusing on the
-*what* instead of the *how*. Imagine that the task is "show a list of items in a
-table", I tend to start thinking about "do I know of a library that would let me
-do it in *react*.. or *elm* ..". Immediately, I focus on the the *how* whereas I
-should be thinking of the *what* i.e. What is the type of data that the table
-contains, what is the use case etc. This is the **curse of knowing** i.e. just
-because I have experience in a few tools, I start thinking of the
-implementation. Whenever something like this happens, the brain shifts from the
-**what domain** to the **how domain** and this comes at a cost. If the brain
-stays in the *how domain* for too long, the cost becomes significant.
+level as well. However, as an individual, it is not always that easy to keep
+focusing on the *what* instead of the *how*. Imagine that the task is "show a
+list of items in a table", I tend to start thinking about "do I know of a
+library that would let me do it in *react*.. or *elm* ..". Immediately, I focus
+on the the *how* whereas I should be thinking of the *what* i.e. What is the
+type of data that the table contains, what is the use case etc. This is the
+**curse of knowing** i.e. just because I have experience in a few tools, I start
+thinking of the implementation. Whenever something like this happens, the brain
+shifts from the **what domain** to the **how domain** and this comes at a cost.
+If the brain stays in the *how domain* for too long, the cost becomes
+significant.
 
 ## but then how do I actually *do* something?
 
@@ -81,16 +82,15 @@ have the execute and that is when you need to know *how* to do it.
 
 My point is that the *how* problems should be so simple that they shouldn't move
 your focus away from the main objective. If you spend too much time in the **how
-domain**, you can get distracted. There are some things that you can be done to
+domain**, you can get distracted. There are some things that can be done to
 minimize such context switches:
 
 ### 1. Internalize the operation
 
 Do the task so many times that it becomes part of the muscle memory. Imagine
-this: when you speak something, you brain doesn't actively think about moving
-the tongue to produce sound. Similarly, when you walk, you don't actively think
-about moving your legs, it just happens, while your brain thinks about other
-things.
+this: when you speak, you brain doesn't actively think about moving the tongue
+to produce sound. Similarly, when you walk, you don't consciously think about
+moving your legs, it just happens, while your brain thinks about other things.
   
 As software developers, there are certain operations that we shouldn't have to
 think about while working e.g. searching for things (files with a name that
@@ -111,7 +111,7 @@ service can be slightly different from the other. I started working on a tool
 named [aww yeah][aww-yeah] that gives me and my team a consistent interface when
 developing features for these services. A simple example is viewing logs for the
 services. Each service can have different types of logs in different locations.
-Using a consistent interface, the developers don't have to find the logs,
+By using a consistent interface, the developers don't have to find the logs,
 instead give a command such as:
 
 ```
