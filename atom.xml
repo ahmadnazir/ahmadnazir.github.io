@@ -8,8 +8,81 @@
         <name>Ahmad Nazir Raja</name>
         <email>ahmadnazir@gmail.com</email>
     </author>
-    <updated>2018-03-06T00:00:00Z</updated>
+    <updated>2019-01-16T00:00:00Z</updated>
     <entry>
+    <title>2018 in retrospect</title>
+    <link href="https://ahmadnazir.github.io/posts/2019-01-16-2018-year-in-review/post.html" />
+    <id>https://ahmadnazir.github.io/posts/2019-01-16-2018-year-in-review/post.html</id>
+    <published>2019-01-16T00:00:00Z</published>
+    <updated>2019-01-16T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>For the last 2 years, I have been keeping a record of most tasks I work on. The idea is perform <em>objective</em> retrospectives i.e. rely on data rather than a feeling to evaluate how things are going. Most of my tasks are done while sitting in front of a screen, so for me, the strategy that I have devised has been working fairly well. Maybe in a few years or in a different life when I don’t have to work with computers all the time, I’ll have to think of a different way to track my activities. Nevertheless, the process works for me. It requires some discipline but in the end it helps me figure out a <em>personal why</em> or <em>vision</em>, gives me direction and helps me communicate better with my peers.</p>
+<h2 id="what-type-of-activities-do-i-care-about">What type of activities do I care about?</h2>
+<p>I try to label most of my tasks but broadly I want to track the following 3 types:</p>
+<ul>
+<li><strong>Official:</strong> Anything work related i.e. feature development, bug fixes, discussions, etc. The only exception to this is time spent on <em>support</em>…</li>
+<li><strong>Support:</strong> By support, I mean any task that could’ve been automated but for some reason it wasn’t. It could happen because of incomplete documentation, figuring out whether the customer is experiencing a bug or not, answering domain related questions, etc.</li>
+<li><strong>Side projects:</strong> This is the work that drives me. I wouldn’t mind spending my weekends doing this and in an ideal world my official work would be replaced with this.</li>
+</ul>
+<p>I can’t track everything and don’t try to track everything. For example, tracking the time spend on every discussion with a colleague can be resource intensive by itself and it doesn’t serve any purpose. The idea is to keep focus by tracking planned activities and in the process and use the discipline to minimize distractions.</p>
+<h2 id="how-did-2018-go">How did 2018 go?</h2>
+<p>A simple way to visualize how the year went is to sum of the time spent on different types of activities. This is how 2018 looked for me:</p>
+<p><img src="./images/2018.png" width="100%" /></p>
+<p>Well, what does it mean? Without any context it means.. well .. didly squat! Which is why I need to correlate it with what happened back then. Here is an annotated version of the visualization:</p>
+<p><img src="./images/2018-annotated.png" width="100%" /></p>
+<p>The annotated version helps… but it would be amazing if I could also know how I felt during the whole year. Just working more or or less on something doesn’t mean that I felt inspired or not. So one of things that I am planning on trying out for the next year is also track morale at different times of the year (using an app like <a href="https://daylio.webflow.io/">Dailio</a>). For now, this is good enough…</p>]]></summary>
+</entry>
+<entry>
+    <title>Build me a DSL for great good [3] : PINE !</title>
+    <link href="https://ahmadnazir.github.io/posts/2018-07-29-3-pine/post.html" />
+    <id>https://ahmadnazir.github.io/posts/2018-07-29-3-pine/post.html</id>
+    <published>2018-07-29T00:00:00Z</published>
+    <updated>2018-07-29T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p><strong>tldr:</strong> Pine is an experimental domain specific language that let’s you query a relational database in a compositional manner. Pine relying on the database schema to determine the relationship between tables so that the user doesn’t have to do the plumbing. In it’s essence, it is a simpler way to write SELECT statements.</p>
+<h2 id="pine-philosophy">Pine Philosophy</h2>
+<h3 id="pine-is-compositional">1. Pine is compositional</h3>
+<p>When I try to solve a complex problem, I try to split it into tiny simpler problems. If the smaller problems are solved, then it is only a matter of combining them which solves the original problem. I like tools that let me think in this way. My favorite example is the <a href="https://en.wikipedia.org/wiki/Pipeline_(Unix)">unix pipe</a>. Pine is inspired by this concept of building pipelines and composition compurations.</p>
+<p>To start with, let’s say that I want to get the customer with id equals 1. Instead of writing an SQL query: <code>SELECT * FROM customers AS c WHERE c.id = 1</code>.</p>
+<p>I can write a pine expression:</p>
+<pre><code>customers 1</code></pre>
+<p>Simple, minimal, and to the point…</p>
+<p>What if I <em>also</em> want all the users for that customer whose name is John? I can pipe the previous expression as follows:</p>
+<pre><code>customers 1 | users name=John</code></pre>
+<p>You can keep adding more expressions to build on the previous expressions. If I want specific columns from the user table, I can write something like follows:</p>
+<pre><code>customers 1 | users name=John | sel: id, email</code></pre>
+<p>You can keep chaining further operations. Another example would be getting the addresses for all users named John:</p>
+<pre><code>customers 1 | users name=John | sel: id, email | address</code></pre>
+<h3 id="pine-hides-the-plumbing-between-expressions">2. Pine hides the plumbing between expressions</h3>
+<p>In SQL, keywords like <code>ON</code> and <code>USING</code> are used for plumbing the query. Pine tries to determine how to join data by looking at the schema. This trick can’t always work because there can be multiple relationships between the same tables and Pine can’t always resolve the ambiguity. But then again pine is not an attempt to replace SQL, which brings us to the next point:</p>
+<h3 id="pine-does-not-attempt-to-replace-sql">3. Pine does not attempt to replace SQL</h3>
+<p>Pine does not and will not attempt to be an SQL replacement. However, it makes certain querying tasks easier than writing SQL.</p>
+<h3 id="pine-expressions-are-concise">3. Pine expressions are concise</h3>
+<p>I am trying to reduce the bloat. Once you get used to the syntax, writing queries comes naturally.</p>
+<p>Simple convention for AND vs OR conditions</p>
+<p>Use commas for OR:</p>
+<pre><code>caseFiles 1,2,3</code></pre>
+<h3 id="pine-supports-incremental-calculations">4. Pine supports incremental calculations</h3>
+<h2 id="implementation">Implementation</h2>
+<ul>
+<li>parser converts the expressions into a parse tree</li>
+<li>convert the parse tree to an indexed version of the operations to be executed</li>
+<li>operations are converted to an AST that represents a query</li>
+<li>Build and run the query</li>
+</ul>
+<h3 id="language-and-libraries">Language and Libraries</h3>
+<ul>
+<li><p>clojure (written about this int he past)</p></li>
+<li><p>instaparse for reading the grammar core.match</p></li>
+</ul>
+<h3 id="support-for-ides">Support for IDEs</h3>
+<p>pine-mode</p>
+<h2 id="future">Future</h2>
+<h3 id="updating-data">Updating data</h3>
+<p>users 1 | set: name=Jane</p>
+<h3 id="skipping-intermediate-tables">Skipping intermediate tables</h3>
+<h3 id="group-expressions">Group expressions</h3>
+<p>This is already partially done!</p>]]></summary>
+</entry>
+<entry>
     <title>2017 - A Bird's Eye View</title>
     <link href="https://ahmadnazir.github.io/posts/2018-03-06-2017-birds-eye-view/post.html" />
     <id>https://ahmadnazir.github.io/posts/2018-03-06-2017-birds-eye-view/post.html</id>
@@ -465,6 +538,7 @@ c() {
 <p>Generate a self-signed certificate in PEM format</p>
 <pre><code>DOMAIN=dev.penneo.com
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $DOMAIN.key -out $DOMAIN.crt</code></pre>
+<p>For a certificate that gets accepted by Chrome 68+, see the <a href="https://github.com/jesusoterogomez/self-signed-ssl-generator">self signed certificate generator</a> by <a href="https://www.jesusoterogomez.com/">Jesus Otero Gomez</a>.</p>
 <h2 id="trusting-the-certificate">Trusting the certificate</h2>
 <p>For making the OS trust the certificate, the requirements for Debian are:</p>
 <ul>
