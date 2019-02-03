@@ -20,16 +20,17 @@
 <p>I try to label most of my tasks but broadly I want to track the following 3 types:</p>
 <ul>
 <li><strong>Official:</strong> Anything work related i.e. feature development, bug fixes, discussions, etc. The only exception to this is time spent on <em>support</em>…</li>
-<li><strong>Support:</strong> By support, I mean any task that could’ve been automated but for some reason it wasn’t. It could happen because of incomplete documentation, figuring out whether the customer is experiencing a bug or not, answering domain related questions, etc.</li>
-<li><strong>Side projects:</strong> This is the work that drives me. I wouldn’t mind spending my weekends doing this and in an ideal world my official work would be replaced with this.</li>
+<li><strong>Support:</strong> These are mean menial tasks and are usually low impact. Also, they could have been automated but for some reason they weren’t.</li>
+<li><strong>Side projects:</strong> This is the work that drives me. I wouldn’t mind spending my weekends doing this type of work and in an ideal world I would only do these types of tasks.</li>
 </ul>
-<p>I can’t track everything and don’t try to track everything. For example, tracking the time spend on every discussion with a colleague can be resource intensive by itself and it doesn’t serve any purpose. The idea is to keep focus by tracking planned activities and in the process and use the discipline to minimize distractions.</p>
+<p>I can’t track everything and don’t try to track everything. For example, tracking the time spend on every discussion with a colleague can be resource intensive by itself and it doesn’t serve any purpose. The idea is to keep focus by tracking planned activities and use the discipline to minimize distractions.</p>
 <h2 id="how-did-2018-go">How did 2018 go?</h2>
 <p>A simple way to visualize how the year went is to sum of the time spent on different types of activities. This is how 2018 looked for me:</p>
 <p><img src="./images/2018.png" width="100%" /></p>
-<p>Well, what does it mean? Without any context it means.. well .. didly squat! Which is why I need to correlate it with what happened back then. Here is an annotated version of the visualization:</p>
+<p>Well, what does it mean? Without any context it means… didly squat! The different times of the year need to be correlated with what happened back then. This is where monthly retrospectives are helpful.</p>
+<p>Here is an lightly annotated version which is more meaningful:</p>
 <p><img src="./images/2018-annotated.png" width="100%" /></p>
-<p>The annotated version helps… but it would be amazing if I could also know how I felt during the whole year. Just working more or or less on something doesn’t mean that I felt inspired or not. So one of things that I am planning on trying out for the next year is also track morale at different times of the year (using an app like <a href="https://daylio.webflow.io/">Dailio</a>). For now, this is good enough…</p>]]></summary>
+<p>The annotated version helps… but it would be amazing if I could also know how I felt during the whole year. Just working more or or less on something doesn’t mean that I felt inspired or not. So one of things that I am planning on trying out for the next year is also track morale at different times of the year (using an app like <a href="https://daylio.webflow.io/">Dailio</a>). This is good enough for now.</p>]]></summary>
 </entry>
 <entry>
     <title>Build me a DSL for great good [3] : PINE !</title>
