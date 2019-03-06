@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>ahmadnazir - A closer look at documents signed with Penneo</title>
+        <link rel="stylesheet" type="text/css" href="../../css/default.css" />
+        <link rel="stylesheet" type="text/css" href="../../css/syntax-highlight-default.css" />
+         <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:900italic,900,700italic,400italic,700,400,300italic,300" />
+        <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+    </head>
+    <body>
+        <div class="header">
+
+            <div class="content">
+                <div class="title">
+                    <a href="../../">(map reflect shtuff)</a>
+                    <div class="sub-title">
+                        &nbsp;=> ramblings by Ahmad Nazir
+                    </div>
+                </div>
+
+                <div class="links">
+                    <a href="../../about.html">(about)</a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- <div class="eval">
+             =>
+             </div> -->
+
+
+        <div id="content" class="content">
+            <div class="after-header">
+                <h1>A closer look at documents signed with Penneo</h1>
+
+<div class="info">
+    March  5, 2019
+    
+</div>
+
+<p><a href="https://penneo.com">Penneo</a> is a digital signature platform which allows you to digitally sign documents using government backed EIDs. That would be NEM ID in Denmark, BANK ID in Sweden, and also BANK ID in Norway. A document signed with Penneo contains all the proof within the document which can be used to prove that the signer signed the document.</p>
+<h2 id="what-is-a-penneo-signature">What is a Penneo signature?</h2>
+<p>Theoretically speaking, a digital signature is the value obtained from from encrypting the hash of the document:</p>
+<pre><code>digital signature = [ hash of document ] 🔑</code></pre>
+<p>However, we need to be able to answer the following questions when signed documents are concerned:</p>
+<ul>
+<li>Which document was signed?</li>
+<li>Who was the signer or signers?</li>
+<li>Is the signature valid i.e. does the signer actually sign the document?</li>
+<li>Is the signature still valid? (Long Term Validation or LTV)</li>
+</ul>
+<p>Just by looking at the digital signature, we can’t answer any of the questions which is why we need to keep the actual value of the signature inside a container. This container will keep all the proof related to the signature i.e. data that was signed, signer info, certificates to establish trust, time stamps for long term validation and so on.</p>
+<p><strong>In Penneo lingo, it is this container that is referred to as the “Penneo Signature” instead of the actual value of the signature. The actual signature is called the <code>signature value</code> inside the container.</strong></p>
+<p>From now on when we say <strong>Penneo Signature</strong>, it means the container that contains everything related to the signature.</p>
+<p>We’ll explore Penneo signatures in detail in the following sections but before that we’ll take a high level view and start with the document itself:</p>
+<h2 id="whats-included-in-the-signed-document">What’s included in the signed document?</h2>
+<p>Let’s start by exploring the signed document and find the signature (i.e. the container that contains all the details).</p>
+<p>You can use <code>pdfdetach</code> command (part of <code>Poppler</code> utils) to extract the attachments:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">pdfdetach</span> -saveall signed.pdf</code></pre></div>
+<p>Now you can see everything that was included in the document:</p>
+<pre><code>$ ls
+audit.txt  penneo.json 3fc266fd847e707c.xml signed.pdf</code></pre>
+<h3 id="audit-file">1. Audit file</h3>
+<p>The audit file is a Penneo log of the events that happened with the document. Here is how it looks:</p>
+<pre><code> ========================= ================== ============== ===================================================== 
+  Time                      Name               IP             Activity                                             
+ ========================= ================== ============== ===================================================== 
+  2019-03-05 18:10:02 UTC   John Doe           xxx.xxx.xx.x   The document was created                             
+  2019-03-05 18:10:04 UTC   John Doe           xxx.xxx.xx.x   A signing link was activated for &quot;Ahmad Nazir Raja&quot;  
+  2019-03-05 18:10:10 UTC   Ahmad Nazir Raja   xxx.xxx.xx.x   The document was viewed by the signer                
+  2019-03-05 18:11:06 UTC   Ahmad Nazir Raja   xxx.xxx.xx.x   The signer signed the document as Signer             
+  2019-03-05 18:11:06 UTC   Penneo system      xxx.xxx.xx.x   The document signing process was completed           
+ ========================= ================== ============== ===================================================== </code></pre>
+<h3 id="index-file-penneo.json">2. Index file: penneo.json</h3>
+<p>The <code>penneo.json</code> contains the list of all the signatures that sign the document. Here is how it looks:</p>
+<pre><code>{
+  &quot;documentKey&quot;: &quot;SPNEM-B22SH-H0TOS-MCLVZ-E3YLB-MMJEL&quot;,
+  &quot;signatures&quot;: [
+    {
+      &quot;signatureLines&quot;: [
+        {
+          &quot;role&quot;: &quot;Signer&quot;,
+          &quot;onBehalfOf&quot;: &quot;Acme Inc&quot;
+        }
+      ],
+      &quot;signerSerial&quot;: &quot;PID:9208-2002-2-821442331526&quot;,
+      &quot;signTime&quot;: &quot;2019-03-05T18:11:05Z&quot;,
+      &quot;signerName&quot;: &quot;Ahmad Nazir Raja&quot;,
+      &quot;validations&quot;: [],
+      &quot;dataFile&quot;: &quot;3fc266fd847e707c.xml&quot;,
+      &quot;type&quot;: &quot;nemid&quot;,
+      &quot;ip&quot;: &quot;xxx.xxx.xx.x&quot;
+    }
+  ],
+  &quot;version&quot;: &quot;1.2&quot;
+}</code></pre>
+<p>The <code>dataFile</code> points to the Penneo Signature i.e. the container that has all signature related details.</p>
+<h3 id="data-file-penneo-signature">3. Data File / Penneo Signature</h3>
+<p>One document can have one or more signers. For every signer, multiple signatures are stored in the data file. In our example, only one signer has signed the document. The <code>penneo.json</code> tells us that the relevant data is contained in <code>3fc266fd847e707c.xml</code>. This file contains the Penneo Signature.</p>
+<p>See the xml file:</p>
+<pre><code>$ xmllint --format 3fc266fd847e707c.xml</code></pre>
+<h2 id="analyzing-the-penneo-signature">Analyzing the Penneo Signature</h2>
+<p>The Penneo Signature is the container of all the relevant data needed to establish that the signer signs the document. It is basically an <a href="https://www.w3.org/TR/xmldsig-core1/">xmldsig</a> document extended to <a href="https://www.w3.org/TR/XAdES/">xades</a> (more on this later). Broadly, the following information is contained:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Sign Properties:</strong> Data that is signed i.e. document digests, etc</li>
+<li><strong>Signature Value:</strong> This is the actual signature generated by signing the data with the signer’s private key</li>
+<li><strong>Certificates:</strong> Signer certificate and related certificates to establish chain of trust</li>
+<li><strong>Time stamps:</strong> This is needed for long term validation</li>
+</ol>
+<h3 id="signer-certificate-and-establishing-trust">Signer Certificate and establishing trust</h3>
+<p>Though the order of the certificates isn’t promised, they are usually present in the following order:</p>
+<ol style="list-style-type: decimal">
+<li>Root certificate</li>
+<li>Intermediate certificate</li>
+<li>Signer Certificate</li>
+</ol>
+<p>The root and the intermediate certificates are required to establish validity of the signer certificate. If you trust any one of them, then it means that the signer certificate can also be trusted.</p>
+<p>In our examples all the certificates are <a href="https://en.wikipedia.org/wiki/X.509">x509</a> and the can be parsed as follows:</p>
+<h4 id="extracting-certificates-from-the-penneo-signature">Extracting certificates from the Penneo Signature</h4>
+<p>We can use <a href="https://en.wikipedia.org/wiki/XMLStarlet">xmlstarlet</a> (not actively maintained but still quite useful) to extract the signatures:</p>
+<pre><code>function extract-signature () {
+    local file=$1
+    local index=$2
+    xmlstarlet \
+        sel \
+        -N openoces='http://www.openoces.org/2006/07/signature#' \
+        -N ds='http://www.w3.org/2000/09/xmldsig#' \
+        -t \
+        -v \
+        &quot;//openoces:signature/ds:Signature/ds:KeyInfo/ds:X509Data[${index}]/ds:X509Certificate/text()&quot; \
+        $file
+}</code></pre>
+<p>To extract the signer certificate:</p>
+<pre><code>extract-signature 3fc266fd847e707c.xml 3</code></pre>
+<h4 id="parsing-the-signer-certificate">Parsing the signer certificate</h4>
+<p>This just gives us the base 64 encoded certificate. In order to read the information inside the x509 certificate, base 64 decode it and using openssl:</p>
+<pre><code>./scripts/extract-signature.sh tmp/3fc266fd847e707c.xml 3 | \
+    base64 --decode | \
+    openssl x509 -noout -text -inform DER -in /dev/stdin</code></pre>
+<p>You can read the name of the signer as follows (by appending to the command above):</p>
+<pre><code>./scripts/extract-signature.sh tmp/3fc266fd847e707c.xml 3 | \
+    base64 --decode | \
+    openssl x509 -noout -text -inform DER -in /dev/stdin | \
+    grep Subject -A1</code></pre>
+<!-- #### How to validate the signatures? -->
+<!-- Stay tuned, I am working on it -->
+<h2 id="so-where-is-the-document-level-signature">So where is the document level signature?</h2>
+<p>Up until now we have looked at the attachments in the pdf. But the original pdf to be signed has also been appended with visual information along with the document level signature. Let’s see how many times the pdf has been appended to:</p>
+<pre><code>$ strings signed.pdf | grep -E '^..EOF' | wc -l
+3</code></pre>
+<p>This means that apart from the original PDF, two more versions were appended.</p>
+<ol style="list-style-type: decimal">
+<li>Version 1: Original PDF (malicious content is removed)</li>
+<li>Version 2: This contains the document key (also visible on the right side of every page)</li>
+<li>Version 3: This is where the document signature resides</li>
+</ol>
+<p>Maybe in another post, I’ll talk about how to extract the document level signature and analyze it.</p>
+<h2 id="other-things-worth-mentioning">Other things worth mentioning…</h2>
+<h3 id="penneo-signatures-are-long-term-validated">Penneo Signatures are Long Term Validated</h3>
+<p>On inspecting the signature file, we can see that the signature is basically an <code>xmldsig</code> document which is extended to <code>xades</code>. The elements of <code>xades</code> are needed to support long term validation (LTV). This means that proof of the signature validity at the time of signing is embedded in the document so that the signer can’t deny the validity of the of signature at a later point (in case the signing certificate gets revoked). This property is called non-repudiation and is needed to support long term validation.</p>
+<h3 id="what-about-cms-and-cades">What about CMS and CADES?</h3>
+<p>Penneo also supports <code>cms</code> instead of <code>xmldsig</code>, and similarly <code>cades</code> instead of <code>xades</code>. It depends on the EID which types of signatures are embedded in the data file.</p>
+<p>Here are the formats that Penneo receives from different EIDs and how Penneo stores them:</p>
+<pre><code>|                | Original Format | Stored by Penneo (LTV) |
+|----------------|-----------------|------------------------|
+| Denmark Nem ID | XMLDSIG         | XADES                  |
+| Sweden Bank ID | XML             | XADES                  |
+| Norway Bank ID | CMS             | CADES                  |</code></pre>
+<h2 id="conclusion">Conclusion</h2>
+<p>Documents signed with Penneo contain all the proof about the signature. The elements are used by the Penneo validator to validate everything. In this post, we looked at the different elements included and how to extract data from them.</p>
+<p>So how would you use the elements and validate that everything checks out yourself? That will have to wait for another post.</p>
+
+
+
+<br />
+<br />
+<div id="disqus_thread"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    /*
+    var disqus_config = function () {
+        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() {  // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+
+        s.src = '//ahmadnazir.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+<br />
+
+            </div>
+        </div>
+
+
+        <div class="footer">
+                <div class="links">
+                    <!-- <a href="/archive.html">Archive</a> -->
+
+                    <a href="https://ahmadnazir.github.io/atom.xml" target="_blank">
+                        <i class="fas fa-2x fa-rss-square"></i>
+                    </a>
+                    <a href="https://github.com/ahmadnazir" target="_blank">
+                        <i class="fab fa-2x fa-github-square"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/ahmad-raja-052a3a3" target="_blank">
+                        <i class="fab fa-2x fa-linkedin"></i>
+                    </a>
+                    <a href="https://twitter.com/ahmadnazir" target="_blank">
+                        <i class="fab fa-2x fa-twitter-square"></i>
+                    </a>
+                    <a href="mailto:ahmadnazir@gmail.com">
+                        <i class="fas fa-2x fa-envelope-square"></i>
+                    </a>
+                </div>
+            <!-- Powered by <a href="http://jaspervdj.be/hakyll">Hakyll</a> -->
+        </div>
+    </body>
+</html>
