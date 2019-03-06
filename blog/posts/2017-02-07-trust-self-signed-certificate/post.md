@@ -12,6 +12,9 @@ DOMAIN=dev.penneo.com
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $DOMAIN.key -out $DOMAIN.crt
 ```
 
+For a certificate that gets accepted by Chrome 68+, see the [self signed certificate generator][generator] by [Jesus Otero Gomez][jesus].
+
+
 ## Trusting the certificate
 
 For making the OS trust the certificate, the requirements for Debian are:
@@ -66,3 +69,5 @@ and here is a quick reference for some extensions that I have bumped into:
 
 [diff-formats]: http://serverfault.com/a/9717/286083
 [redhat]: http://serverfault.com/a/730234/286083
+[generator]: https://github.com/jesusoterogomez/self-signed-ssl-generator
+[jesus]: https://www.jesusoterogomez.com/

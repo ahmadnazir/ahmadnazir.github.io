@@ -23,6 +23,14 @@ main = hakyll $ do
             >>= loadAndApplyTemplate "templates/default.html" postCtx
             >>= relativizeUrls
 
+    -- match "life/*/post.md" $ do
+    --     route $ setExtension "html"
+    --     compile $ pandocCompiler
+    --         >>= saveSnapshot "life-content"
+    --         >>= loadAndApplyTemplate "templates/post.html"    postCtx
+    --         >>= loadAndApplyTemplate "templates/default.html" postCtx
+    --         >>= relativizeUrls
+
     match "posts/*/images/*" $ do
         route   idRoute
         compile copyFileCompiler
