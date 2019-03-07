@@ -45,7 +45,7 @@ that we'll take a high level view and start with the document itself:
 Let's start by exploring the signed document and find the signature (i.e. the
 container that contains all the details).
 
-You can use `pdfdetach` command (part of `Poppler` utils) to extract the attachments:
+You can use `pdfdetach` command (part of [Poppler][poppler] utils) to extract the attachments:
 
  
 ``` bash
@@ -178,7 +178,7 @@ This just gives us the base 64 encoded certificate. In order to read the
 information inside the x509 certificate, base 64 decode it and using openssl:
 
 ```
-./scripts/extract-signature.sh tmp/3fc266fd847e707c.xml 3 | \
+extract-signature 3fc266fd847e707c.xml 3 | \
     base64 --decode | \
     openssl x509 -noout -text -inform DER -in /dev/stdin
 ```
@@ -186,7 +186,7 @@ information inside the x509 certificate, base 64 decode it and using openssl:
 You can read the name of the signer as follows (by appending to the command above):
 
 ```
-./scripts/extract-signature.sh tmp/3fc266fd847e707c.xml 3 | \
+extract-signature 3fc266fd847e707c.xml 3 | \
     base64 --decode | \
     openssl x509 -noout -text -inform DER -in /dev/stdin | \
     grep Subject -A1
@@ -210,7 +210,7 @@ $ strings signed.pdf | grep -E '^..EOF' | wc -l
 
 This means that apart from the original PDF, two more versions were appended. 
 
-1. Version 1: Original PDF (malicious content is removed)
+1. Version 1: Original PDF (after removing malicious content)
 2. Version 2: This contains the document key (also visible on the right side of every page)
 3. Version 3: This is where the document signature resides
 
@@ -221,27 +221,27 @@ Maybe in another post, I'll talk about how to extract the document level signatu
 ### Penneo Signatures are Long Term Validated
 
 On inspecting the signature file, we can see that the signature is basically an
-`xmldsig` document which is extended to `xades`. The elements of `xades` are
-needed to support long term validation (LTV). This means that proof of the
-signature validity at the time of signing is embedded in the document so that
-the signer can't deny the validity of the of signature at a later point (in case
-the signing certificate gets revoked). This property is called non-repudiation
-and is needed to support long term validation.
+[xmldsig][xmldsig] document which is extended to [xades][xades]. The elements of
+[xades][xades] are needed to support long term validation (LTV). This means that
+proof of the signature validity at the time of signing is embedded in the
+document so that the signer can't deny the validity of the of signature at a
+later point (in case the signing certificate gets revoked). This property is
+called non-repudiation and is needed to support long term validation.
 
 ### What about CMS and CADES?
-Penneo also supports `cms` instead of `xmldsig`, and similarly `cades` instead
-of `xades`. It depends on the EID which types of signatures are embedded in the
-data file.
+Penneo also supports [cms][cms] instead of xmldsig, and similarly [cades][cades]
+instead of xades. It depends on the EID which types of signatures are embedded
+in the data file.
 
 
 Here are the formats that Penneo receives from different EIDs and how Penneo stores them:
 
 ```
-|                | Original Format | Stored by Penneo (LTV) |
-|----------------|-----------------|------------------------|
-| Denmark Nem ID | XMLDSIG         | XADES                  |
-| Sweden Bank ID | XML             | XADES                  |
-| Norway Bank ID | CMS             | CADES                  |
+|                | Originally Received | Stored by Penneo (LTV) |
+|----------------|---------------------|------------------------|
+| Denmark Nem ID | XMLDSIG             | XADES                  |
+| Sweden Bank ID | XML                 | XADES                  |
+| Norway Bank ID | CMS                 | CADES                  |
 ```
 
 
@@ -255,7 +255,10 @@ So how would you use the elements and validate that everything checks out
 yourself? That will have to wait for another post.
 
 
+[cades]: https://tools.ietf.org/html/rfc5126.html
+[cms]: https://tools.ietf.org/html/rfc5652
 [penneo]: https://penneo.com
+[poppler]: https://en.wikipedia.org/wiki/Poppler_(software)
 [x509]: https://en.wikipedia.org/wiki/X.509
 [xades]: https://www.w3.org/TR/XAdES/
 [xmldsig]: https://www.w3.org/TR/xmldsig-core1/
