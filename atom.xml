@@ -32,7 +32,7 @@
 <p>We’ll explore Penneo signatures in detail in the following sections but before that we’ll take a high level view and start with the document itself:</p>
 <h2 id="whats-included-in-the-signed-document">What’s included in the signed document?</h2>
 <p>Let’s start by exploring the signed document and find the signature (i.e. the container that contains all the details).</p>
-<p>You can use <code>pdfdetach</code> command (part of <code>Poppler</code> utils) to extract the attachments:</p>
+<p>You can use <code>pdfdetach</code> command (part of <a href="https://en.wikipedia.org/wiki/Poppler_(software)">Poppler</a> utils) to extract the attachments:</p>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">pdfdetach</span> -saveall signed.pdf</code></pre></div>
 <p>Now you can see everything that was included in the document:</p>
 <pre><code>$ ls
@@ -111,11 +111,11 @@ audit.txt  penneo.json 3fc266fd847e707c.xml signed.pdf</code></pre>
 <pre><code>extract-signature 3fc266fd847e707c.xml 3</code></pre>
 <h4 id="parsing-the-signer-certificate">Parsing the signer certificate</h4>
 <p>This just gives us the base 64 encoded certificate. In order to read the information inside the x509 certificate, base 64 decode it and using openssl:</p>
-<pre><code>./scripts/extract-signature.sh tmp/3fc266fd847e707c.xml 3 | \
+<pre><code>extract-signature 3fc266fd847e707c.xml 3 | \
     base64 --decode | \
     openssl x509 -noout -text -inform DER -in /dev/stdin</code></pre>
 <p>You can read the name of the signer as follows (by appending to the command above):</p>
-<pre><code>./scripts/extract-signature.sh tmp/3fc266fd847e707c.xml 3 | \
+<pre><code>extract-signature 3fc266fd847e707c.xml 3 | \
     base64 --decode | \
     openssl x509 -noout -text -inform DER -in /dev/stdin | \
     grep Subject -A1</code></pre>
@@ -127,22 +127,22 @@ audit.txt  penneo.json 3fc266fd847e707c.xml signed.pdf</code></pre>
 3</code></pre>
 <p>This means that apart from the original PDF, two more versions were appended.</p>
 <ol style="list-style-type: decimal">
-<li>Version 1: Original PDF (malicious content is removed)</li>
+<li>Version 1: Original PDF (after removing malicious content)</li>
 <li>Version 2: This contains the document key (also visible on the right side of every page)</li>
 <li>Version 3: This is where the document signature resides</li>
 </ol>
 <p>Maybe in another post, I’ll talk about how to extract the document level signature and analyze it.</p>
 <h2 id="other-things-worth-mentioning">Other things worth mentioning…</h2>
 <h3 id="penneo-signatures-are-long-term-validated">Penneo Signatures are Long Term Validated</h3>
-<p>On inspecting the signature file, we can see that the signature is basically an <code>xmldsig</code> document which is extended to <code>xades</code>. The elements of <code>xades</code> are needed to support long term validation (LTV). This means that proof of the signature validity at the time of signing is embedded in the document so that the signer can’t deny the validity of the of signature at a later point (in case the signing certificate gets revoked). This property is called non-repudiation and is needed to support long term validation.</p>
+<p>On inspecting the signature file, we can see that the signature is basically an <a href="https://www.w3.org/TR/xmldsig-core1/">xmldsig</a> document which is extended to <a href="https://www.w3.org/TR/XAdES/">xades</a>. The elements of <a href="https://www.w3.org/TR/XAdES/">xades</a> are needed to support long term validation (LTV). This means that proof of the signature validity at the time of signing is embedded in the document so that the signer can’t deny the validity of the of signature at a later point (in case the signing certificate gets revoked). This property is called non-repudiation and is needed to support long term validation.</p>
 <h3 id="what-about-cms-and-cades">What about CMS and CADES?</h3>
-<p>Penneo also supports <code>cms</code> instead of <code>xmldsig</code>, and similarly <code>cades</code> instead of <code>xades</code>. It depends on the EID which types of signatures are embedded in the data file.</p>
+<p>Penneo also supports <a href="https://tools.ietf.org/html/rfc5652">cms</a> instead of xmldsig, and similarly <a href="https://tools.ietf.org/html/rfc5126.html">cades</a> instead of xades. It depends on the EID which types of signatures are embedded in the data file.</p>
 <p>Here are the formats that Penneo receives from different EIDs and how Penneo stores them:</p>
-<pre><code>|                | Original Format | Stored by Penneo (LTV) |
-|----------------|-----------------|------------------------|
-| Denmark Nem ID | XMLDSIG         | XADES                  |
-| Sweden Bank ID | XML             | XADES                  |
-| Norway Bank ID | CMS             | CADES                  |</code></pre>
+<pre><code>|                | Originally Received | Stored by Penneo (LTV) |
+|----------------|---------------------|------------------------|
+| Denmark Nem ID | XMLDSIG             | XADES                  |
+| Sweden Bank ID | XML                 | XADES                  |
+| Norway Bank ID | CMS                 | CADES                  |</code></pre>
 <h2 id="conclusion">Conclusion</h2>
 <p>Documents signed with Penneo contain all the proof about the signature. The elements are used by the Penneo validator to validate everything. In this post, we looked at the different elements included and how to extract data from them.</p>
 <p>So how would you use the elements and validate that everything checks out yourself? That will have to wait for another post.</p>]]></summary>
