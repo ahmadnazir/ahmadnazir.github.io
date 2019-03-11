@@ -87,8 +87,8 @@ audit.txt  penneo.json 3fc266fd847e707c.xml signed.pdf</code></pre>
 <h3 id="signer-certificate-and-establishing-trust">Signer Certificate and establishing trust</h3>
 <p>Though the order of the certificates isn’t promised, they are usually present in the following order:</p>
 <ol style="list-style-type: decimal">
-<li>Root certificate</li>
 <li>Intermediate certificate</li>
+<li>Root certificate</li>
 <li>Signer Certificate</li>
 </ol>
 <p>The root and the intermediate certificates are required to establish validity of the signer certificate. If you trust any one of them, then it means that the signer certificate can also be trusted.</p>
@@ -111,7 +111,7 @@ audit.txt  penneo.json 3fc266fd847e707c.xml signed.pdf</code></pre>
 <pre><code>extract-signature 3fc266fd847e707c.xml 3</code></pre>
 <h4 id="parsing-the-signer-certificate">Parsing the signer certificate</h4>
 <p>This just gives us the base 64 encoded certificate. In order to read the information inside the x509 certificate, base 64 decode it and using openssl:</p>
-<pre><code>extract-signature 3fc266fd847e707c.xml 3 | \
+<pre><code>extract-signature 3fc266fd847e707c.xml 1 | \
     base64 --decode | \
     openssl x509 -noout -text -inform DER -in /dev/stdin</code></pre>
 <p>You can read the name of the signer as follows (by appending to the command above):</p>
@@ -647,7 +647,7 @@ sudo ln -s $DOMAIN.crt $HASH</code></pre>
 <!-- ## Add the key and certificate to the nginx confiruation -->
 <h2 id="faq">FAQ</h2>
 <h3 id="does-this-mean-that-the-browsers-also-trust-the-certificate">Does this mean that the browsers also trust the certificate?</h3>
-<p>Some applications rely on the OS level trusted certificates. Browsers have a different way to established trust. For Chrome, you have to add the certificate manually as a trusted certificate:</p>
+<p>Some applications rely on the OS level trusted certificates. Browsers have a different way to established trust. For Chrome, you have to add the <code>rootCA</code> certificate instead of the self signed certificate. Check out <a href="https://www.jesusoterogomez.com/">Jesus’s self signed certificate generator</a> to generate the <code>rootCA.pem</code>. Once you have that, it needs to be imported in Chrome:</p>
 <pre><code>Chrome Settings
   &gt; Show advanced settings
   &gt; HTTPS/SSL
