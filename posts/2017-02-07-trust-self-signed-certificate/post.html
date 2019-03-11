@@ -61,6 +61,8 @@ cd $CERTS
 HASH=`openssl x509 -noout -hash -in $DOMAIN.crt`.0
 sudo ln -s $DOMAIN.crt $HASH</code></pre>
 <p>Source: <a href="http://serverfault.com/a/730234/286083">Trusting self-signed certificates in redhat</a></p>
+<p>You can check the details for the newly generated certificate as follows:</p>
+<pre><code>openssl x509 -in $DOMAIN.crt -text -noout</code></pre>
 <!-- How is chrome and firefox affected? -->
 <!-- ## Add the key and certificate to the nginx confiruation -->
 <h2 id="faq">FAQ</h2>
