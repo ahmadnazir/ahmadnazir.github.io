@@ -67,7 +67,7 @@ sudo ln -s $DOMAIN.crt $HASH</code></pre>
 <!-- ## Add the key and certificate to the nginx confiruation -->
 <h2 id="faq">FAQ</h2>
 <h3 id="does-this-mean-that-the-browsers-also-trust-the-certificate">Does this mean that the browsers also trust the certificate?</h3>
-<p>Some applications rely on the OS level trusted certificates. Browsers have a different way to established trust. For Chrome, you have to add the certificate manually as a trusted certificate:</p>
+<p>Some applications rely on the OS level trusted certificates. Browsers have a different way to established trust. For Chrome, you have to add the <code>rootCA</code> certificate instead of the self signed certificate. Check out <a href="https://www.jesusoterogomez.com/">Jesus’s self signed certificate generator</a> to generate the <code>rootCA.pem</code>. Once you have that, it needs to be imported in Chrome:</p>
 <pre><code>Chrome Settings
   &gt; Show advanced settings
   &gt; HTTPS/SSL

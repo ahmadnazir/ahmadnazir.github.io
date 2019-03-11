@@ -50,8 +50,10 @@ openssl x509 -in $DOMAIN.crt -text -noout
 ### Does this mean that the browsers also trust the certificate?
 
 Some applications rely on the OS level trusted certificates. Browsers have a
-different way to established trust. For Chrome, you have to add the certificate
-manually as a trusted certificate:
+different way to established trust. For Chrome, you have to add the `rootCA`
+certificate instead of the self signed certificate. Check out [Jesus's self
+signed certificate generator][jesus] to generate the `rootCA.pem`. Once you have
+that, it needs to be imported in Chrome:
 
 ```
 Chrome Settings
