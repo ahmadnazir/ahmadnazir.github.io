@@ -35,6 +35,12 @@ sudo ln -s $DOMAIN.crt $HASH
 
 Source: [Trusting self-signed certificates in redhat][redhat]
 
+You can check the details for the newly generated certificate as follows:
+
+```
+openssl x509 -in $DOMAIN.crt -text -noout
+```
+
 <!-- How is chrome and firefox affected? -->
 
 <!-- ## Add the key and certificate to the nginx confiruation -->
