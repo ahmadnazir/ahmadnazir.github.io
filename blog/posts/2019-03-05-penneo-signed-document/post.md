@@ -136,8 +136,8 @@ Broadly, the following information is contained:
 Though the order of the certificates isn't promised, they are usually present in
 the following order:
 
-1. Root certificate
-2. Intermediate certificate
+1. Intermediate certificate
+2. Root certificate
 3. Signer Certificate
 
 The root and the intermediate certificates are required to establish validity of
@@ -178,7 +178,7 @@ This just gives us the base 64 encoded certificate. In order to read the
 information inside the x509 certificate, base 64 decode it and using openssl:
 
 ```
-extract-signature 3fc266fd847e707c.xml 3 | \
+extract-signature 3fc266fd847e707c.xml 1 | \
     base64 --decode | \
     openssl x509 -noout -text -inform DER -in /dev/stdin
 ```
