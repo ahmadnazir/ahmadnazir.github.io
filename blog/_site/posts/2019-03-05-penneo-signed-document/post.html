@@ -42,7 +42,8 @@
     
 </div>
 
-<p><a href="https://penneo.com">Penneo</a> is a digital signature platform which allows you to digitally sign documents using government backed EIDs. That would be NEM ID in Denmark, BANK ID in Sweden, and also BANK ID in Norway. A document signed with Penneo contains all the proof within the document which can be used to prove that the signer signed the document.</p>
+<p><a href="https://penneo.com">Penneo</a> is a digital signature platform that relies on government backed EIDs. That would be <a href="https://www.nemid.nu/dk-en/">NemID</a> in Denmark, <a href="https://www.bankid.com/en/">BankID</a> in Sweden, and <a href="https://www.bankid.no/en/">BankID</a> in Norway. A document signed with Penneo contains all the proof required to establish the validity of the signature.</p>
+<p><strong>Note:</strong> If can try the following yourself if you have access to bash on Linux shell (or just use this <a href="https://cloud.docker.com/u/ahmadnazir/repository/docker/ahmadnazir/penneo-signature-toolkit">docker image</a>).</p>
 <h2 id="what-is-a-penneo-signature">What is a Penneo signature?</h2>
 <p>Theoretically speaking, a digital signature is the value obtained from from encrypting the hash of the document:</p>
 <pre><code>digital signature = [ hash of document ] 🔑</code></pre>
@@ -122,7 +123,7 @@ audit.txt  penneo.json 3fc266fd847e707c.xml signed.pdf</code></pre>
 <p>In our examples all the certificates are <a href="https://en.wikipedia.org/wiki/X.509">x509</a> and the can be parsed as follows:</p>
 <h4 id="extracting-certificates-from-the-penneo-signature">Extracting certificates from the Penneo Signature</h4>
 <p>We can use <a href="https://en.wikipedia.org/wiki/XMLStarlet">xmlstarlet</a> (not actively maintained but still quite useful) to extract the signatures:</p>
-<pre><code>function extract-signature () {
+<pre><code>function extract-certificate () {
     local file=$1
     local index=$2
     xmlstarlet \
@@ -135,14 +136,14 @@ audit.txt  penneo.json 3fc266fd847e707c.xml signed.pdf</code></pre>
         $file
 }</code></pre>
 <p>To extract the signer certificate:</p>
-<pre><code>extract-signature 3fc266fd847e707c.xml 3</code></pre>
+<pre><code>extract-certificate 3fc266fd847e707c.xml 3</code></pre>
 <h4 id="parsing-the-signer-certificate">Parsing the signer certificate</h4>
 <p>This just gives us the base 64 encoded certificate. In order to read the information inside the x509 certificate, base 64 decode it and using openssl:</p>
-<pre><code>extract-signature 3fc266fd847e707c.xml 1 | \
+<pre><code>extract-certificate 3fc266fd847e707c.xml 1 | \
     base64 --decode | \
     openssl x509 -noout -text -inform DER -in /dev/stdin</code></pre>
 <p>You can read the name of the signer as follows (by appending to the command above):</p>
-<pre><code>extract-signature 3fc266fd847e707c.xml 3 | \
+<pre><code>extract-certificate 3fc266fd847e707c.xml 3 | \
     base64 --decode | \
     openssl x509 -noout -text -inform DER -in /dev/stdin | \
     grep Subject -A1</code></pre>

@@ -3,11 +3,13 @@ title: A closer look at documents signed with Penneo
 comments: true
 ---
 
-[Penneo][penneo] is a digital signature platform which allows you to digitally
-sign documents using government backed EIDs. That would be NEM ID in Denmark,
-BANK ID in Sweden, and also BANK ID in Norway. A document signed with Penneo
-contains all the proof within the document which can be used to prove that the
-signer signed the document.
+[Penneo][penneo] is a digital signature platform that relies on government
+backed EIDs. That would be [NemID][nemid] in Denmark, [BankID][bankidse] in
+Sweden, and [BankID][bankidno] in Norway. A document signed with Penneo contains
+all the proof required to establish the validity of the signature.
+
+**Note:** If can try the following yourself if you have access to bash on Linux
+shell (or just use this [docker image][toolkit]).
 
 ## What is a Penneo signature?
 
@@ -152,7 +154,7 @@ We can use [xmlstarlet][xmlstarlet] (not actively maintained but still quite
 useful) to extract the signatures:
 
 ```
-function extract-signature () {
+function extract-certificate () {
     local file=$1
     local index=$2
     xmlstarlet \
@@ -169,7 +171,7 @@ function extract-signature () {
 To extract the signer certificate: 
 
 ```
-extract-signature 3fc266fd847e707c.xml 3
+extract-certificate 3fc266fd847e707c.xml 3
 ```
 
 #### Parsing the signer certificate
@@ -178,7 +180,7 @@ This just gives us the base 64 encoded certificate. In order to read the
 information inside the x509 certificate, base 64 decode it and using openssl:
 
 ```
-extract-signature 3fc266fd847e707c.xml 1 | \
+extract-certificate 3fc266fd847e707c.xml 1 | \
     base64 --decode | \
     openssl x509 -noout -text -inform DER -in /dev/stdin
 ```
@@ -186,7 +188,7 @@ extract-signature 3fc266fd847e707c.xml 1 | \
 You can read the name of the signer as follows (by appending to the command above):
 
 ```
-extract-signature 3fc266fd847e707c.xml 3 | \
+extract-certificate 3fc266fd847e707c.xml 3 | \
     base64 --decode | \
     openssl x509 -noout -text -inform DER -in /dev/stdin | \
     grep Subject -A1
@@ -255,10 +257,14 @@ So how would you use the elements and validate that everything checks out
 yourself? That will have to wait for another post.
 
 
+[bankidno]: https://www.bankid.no/en/
+[bankidse]: https://www.bankid.com/en/
 [cades]: https://tools.ietf.org/html/rfc5126.html
 [cms]: https://tools.ietf.org/html/rfc5652
+[nemid]: https://www.nemid.nu/dk-en/
 [penneo]: https://penneo.com
 [poppler]: https://en.wikipedia.org/wiki/Poppler_(software)
+[toolkit]: https://cloud.docker.com/u/ahmadnazir/repository/docker/ahmadnazir/penneo-signature-toolkit
 [x509]: https://en.wikipedia.org/wiki/X.509
 [xades]: https://www.w3.org/TR/XAdES/
 [xmldsig]: https://www.w3.org/TR/xmldsig-core1/
