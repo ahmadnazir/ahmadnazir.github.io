@@ -8,8 +8,9 @@ backed EIDs. That would be [NemID][nemid] in Denmark, [BankID][bankidse] in
 Sweden, and [BankID][bankidno] in Norway. A document signed with Penneo contains
 all the proof required to establish the validity of the signature.
 
-**Note:** If can try the following yourself if you have access to bash on Linux
-shell (or just use the [penneo signature toolkit docker image][toolkit]).
+**Note:** In order to parse the signatures, you will need access to a Linux
+shell. The easiest way to make sure that all the dependencies are available is
+to use the [penneo signature toolkit docker image][toolkit].
 
 ## What is a Penneo signature?
 
