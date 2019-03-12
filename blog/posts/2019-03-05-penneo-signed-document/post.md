@@ -9,7 +9,7 @@ Sweden, and [BankID][bankidno] in Norway. A document signed with Penneo contains
 all the proof required to establish the validity of the signature.
 
 **Note:** If can try the following yourself if you have access to bash on Linux
-shell (or just use this [docker image][toolkit]).
+shell (or just use the [penneo signature toolkit docker image][toolkit]).
 
 ## What is a Penneo signature?
 
