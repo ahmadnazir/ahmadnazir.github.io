@@ -16,7 +16,7 @@
     <published>2019-03-05T00:00:00Z</published>
     <updated>2019-03-05T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p><a href="https://penneo.com">Penneo</a> is a digital signature platform that relies on government backed EIDs. That would be <a href="https://www.nemid.nu/dk-en/">NemID</a> in Denmark, <a href="https://www.bankid.com/en/">BankID</a> in Sweden, and <a href="https://www.bankid.no/en/">BankID</a> in Norway. A document signed with Penneo contains all the proof required to establish the validity of the signature.</p>
-<p><strong>Note:</strong> If can try the following yourself if you have access to bash on Linux shell (or just use the <a href="https://cloud.docker.com/u/ahmadnazir/repository/docker/ahmadnazir/penneo-signature-toolkit">penneo signature toolkit docker image</a>).</p>
+<p><strong>Note:</strong> In order to parse the signatures, you will need access to a Linux shell. The easiest way to make sure that all the dependencies are available is to use the <a href="https://cloud.docker.com/u/ahmadnazir/repository/docker/ahmadnazir/penneo-signature-toolkit">penneo signature toolkit docker image</a>.</p>
 <h2 id="what-is-a-penneo-signature">What is a Penneo signature?</h2>
 <p>Theoretically speaking, a digital signature is the value obtained from from encrypting the hash of the document:</p>
 <pre><code>digital signature = [ hash of document ] 🔑</code></pre>
