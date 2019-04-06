@@ -56,6 +56,11 @@ openssl x509 -in cert-a.pem -fingerprint -noout
 openssl x509 -in cert-b.pem -fingerprint -noout -inform DER
 ```
 
+## Extract the public key from the certificate
+
+```
+openssl x509 -pubkey -noout -in cert.pem > pubkey.pem
+```
 
 # Storing certificates and keys
 
@@ -80,6 +85,12 @@ keytool -exportcert -keystore $KEYSTORE -alias $CERT_NAME > certificate.crt
 https://www.cryptologie.net/article/260/asn1-vs-der-vs-pem-vs-x509-vs-pkcs7-vs/
 
 
+# How to get the https certificate for a website?
+
+```
+openssl s_client -connect registry.penneo.com:443 < /dev/null 2>/dev/null \
+    | openssl x509 -in /dev/stdin -noout -text
+```
 
 ## Misc
 
