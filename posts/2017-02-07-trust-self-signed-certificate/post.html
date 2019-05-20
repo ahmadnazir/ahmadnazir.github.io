@@ -4,7 +4,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>ahmadnazir - Trust a self-signed certificate in Debian</title>
+        <title>ahmadnazir - Trust a self signed certificate in Debian</title>
         <link rel="stylesheet" type="text/css" href="../../css/default.css" />
         <link rel="stylesheet" type="text/css" href="../../css/syntax-highlight-default.css" />
          <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:900italic,900,700italic,400italic,700,400,300italic,300" />
@@ -32,6 +32,7 @@
                 </div>
 
                 <div class="links">
+                    <a href="https://ahmadnazir.github.io/scribbles/">(scribbles)</a>
                     <a href="../../about.html">(about)</a>
                 </div>
             </div>
@@ -45,7 +46,7 @@
 
         <div id="content" class="content">
             <div class="after-header">
-                <h1>Trust a self-signed certificate in Debian</h1>
+                <h1>Trust a self signed certificate in Debian</h1>
 
 <div class="info">
     February  7, 2017
@@ -61,7 +62,7 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $DOMAIN.key -out $DO
 <p>For making the OS trust the certificate, the requirements for Debian are:</p>
 <ul>
 <li>The certificate should be in PEM format</li>
-<li>The certificate should be placed in the certificates directory i.e. /etc/ssl/certs</li>
+<li>The certificate should be placed in the certificates directory i.e. /etc/ssl/certs</li>
 <li>The name of the symlink to the certificate is the hash of the certificate needs a <code>.0</code> appended to it. Why we do that? No idea.. let me know when you find out</li>
 </ul>
 <p>or in bash lingo:</p>
