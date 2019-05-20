@@ -32,6 +32,7 @@
                 </div>
 
                 <div class="links">
+                    <a href="https://ahmadnazir.github.io/scribbles/">(scribbles)</a>
                     <a href="../../about.html">(about)</a>
                 </div>
             </div>
@@ -61,13 +62,13 @@
 </ul>
 <p>For me, convenience is about staying on the command line (or inside the editor) - basically using text to search the data with the minimum number of characters. It turns out that when you have to write a lot of queries, a lazy person like me will try to find a shorter syntax for <code>SELECT</code> statements and <code>JOIN</code>s.</p>
 <p>So, if I want to ask the system about all the users for customer ‘Acme Inc’, instead of the following:</p>
-<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> *
-<span class="kw">FROM</span> users <span class="kw">AS</span> u
-<span class="kw">JOIN</span> customer <span class="kw">AS</span> c
-<span class="kw">ON</span> (u.customer_id = c.id)
-<span class="kw">WHERE</span> c.name = <span class="st">'Acme Inc'</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sql"><code class="sourceCode sql"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">SELECT</span> <span class="op">*</span></a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="kw">FROM</span> users <span class="kw">AS</span> u</a>
+<a class="sourceLine" id="cb1-3" title="3"><span class="kw">JOIN</span> customer <span class="kw">AS</span> c</a>
+<a class="sourceLine" id="cb1-4" title="4"><span class="kw">ON</span> (u.customer_id <span class="op">=</span> c.<span class="kw">id</span>)</a>
+<a class="sourceLine" id="cb1-5" title="5"><span class="kw">WHERE</span> c.name <span class="op">=</span> <span class="st">'Acme Inc'</span></a></code></pre></div>
 <p>I want something like:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">customers</span> <span class="st">&quot;Acme&quot;</span> <span class="kw">|</span> <span class="kw">users</span> *</code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb2-1" title="1"><span class="ex">customers</span> <span class="st">&quot;Acme&quot;</span> <span class="kw">|</span> <span class="fu">users</span> *</a></code></pre></div>
 <p>Unix Pipes Rules!</p>
 <p>A query in the latter form supports my chain of thought and helps me stay in the <em>what</em> domain i.e. <a href="https://ahmadnazir.github.io/posts/2017-07-11-focusing-on-what-matters/post.html">I should tell the machine what I want instead of how I want it</a>.</p>
 <h2 id="attempting-an-implementation-in-haskell">Attempting an implementation in Haskell</h2>
@@ -76,36 +77,36 @@
 <p>I want to <strong>explore the domain of my data set</strong> - I don’t really know the types at compile time, or I don’t want to be tied with a specific domain. For example, if I have a MySql database, I could create types corresponding to every table in the database but then my implementation would be specific for that schema. I wanted to be able to to feed the program any schema and start exploring the relationships between the data. In other words, I want to be able to generate types at run time, which goes against static typing. So… no bueno!</p>
 <h3 id="working-with-records-is-sometimes-frustrating">2. Working with records is sometimes frustrating</h3>
 <p>I can’t include two records with the same fields in the same module. This is because the record fields act as functions which would lead to two functions with the same name in the module. Without enabling any extension, the following does not work:</p>
-<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">Customer</span> <span class="fu">=</span> <span class="dt">Customer</span>
-  {<span class="ot"> name ::</span> <span class="dt">String</span>
-  } <span class="kw">deriving</span> (<span class="dt">Show</span>)
-  
-<span class="kw">data</span> <span class="dt">User</span> <span class="fu">=</span> <span class="dt">User</span>
-  {<span class="ot"> name ::</span> <span class="dt">String</span>
-  ,<span class="ot"> gender ::</span> <span class="dt">String</span>
-  } <span class="kw">deriving</span> (<span class="dt">Show</span>)</code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">data</span> <span class="dt">Customer</span> <span class="ot">=</span> <span class="dt">Customer</span></a>
+<a class="sourceLine" id="cb3-2" title="2">  {<span class="ot"> name ::</span> <span class="dt">String</span></a>
+<a class="sourceLine" id="cb3-3" title="3">  } <span class="kw">deriving</span> (<span class="dt">Show</span>)</a>
+<a class="sourceLine" id="cb3-4" title="4">  </a>
+<a class="sourceLine" id="cb3-5" title="5"><span class="kw">data</span> <span class="dt">User</span> <span class="ot">=</span> <span class="dt">User</span></a>
+<a class="sourceLine" id="cb3-6" title="6">  {<span class="ot"> name ::</span> <span class="dt">String</span></a>
+<a class="sourceLine" id="cb3-7" title="7">  ,<span class="ot"> gender ::</span> <span class="dt">String</span></a>
+<a class="sourceLine" id="cb3-8" title="8">  } <span class="kw">deriving</span> (<span class="dt">Show</span>)</a></code></pre></div>
 <p>The record field <code>name</code> is used in two places so the compiler will complain about <code>name</code> being unambiguous. You can enable the extension <code>DuplicateRecordFields</code> to overcome this however when you’ll get a problem when using the record fields as selectors e.g. the following will not work:</p>
-<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">name <span class="fu">$</span> customer
-name <span class="fu">$</span> user</code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb4-1" title="1">name <span class="op">$</span> customer</a>
+<a class="sourceLine" id="cb4-2" title="2">name <span class="op">$</span> user</a></code></pre></div>
 <h3 id="how-to-pattern-match-on-only-the-arguments-of-value-constructors-wait-what">3. How to pattern match on only the arguments of value constructors… wait, what?</h3>
 <p>Allow me to explain, here is a data type:</p>
-<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">Bool</span> <span class="fu">=</span> <span class="dt">True</span> <span class="fu">|</span> <span class="dt">False</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">data</span> <span class="dt">Bool</span> <span class="ot">=</span> <span class="dt">True</span> <span class="op">|</span> <span class="dt">False</span></a></code></pre></div>
 <p><code>True</code> and <code>False</code> are functions, also known as <code>value constructors</code>. In this example they don’t need any arguments. Here is another example:</p>
-<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">type</span> <span class="dt">String</span>     <span class="fu">=</span> <span class="dt">Name</span>
-<span class="kw">type</span> <span class="dt">CustomerId</span> <span class="fu">=</span> <span class="dt">Int</span>
-
-<span class="kw">type</span> <span class="dt">Customer</span> <span class="fu">=</span> (<span class="dt">Id</span>, <span class="dt">Name</span>)
-<span class="kw">type</span> <span class="dt">User</span>     <span class="fu">=</span> (<span class="dt">Id</span>, <span class="dt">Name</span>, <span class="dt">CustomerId</span>)
-
-<span class="kw">data</span> <span class="dt">Entity</span>
-  <span class="fu">=</span>
-    <span class="dt">CustomerEntity</span> (<span class="dt">Maybe</span> <span class="dt">Customer</span>)
-  <span class="fu">|</span> <span class="dt">UserEntity</span>     (<span class="dt">Maybe</span> <span class="dt">User</span>)</code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">type</span> <span class="dt">String</span>     <span class="ot">=</span> <span class="dt">Name</span></a>
+<a class="sourceLine" id="cb6-2" title="2"><span class="kw">type</span> <span class="dt">CustomerId</span> <span class="ot">=</span> <span class="dt">Int</span></a>
+<a class="sourceLine" id="cb6-3" title="3"></a>
+<a class="sourceLine" id="cb6-4" title="4"><span class="kw">type</span> <span class="dt">Customer</span> <span class="ot">=</span> (<span class="dt">Id</span>, <span class="dt">Name</span>)</a>
+<a class="sourceLine" id="cb6-5" title="5"><span class="kw">type</span> <span class="dt">User</span>     <span class="ot">=</span> (<span class="dt">Id</span>, <span class="dt">Name</span>, <span class="dt">CustomerId</span>)</a>
+<a class="sourceLine" id="cb6-6" title="6"></a>
+<a class="sourceLine" id="cb6-7" title="7"><span class="kw">data</span> <span class="dt">Entity</span></a>
+<a class="sourceLine" id="cb6-8" title="8">  <span class="ot">=</span></a>
+<a class="sourceLine" id="cb6-9" title="9">    <span class="dt">CustomerEntity</span> (<span class="dt">Maybe</span> <span class="dt">Customer</span>)</a>
+<a class="sourceLine" id="cb6-10" title="10">  <span class="op">|</span> <span class="dt">UserEntity</span>     (<span class="dt">Maybe</span> <span class="dt">User</span>)</a></code></pre></div>
 <p>Let’s say I want to extract the id of an entity. I don’t care what the type of entity it is. So, I want to be able to do this (which won’t work):</p>
-<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">getId ::</span> <span class="dt">Entity</span> <span class="ot">-&gt;</span> <span class="dt">Maybe</span> <span class="dt">Id</span>
-getId entity <span class="fu">=</span> <span class="kw">case</span> entity <span class="kw">of</span>
-     _ (<span class="dt">Just</span> r)       <span class="ot">-&gt;</span> <span class="dt">Just</span> <span class="fu">$</span> sel1 r
-     _ <span class="dt">Nothing</span>        <span class="ot">-&gt;</span> <span class="dt">Nothing</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb7-1" title="1"><span class="ot">getId ::</span> <span class="dt">Entity</span> <span class="ot">-&gt;</span> <span class="dt">Maybe</span> <span class="dt">Id</span></a>
+<a class="sourceLine" id="cb7-2" title="2">getId entity <span class="ot">=</span> <span class="kw">case</span> entity <span class="kw">of</span></a>
+<a class="sourceLine" id="cb7-3" title="3">     _ (<span class="dt">Just</span> r)       <span class="ot">-&gt;</span> <span class="dt">Just</span> <span class="op">$</span> sel1 r</a>
+<a class="sourceLine" id="cb7-4" title="4">     _ <span class="dt">Nothing</span>        <span class="ot">-&gt;</span> <span class="dt">Nothing</span></a></code></pre></div>
 <p>It is required to specify the value constructor which is either <code>CustomerEntity</code> or <code>UserEntity</code>. I can’t use a generalized pattern and use <code>_</code> in place of the value constructor. This results in code bloat and you know what happens when things bloats… well, somebody pukes! Quite possibly, there is a way to handle this… I can’t really figure it out.</p>
 <h2 id="whats-next">What’s next?</h2>
 <p>Haskell seems like a really powerful tool but <strong>if the nature of the problem is data exploration, a dynamic language might be a better fit</strong>. I’ll use the concepts that I have learned and try to solve this problem in another language. I am tempted to try out clojure or even a library in javascript like <a href="http://ramdajs.com/">ramda</a>. Let’s see how that goes!</p>

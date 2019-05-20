@@ -1,6 +1,6 @@
 ---
-title: Trust a self-signed certificate in Debian
-changelog: 2017-08-01: Note about establishing trust in the browser
+title: Trust a self signed certificate in Debian
+changelog: "2017-08-01 Note about establishing trust in the browser"
 ---
 
 ## Generate a self-signed certificate

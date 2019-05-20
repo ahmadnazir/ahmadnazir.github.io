@@ -32,6 +32,7 @@
                 </div>
 
                 <div class="links">
+                    <a href="https://ahmadnazir.github.io/scribbles/">(scribbles)</a>
                     <a href="../../about.html">(about)</a>
                 </div>
             </div>
@@ -77,7 +78,7 @@
 </ul></li>
 </ul>
 <p>I would like to write something like this using the language:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">customers</span> <span class="st">&quot;Acme Inc.&quot;</span> <span class="kw">|</span> <span class="kw">addresses</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb1-1" title="1"><span class="ex">customers</span> <span class="st">&quot;Acme Inc.&quot;</span> <span class="kw">|</span> <span class="ex">addresses</span></a></code></pre></div>
 <p>and the language should be able to figure out the relationship between the customer “Acme” and all the addresses that belong to the users of the company. The runtime should fire the relevant requests using the rest API and find me what I need. I want to <strong>combine any number of resources and filter the data</strong>. It is basically <strong>unix pipes that work with types</strong> and have filtering functionality built in.</p>
 <p>At a later point, I would like to separate the data fetching layer (that fires API requests) and build a SQL component as well which will make it possible to fetch data from a database instead of only HTTP requests.</p>
 <p>To begin with, I’ll target Penneo’s public API for this experiment. Inspired by pipes and focusing on Penneo’s API as a starting point, I have named the language <strong>pine</strong>. Also, pine trees look kind of like pipes :)</p>
@@ -85,14 +86,14 @@
 <p>I’ll be writing about my progress related to building this language and share those ‘aha’ moments from time to time…</p>
 <h2 id="using-stack-instead-of-cabal">1. Using Stack instead of Cabal</h2>
 <p>Stack is the new way of setting up projects and I’ll use that from now on instead of cabal. Stack groks the cabal format (as it is the same on some level). Setting up a project in stack is simple:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">stack</span> new app
-<span class="kw">cd</span> app
-<span class="kw">stack</span> build app
-<span class="kw">stack</span> exec app-exe</code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb2-1" title="1"><span class="ex">stack</span> new app</a>
+<a class="sourceLine" id="cb2-2" title="2"><span class="bu">cd</span> app</a>
+<a class="sourceLine" id="cb2-3" title="3"><span class="ex">stack</span> build app</a>
+<a class="sourceLine" id="cb2-4" title="4"><span class="ex">stack</span> exec app-exe</a></code></pre></div>
 <h2 id="adding-dependencies-in-stack-is-inconvenient">2. Adding dependencies in Stack is inconvenient</h2>
 <p>Adding dependencies in stack is not as simple as it is when using npm (node) or composer (php). I would expect to add a dependency like this:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">stack</span> install --save lib <span class="co"># --save switch doesn't exist !!</span></code></pre></div>
-<p>I have to manually update the .cabal file for the project e.g. <code>app.cabal</code> that stack uses.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb3-1" title="1"><span class="ex">stack</span> install --save lib <span class="co"># --save switch doesn't exist !!</span></a></code></pre></div>
+<p>I have to manually update the .cabal file for the project e.g. <code>app.cabal</code> that stack uses.</p>
 <p>The reason for this could be that stack sets up dependencies for all the things that it builds and therefore keeps the dependencies separate. Just using a <code>--save</code> switch without specifying the dependent module doesn’t make sense.</p>
 <p>Here is an issue open related to this: <a href="https://github.com/commercialhaskell/stack/issues/1933">stack install package –save to add a dependency to the cabal file</a></p>
 <p>Anyway, here is a snippet from the pine’s cabal file (<code>pine.cabal</code>) that I had to modify manually:</p>
@@ -114,10 +115,10 @@ executable pine-exe
 <p>I think this makes it possible for to use two different versions of the same library in the project. Anyway, adding a dependency to stack becomes a little bit inconvenient because of this</p>
 <h2 id="find-the-versions-for-dependencies">3. Find the versions for dependencies</h2>
 <p>Once you have dependencies installed and given that no version is specified in the cabal file, they can be found as follows:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">stack</span> list-dependencies <span class="kw">|</span> <span class="kw">grep</span> mysql-simple</code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb5-1" title="1"><span class="ex">stack</span> list-dependencies <span class="kw">|</span> <span class="fu">grep</span> mysql-simple</a></code></pre></div>
 <h2 id="language-extensions">4. Language Extensions</h2>
 <p>Haskell’s default behavior is quite restrictive. In order to loosen the behavior and make some cases more convenient to write, language extensions can be enabled either by using switches from the command line (<code>ghc</code> supports this, not sure about <code>hugs</code> and other compilers) or by adding language directives / <code>LANGUAGE PRAGMA</code> at the top of the file e.g. implicit conversion between different string types in haskell can be achieved by adding the following at the top of the file:</p>
-<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">{-# LANGUAGE OverloadedStrings #-}</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb6-1" title="1"><span class="ot">{-# LANGUAGE OverloadedStrings #-}</span></a></code></pre></div>
 <h2 id="whats-next">What’s next?</h2>
 <ul>
 <li>Use the <code>wreq</code> library to make API requests and the <code>lens</code> library to parse the responses</li>

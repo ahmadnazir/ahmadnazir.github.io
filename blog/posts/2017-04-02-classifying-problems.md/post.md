@@ -1,5 +1,5 @@
 ---
-title: Computational Problems: Easy to Impossible
+title: "Computational Problems: Easy to Impossible"
 comments: true
 ---
 

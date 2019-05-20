@@ -6,3 +6,4 @@ _cache
 .cabal-sandbox
 node_modules
 blog/css/default.css
+drafts
